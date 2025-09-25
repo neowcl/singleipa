@@ -1,0 +1,430 @@
+2.16
+增加默认条码
+
+2.15
+增加条码位18位
+
+2.14
+如果大于6% 更新 ， 
+如果newfcc 比原来小：
+放电比例 ： （newRC -newFCC*0.02 ） / （newFCC*0.06）
+如果newfcc 比原来大：
+放电比例： （newRC -newFCC*0.01 ） / （newFCC*0.06）
+
+如果小于6%还没更新cpl， I减半 ，直到更新，按照设计的比例继续计算RC 。
+2.11
+更新读取数据校验，修改读取次数
+
+V2.10
+上电延迟开启ldo
+
+V2.09
+验证ecc才开启ldo
+
+
+
+v.2.08
+增加FCClimitmax  限制。 
+调整放电平滑比例。
+更新读取7037的方式。初次使用日期
+
+v.2.07
+修复读取异常问题，将缓存整合为一个数组
+
+V2.06
+完善66指令。
+
+
+V.2.05
+增加P12的充电
+
+V2.04
+将充电电压开放
+
+V2.01
+限制ncc在1.02内
+
+
+
+V2.00
+修复读取异常问题，将缓存整合为一个数组
+删除保护功能
+删除预充
+读取ic信息后重新赋值
+
+
+
+
+
+
+ 
+V1.31 ：
+修改满充放电更新bug：
+1.因为温度改变引起的FCC更新，温度要保持大于阈值5秒才更新，否则清零 。 
+2. 大于0.5C倍率，改为>= 0.5C 
+3.程序内部使用的两个温度， 一个上报给上位机， 一个有偏移，使用上报给上位机的。 
+
+V1.30
+
+1.充电时温度大于等于35度，开始减5度上报
+
+
+V1.29 ： 
+SFG2022_P13_IIC_1.29增加功能，
+
+增加动态调整0点电压：
+在大于0.5C的倍率前提下 ：
+温度大于等于10度, 0点电压 ： 是之前设定值
+温度大于等于5度小于10度, 0点电压 ：3100mV
+温度大于等于5度, 0点电压 ：3000mV
+这三个点都可以通过上位机调整， 上位机文件已经修改 。
+
+
+增加FCC limit 限制。
+
+V1.25
+开放放电平滑参数。
+
+V1.24
+更新指令从内存中读取
+
+v1.23
+
+FCC动态更新上限
+v1.21
+读内部温度
+
+
+v1.20
+读取ipa外部温度
+
+
+V1.17
+增加A7的写入
+
+v.1.16
+增加ldo控制
+
+v1.15
+
+温度全部换为内部温度，将ts脚复用
+
+
+V。1.13
+优化IIC读取
+
+V1.12
+把平滑参数取出来
+#define D_PINGHUA_CHGVOL_THRESH	u_fd_rom.d_pinghua_chgvol_thresh  //100
+#define D_PINGHUA_CHGCUR_LOW   u_fd_rom.d_d_pinghua_chgcur_low    // 230
+#define D_PINGHUA_CHGCUR_HIGH u_fd_rom.d_pinghua_chgcur_high      // 350 
+#define D_PINGHUA_TIME	u_fd_rom.d_pinghua_time                   // 40
+#define D_PINGHUA_CUR_RANGE   u_fd_rom.d_pinghua_cur_range        // 3
+#define D_PINGHUA_CAP  u_fd_rom.d_pinghua_cap                     // 30  *3600/100/1400
+
+
+V1.59
+
+void FullCharge(void)
+if (t_com08 < D_STUDYT	 // Less than relearn limit temp
+
+t_com08 改为 CellTemp
+都是温度， t_com08  是CellTemp的10倍 ， 处理数据用的。
+
+V1.58
+1.修改充电电压的显示
+2.修改66满充标志位的判断条件
+V57
+算法添加 ：
+第一次更新前提 ， cph或者cpl 放电更新过。
+只要改变10度，就相对上次的FCC，更新FCC 　。
+
+V56
+增加显示中间变量，为防止出现bug ，计算起来困难，
+t_com2a            old_factor    
+t_com2b            twrok1_out
+t_com2c             twrok2_out
+t_com2d            awrok3_out
+t_com2e             awrok4_out
+
+V55 
+倍率 温度 都除以2 
+
+V 54
+满充一放电就更新， 温度变化比例影响减小为原来得1/2 .
+
+V1.53
+ 1.增加deepsleep
+
+
+V1.52
+1.修复900个循环以后ncc的bug
+
+V51
+lifetime高温高压，更换了一个指令变量， 对现在的电池没影响。 
+以前只有高温 高压才有错。
+  if(t_com08 > D_HIGHVOLT && CellTemp > D_HIGHTEMP)
+
+t_com08 改为09 
+  if(t_com09 > D_HIGHVOLT && CellTemp > D_HIGHTEMP)
+        {
+            if(f_DP_SLP)
+            {
+                HTV_Cnt += D_DSLPVOLTTIME;
+            }
+49
+修复 3200mv'以下， 0 和1 来回跳的bug
+因为截止电压 3200以下等5s才hold1 ，错误原因： 循环hold
+
+平滑分段比例对不上
+应该自始至终只用一个比例
+
+把比例放置在 if（cpl ==ON的判断中），这样就能消除比例也分段了。
+
+
+cpl  
+
+
+
+错误原因，原来：
+
+if(Count_0Vlt_soctimehold0 == 5)
+				{
+					twork /= 10;
+					Count_0Vlt_soctimehold0 = 0 ;
+				}else
+
+
+
+Count_0Vlt_soctimehold0++;
+				if(Count_0Vlt_soctimehold0 >= 5)
+				{
+					twork /= 10;
+					Count_0Vlt_soctimehold0 = 6 ;
+				}else
+				{
+					if (F_0TOFD)
+					{
+						twork = 1;
+					}else
+					{
+						twork /= 10;
+					}
+				}
+
+48 
+电压到0 ， cpl电压点以上作限制。
+因为以前考虑到：cpl点的电压以上，如果RSOC hold0 时， RC是0 .
+而cpl电压以下hold0时，RC设定为 0.5% FCC 。
+当cpl点更新这一刻， 会跳变为新的FCC的1% ,为了防止放电时，0跳到更大的数，
+所以去了对RC <=0 时， 强制设定为0 的限制，但这又引起新问题， 就是内部变量小于0 后， 赋值给Uint16类型的值，RC变为60000多， 大于FCC后， 强制RC=FCC；
+所以目前解决方案为：
+cpl点的电压以上hold0 时 ，容量也设定为当前FCC的０.５％　，然后放电到达ｃｐｌ电压点后，　RC再更新为当前FCC的１％　，然后继续减少，直到ｈｏｌｄ　新的FCC的0.5% 。
+
+47
+soc充电后， 停止时 放电时刻，　读取上一次充电时保留的soc 和rc
+把判断函数写在放电条件中， 静置没有。 
+修改：
+不管充放电和静置， 都赋值。
+但是只在FCC作判断。 
+
+
+46
+解决满充放电更新bug
+因为上一次修改的防bug功能， 可以让RC 在cph，cpl 更新的时候产生变大。
+作比较的没有变大。
+因为!f_chg 不包含静置，t_com0d保留了上次刚放电结束的，截至电压时刻的rsoc和rc。
+所以：修改两处：
+1.一放电就更新，赋值
+2. 加上更新的条件是 静态和放电 都是ON。
+
+
+45
+soc 和rc 同步置 0 ；
+
+44
+1%hold后，
+ 修复容量变0 的bug
+43
+1. CPL 点 6%的点 不 hold。
+2.计算比例的逻辑
+3.1% hold 
+4.0-99跳变 。
+cph点一以下也要加
+5.cpl关闭，加延时
+cpl
+
+cpl off 延时 
+
+t_com0d
+防止 回充。
+
+cph  使用当时的soc
+
+
+测试方法： 
+用防止后的测试如果没问题
+再用有问题的版本，看看能不能复现。 
+
+
+(f discharge &8 finit first time
+if( Rsoc >t comedrsoclast)
+Rsoc =t comedrsoclast;
+comadrsoclast =RSOC;f init firstlltime=0:
+
+t_com0dlast
+f_init_first_time = 0;
+42
+cph cpl设置为 FCC更新后RSOC不跳变​，RC跳变。
+
+增加了cph / cpl 上下限制
+cpl点停留，RC不下降
+cph
+cpl 
+更新FCC时， 都更新RC，不更新FCC。
+原因：cpl电压点小于3200 了 ， 截至电压点了。
+
+直接结果上限制。
+
+hold 1
+
+41
+      {0x02, (uint8_t *)&tcpl_v_out},           // 0x2a
+        {0x02, (uint8_t *)&f_cp_l},           // 0x2b
+        {0x02, (uint8_t *)&f_cp_l_last}, // 0x2c
+
+CPL 放电电流大，导致进入不了 
+cpl设计的降电压函数。
+去掉了 6 5 4 加速 。
+
+打开强制赋值 。
+
+V40 
+放电过快，soc变0  。
+hold1 没有进入。
+
+V39 
+解决cph不更新bug
+cpl放电6 5 4 加速， 不减速。
+
+
+V38 解决 cph 点RC不下降
+
+V37 正常放电的也加了比例。
+
+
+V36 
+做了防bug， 强制让更新后的FCC对应的RC　，如果设置错误会影响正常使用。
+在这里作恶防ｂｕｇ。
+
+V1.35
+针对放电跳0 的问题： 
+新程序cpl点更新后， RC会跳变，rsoc 不跳变。
+cpl点RC往下走后， 会平滑。
+去掉了cph更新后的RC放电平滑。
+
+V1.33
+1.更改lifetime数据
+
+V1.32
+满充一放电就更新的条件
+累计容量 或者满充  ，放电更新
+改为且的关系。
+
+
+V1.31
+1.增加NCC限制
+
+V29
+增加限制idealfcc 和保留idealfcc 不为0 .
+优化了限制fcc逻辑。
+V28 增加修复第一次放电更新bug
+Idealfcc限制在每次更新1%以内。
+
+V1.27
+ 1.增加ncc限制
+
+V1.26
+ 1.增加ncc限制
+
+V1.24V。25
+1.更新lifetime
+
+V1.23版
+ 1.增加发送休眠指令
+
+V1.22版
+ 1.增加充电截止 
+
+V1.21版
+ 1. 修复充电不开机问题
+ 2.满充到75以下电流报0；
+
+
+
+
+
+V1.20版
+添加吴成龙修改待测试的20版本。
+修改满充一放电更新功能不能正常运行bug 修改bug，
+
+错误原因： 程序内部本算法为了防bug ，限制了参数为不为0。
+
+但​是第一次为0， 导致一放电就更新不起作用。
+Dsg_Update_work（）；
+
+
+V1.19
+一放电就更新，把公式用到的参数，做了限制，防bug，上位机可以些参数。
+放电更新记录FCC的比例， 并使用。 
+Dsg_Update_work（）；
+去掉
+inner_res_buchang_vol
+因为电池老化后， 同样的cp点内阻会变小， 整体平移。
+目前测试加是因为仅仅考虑到内阻的变化，真实的cp点变了。
+
+
+V1.18
+把阻抗补偿功能， 达到条件的循环设置成10000。
+补偿从原来的加变成减。
+V1.17 
+一放电就更新FCC
+去掉限定温度低于15度的条件。
+
+
+V1.16
+增加输出数据指令
+ t_com39
+ t_com3a
+ t_com3b
+ t_com3c
+
+V1.15
+1.限制fcc上下限
+2.增加读取ncc为0的情况
+
+V1.14
+1.限制FCC只拿一次1000 
+
+
+V1.13
+1.更新固定参数 
+
+
+V1.12
+1.限制FCC不能超过3600 
+2.限制NCC不超过3450
+
+V1.11
+1.增加主机IIC通讯
+2.增加版本读取
+
+
+
+
+
+
+
+
+
+

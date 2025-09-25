@@ -1,0 +1,53 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"comm_protocol.h": "c",
+			"main.h": "c",
+			"modules_reg.h": "c",
+			"bi2cs_interface.h": "c",
+			"datcalc_spl.h": "c",
+			"app_inc.h": "c",
+			"sw_slave_i2c.h": "c",
+			"ram.h": "c",
+			"modules_pmu.h": "c",
+			"task.h": "c",
+			"data_flash.h": "c",
+			"user_config.h": "c",
+			"base_types.h": "c",
+			"standard_data_cmd.h": "c",
+			"modules_delay.h": "c",
+			"lifetime.h": "c",
+			"rte_components.h": "c",
+			"calibration_handle.h": "c",
+			"cell.h": "c",
+			"bit_register.h": "c",
+			"modules_init.h": "c",
+			"ic_config.h": "c",
+			"string.h": "c",
+			"app_interface.h": "c",
+			"bms_register_inc.h": "c",
+			"stdint.h": "c",
+			"block_command.h": "c",
+			"life_time_collect.h": "c",
+			"protect.h": "c",
+			"calc_cvt.h": "c",
+			"modules_temp.h": "c",
+			"algorithm_api.h": "c",
+			"utility.h": "c",
+			"mode.h": "c",
+			"modules_fmc.h": "c",
+			"stdio.h": "c",
+			"modules_vbat.h": "c"
+		},
+		"marscode.chatLanguage": "cn",
+		"marscode.codeCompletionPro": {
+			"enableCodeCompletionPro": true
+		},
+		"marscode.enableInlineCommand": true
+	}
+}
