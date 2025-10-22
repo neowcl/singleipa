@@ -19,7 +19,7 @@
 
 #define MAC_DATA_LEN        32
 
-
+#define IPA_32     (256*256*2)
 
 //DATA_COMMAND
 #define DATA_CMD_CNTL       0x00
@@ -301,22 +301,22 @@ typedef struct
 	
 } newCHARGING_STATUS;//ChargingStatus 0X43
 
-typedef union
-{
-  uint8_t data[4];
-  uint32_t data32;
-  newCHARGING_STATUS newChargingStatus_f;
-}newChargingStatus;
+// typedef union
+// {
+//   uint8_t data[4];
+//   uint32_t data32;
+//   newCHARGING_STATUS newChargingStatus_f;
+// }newChargingStatus;
 
-extern newChargingStatus newChargingStatu;
-//#define t_com43  newChargingStatu.data32
-#define f_CFET   newChargingStatu.newChargingStatus_f.CFET
-#define f_DFET   newChargingStatu.newChargingStatus_f.DFET
-#define f_SETC   newChargingStatu.newChargingStatus_f.SETC
-#define f_SOKC   newChargingStatu.newChargingStatus_f.SOKC
-#define f_SCC   newChargingStatu.newChargingStatus_f.SCC
-#define f_SFC   newChargingStatu.newChargingStatus_f.SFC
-#define f_SMC   newChargingStatu.newChargingStatus_f.SMC
+// extern newChargingStatus newChargingStatu;
+// //#define t_com43  newChargingStatu.data32
+// #define f_CFET   newChargingStatu.newChargingStatus_f.CFET
+// #define f_DFET   newChargingStatu.newChargingStatus_f.DFET
+// #define f_SETC   newChargingStatu.newChargingStatus_f.SETC
+// #define f_SOKC   newChargingStatu.newChargingStatus_f.SOKC
+// #define f_SCC   newChargingStatu.newChargingStatus_f.SCC
+// #define f_SFC   newChargingStatu.newChargingStatus_f.SFC
+// #define f_SMC   newChargingStatu.newChargingStatus_f.SMC
 
 //GaugingStatus
 typedef struct
@@ -346,57 +346,57 @@ extern nGaugingStatus			GaugingStatus;
 
 
 
-typedef struct
-{
-    uint32_t FD                             : 1;
-    uint32_t FC                             : 1;
-    uint32_t TD                             : 1;
-    uint32_t TC                             : 1;
-    uint32_t RSVD1                          : 1;
-    uint32_t EDV                            : 1;
-    uint32_t DSG                            : 1;
-    uint32_t RSVD2                          : 1;
-    uint32_t REST                           : 1;
-    uint32_t RSVD3                          : 1;
-    uint32_t RDIS                           : 1;
-    uint32_t VOK                            : 1;
-    uint32_t QEN                            : 1;
-    uint32_t SLPQMax                        : 1;
-    uint32_t OCVPRED                        : 1;
-    uint32_t NSFM                           : 1;
-    uint32_t VDQ                            : 1;
-    uint32_t QMax                           : 1;
-    uint32_t RX                             : 1;
-    uint32_t LDMD                           : 1;
-    uint32_t OCVFR                          : 1;
-    uint32_t QMAXDODOK                      : 1;
-    uint32_t RSVD4                          : 10;
-} GaugingStatus_Field_T;
+// typedef struct
+// {
+//     uint32_t FD                             : 1;
+//     uint32_t FC                             : 1;
+//     uint32_t TD                             : 1;
+//     uint32_t TC                             : 1;
+//     uint32_t RSVD1                          : 1;
+//     uint32_t EDV                            : 1;
+//     uint32_t DSG                            : 1;
+//     uint32_t RSVD2                          : 1;
+//     uint32_t REST                           : 1;
+//     uint32_t RSVD3                          : 1;
+//     uint32_t RDIS                           : 1;
+//     uint32_t VOK                            : 1;
+//     uint32_t QEN                            : 1;
+//     uint32_t SLPQMax                        : 1;
+//     uint32_t OCVPRED                        : 1;
+//     uint32_t NSFM                           : 1;
+//     uint32_t VDQ                            : 1;
+//     uint32_t QMax                           : 1;
+//     uint32_t RX                             : 1;
+//     uint32_t LDMD                           : 1;
+//     uint32_t OCVFR                          : 1;
+//     uint32_t QMAXDODOK                      : 1;
+//     uint32_t RSVD4                          : 10;
+// } GaugingStatus_Field_T;
 
 
-typedef union
-{
-    uint16_t data; 
-    struct 
-    {
-        uint16_t QEN                 : 1;
-        uint16_t VOK                 : 1;
-        uint16_t DNR                 : 1;
-        uint16_t LDMD                : 1;   
-        uint16_t SLEEP               : 1;
-        uint16_t FULLSLEEP           : 1;
-        uint16_t HIBERNATE           : 1;
-        uint16_t SHUTDOWN            : 1;
-        uint16_t RSVD1               : 1;   
-        uint16_t QMAXUPDATE          : 1;   
-        uint16_t RSVD2               : 2;
-        uint16_t CALMODE             : 1;   
-        uint16_t FAS                 : 1;
-        uint16_t SS                  : 1;
-        uint16_t RSVD3               : 1;  
-    }ContorlStatus_Field1;
+// typedef union
+// {
+//     uint16_t data; 
+//     struct 
+//     {
+//         uint16_t QEN                 : 1;
+//         uint16_t VOK                 : 1;
+//         uint16_t DNR                 : 1;
+//         uint16_t LDMD                : 1;   
+//         uint16_t SLEEP               : 1;
+//         uint16_t FULLSLEEP           : 1;
+//         uint16_t HIBERNATE           : 1;
+//         uint16_t SHUTDOWN            : 1;
+//         uint16_t RSVD1               : 1;   
+//         uint16_t QMAXUPDATE          : 1;   
+//         uint16_t RSVD2               : 2;
+//         uint16_t CALMODE             : 1;   
+//         uint16_t FAS                 : 1;
+//         uint16_t SS                  : 1;
+//         uint16_t RSVD3               : 1;  
+//     }ContorlStatus_Field1;
     
-} ContorlStatus_Field_T1;
+// } ContorlStatus_Field_T1;
 
 typedef struct
 {
@@ -426,7 +426,7 @@ extern nManufacturingStatus		ManufacturingStatus;
 
  typedef struct
     {
-        ContorlStatus_Field_T1 nCtrlStatus1;           /* 0X00,0X01 */
+        //ContorlStatus_Field_T1 nCtrlStatus1;           /* 0X00,0X01 */
         ContorlStatus_Field_T nCtrlStatus;           /* 0X00,0X01 */
         int16_t  nAtRate;                             /* 0X02,0X03 */
         uint16_t  nBatteryMode; 
@@ -447,7 +447,7 @@ extern nManufacturingStatus		ManufacturingStatus;
         uint16_t nCycleCount;         /* 0X2A,0X2B */
         uint16_t nAverageTimeToFull;  /* 0X18,0X19 */
         uint16_t nSBSInfo;
-				uint16_t nIdealRcCwh;								 /* 0X1A,0X1B */
+		uint16_t nIdealRcCwh;								 /* 0X1A,0X1B */
         uint16_t nManufactdata;
 		uint16_t nIdealFccCwh;								 /* 0X1C,0X1D */
        int16_t  nMaxLoadCurrent;        /* 0X1E,0X1F */
@@ -515,6 +515,7 @@ extern nManufacturingStatus		ManufacturingStatus;
         uint8_t nt_com7eBuf[0x14];     
         uint16_t nAccessModeInfo;        /*0x80*/
         uint16_t  nFullyCharged;        /*0x82*/
+        uint16_t  nipaQmax;
         uint8_t   nAdcBypassDataCellCurrent[4];  /*0x86*/  
         int16_t  n0Current;             /*0x87*/
         uint8_t  nOCV_V[4];             /*0x8c*/ 
@@ -575,6 +576,9 @@ extern int8_t        IntTemp;
 
 ///////////////////////////////////////////////////
 
+
+
+#define t_ipaQmax  g_StdCmdData.Field.nipaQmax
 #define t_combe  g_StdCmdData.Field.n_tcombe
 #define t_comc5  g_StdCmdData.Field.n_tcomc5 
 #define t_comfa  g_StdCmdData.Field.n_comfa
@@ -677,19 +681,19 @@ extern int8_t        IntTemp;
 #define f_SS       g_StdCmdData.Field.nCtrlStatus.ContorlStatus_Field.SS
 #define f_NVR       g_StdCmdData.Field.nCtrlStatus.ContorlStatus_Field.NVR
 
-#define t1_com00					  g_StdCmdData.Field.nCtrlStatus1.data
-#define f_QEN1              g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.QEN
-#define f_VOK1              g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.VOK
-#define f_DNR1              g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.DNR
-#define f_LDMD1             g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.LDMD
-#define f_SLEEP1            g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.SLEEP
-#define f_FULLSLEEP1        g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.FULLSLEEP
-#define f_HIBERNATE1        g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.HIBERNATE
-#define f_SHUTDOWN1         g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.SHUTDOWN
-#define f_QMAXUPDATE1       g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.QMAXUPDATE
-#define f_CALMODE1          g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.CALMODE
-#define f_FAS1              g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.FAS
-#define f_SS1               g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.SS
+// #define t1_com00					  g_StdCmdData.Field.nCtrlStatus1.data
+// #define f_QEN1              g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.QEN
+// #define f_VOK1              g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.VOK
+// #define f_DNR1              g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.DNR
+// #define f_LDMD1             g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.LDMD
+// #define f_SLEEP1            g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.SLEEP
+// #define f_FULLSLEEP1        g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.FULLSLEEP
+// #define f_HIBERNATE1        g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.HIBERNATE
+// #define f_SHUTDOWN1         g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.SHUTDOWN
+// #define f_QMAXUPDATE1       g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.QMAXUPDATE
+// #define f_CALMODE1          g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.CALMODE
+// #define f_FAS1              g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.FAS
+// #define f_SS1               g_StdCmdData.Field.nCtrlStatus1.ContorlStatus_Field1.SS
 
 
 
@@ -983,7 +987,7 @@ extern   uint16_t t_com86cnt;
 
 //#define  t1_com78     g_StdCmdData1.Field.ElapsedTimeHour
 //void new_dataCmd(void);
-
+extern int16_t t_com09_rep;
 extern uint16_t t_com62cnt;
 extern int8_t CellTemp_use_rsoc;
 /*

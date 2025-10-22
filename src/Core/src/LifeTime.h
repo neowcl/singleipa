@@ -35,30 +35,7 @@ typedef struct
     uint32_t   lt_HighTempTime;
     uint32_t   lt_HighVoltTime;
     uint32_t   lt_HighTVTime;
-    uint32_t   lt_T1_RSOC[8];
-    uint32_t   lt_T2_RSOC[8];
-    uint32_t   lt_T3_RSOC[8];
-    uint32_t   lt_T4_RSOC[8];
-    uint32_t   lt_T5_RSOC[8];
-    uint32_t   lt_T6_RSOC[8];
-    uint32_t   lt_T7_RSOC[8];
-
-   uint16_t 	d_Inner_R0;
-	uint16_t 	d_Inner_R3;
-	uint16_t 	d_Inner_R5;
-	uint16_t 	d_Inner_R10;
-	uint16_t 	d_Inner_R20;
-	uint16_t 	d_Inner_R30;
-	uint16_t 	d_Inner_R40;
-	uint16_t 	d_Inner_R50;
-	uint16_t 	d_Inner_R60;
-	uint16_t 	d_Inner_R70;
-	uint16_t 	d_Inner_R80;
-	uint16_t 	d_Inner_R90;
-	uint16_t 	d_Inner_R100;
-
-
-		int16_t    lt_MinChargeVoltage;
+    int16_t     lt_MinChargeVoltage;
 }_LifTimes;
 
 #pragma pack()
@@ -112,28 +89,10 @@ extern  _LTDF     DF_LifeTime;
 #define     HT_TIME              DF_LifeTime.sltdat.lt_HighTempTime
 #define     HV_TIME              DF_LifeTime.sltdat.lt_HighVoltTime
 #define     HTV_TIME             DF_LifeTime.sltdat.lt_HighTVTime
-#define     T1_RSOC              DF_LifeTime.sltdat.lt_T1_RSOC
-#define     T2_RSOC              DF_LifeTime.sltdat.lt_T2_RSOC
-#define     T3_RSOC              DF_LifeTime.sltdat.lt_T3_RSOC
-#define     T4_RSOC              DF_LifeTime.sltdat.lt_T4_RSOC
-#define     T5_RSOC              DF_LifeTime.sltdat.lt_T5_RSOC
-#define     T6_RSOC              DF_LifeTime.sltdat.lt_T6_RSOC
-#define     T7_RSOC              DF_LifeTime.sltdat.lt_T7_RSOC
+
 #define     MinChargeVoltage     DF_LifeTime.sltdat.lt_MinChargeVoltage
 
-#define D_Inner_R0	    DF_LifeTime.sltdat.d_Inner_R0
-#define D_Inner_R3	 	  DF_LifeTime.sltdat.d_Inner_R3
-#define D_Inner_R5	 		DF_LifeTime.sltdat.d_Inner_R5
-#define D_Inner_R10	 		DF_LifeTime.sltdat.d_Inner_R10
-#define D_Inner_R20	 		DF_LifeTime.sltdat.d_Inner_R20
-#define D_Inner_R30	 		DF_LifeTime.sltdat.d_Inner_R30
-#define D_Inner_R40	 		DF_LifeTime.sltdat.d_Inner_R40
-#define D_Inner_R50	 		DF_LifeTime.sltdat.d_Inner_R50
-#define D_Inner_R60	 		DF_LifeTime.sltdat.d_Inner_R60
-#define D_Inner_R70			DF_LifeTime.sltdat.d_Inner_R70
-#define D_Inner_R80			DF_LifeTime.sltdat.d_Inner_R80
-#define D_Inner_R90			DF_LifeTime.sltdat.d_Inner_R90
-#define D_Inner_R100		DF_LifeTime.sltdat.d_Inner_R100
+
 												
 #define     LIFETIME_ST_OFF                   16
 #define     LIFETIME_LEN                      480
@@ -146,13 +105,7 @@ extern uint16_t HT_Cnt;
 extern uint16_t HV_Cnt;
 extern uint16_t HTV_Cnt;
 extern uint16_t lt_test;
-extern uint16_t T1_Cnt[8];
-extern uint16_t T2_Cnt[8];
-extern uint16_t T3_Cnt[8];
-extern uint16_t T4_Cnt[8];
-extern uint16_t T5_Cnt[8];
-extern uint16_t T6_Cnt[8];
-extern uint16_t T7_Cnt[8];
+
 
 extern int16_t CurrentPower;
 //extern int16_t Power;

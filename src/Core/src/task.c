@@ -31,7 +31,8 @@ uint16_t t_com86cnt=0;
 
 uint8_t  readIPAFrist=1;
 uint8_t  readIPAmes_flag=0;
-
+uint8_t  f_ipa_vol=0;
+uint8_t  f_ipa_temp=0;
 
 //uint8_t READIPATEMPLATE = 0; //0x18
 uint16_t open_IPA=0;
@@ -412,19 +413,23 @@ void update_soc_input_param(void)
                 t_com75 = temperature_inner + 2731;
                 IntTemp = temperature_inner / 10;
             }
-            //        if(GET_SOCFlagConfig_TempEnable_TSInt())//用内温
-            //        {
-            //            temperature_ex = temperature_inner;
-            //        }else{ //用外温
-            // temprature_r = vadc_get_temperature(VADC_CHANNEL_3, VADC_VADCHS_EXTERNAL_SENSOR, 2);
-            // temperature_ex = Lookup_T(temprature_r); // 0.1 degc
-            // if(!f_CAL_EN)
-            // {
-            // temperature_ex += (int16_t)CELLTEMPOFFSET * 10;
-            // }
-
-            //        }
+          
             temperature_ex = temperature_inner;
+            if( (temperature_ex>450 && temperature_ex<550)&& f_charge)
+            {
+                f_ipa_temp=1;
+            
+            }
+
+            if(f_ipa_temp)
+            {
+                 if(!f_charge || temperature_ex<380 || temperature_ex>=550)
+                 {
+                    f_ipa_temp=0;
+                 }
+                temperature_ex-=50;
+
+            }
 #if NTC_TEMPERATURE_REDUCE
             if (temperature_ex > 400)
             {
@@ -544,14 +549,44 @@ void update_soc_input_param(void)
             if(vbat_val<3210&&  (!f_CAL_EN) &&t_com0a>0)
             {
                 t_com09 = 3210;
+                t_com09_rep = 3210;
             }
             else
             {
-            t_com09 = vbat_val;
+               t_com09 = vbat_val;
+               if ((vbat_val > 3900 && vbat_val < 4170) && f_charge && (temperature_ex > 430))
+               {
+                   f_ipa_vol = 1;
+               }
+               if (f_ipa_vol)
+               {
+                   t_com09_rep = 4170;
+                   if (!f_charge || (temperature_ex < 350) || (vbat_val >= 4170) || (vbat_val<=3900))
+                   {
+                       f_ipa_vol = 0;
+                   }
+               }
+               else
+               {
+                   if (vbat_val > 4400 && f_charge && t_com0d<100)
+                   {
+                       t_com09_rep = vbat_val + 10;
+                   }
+                   else if ((t_com0d == 100) && f_charge)
+                   {
+                       t_com09_rep = vbat_val - 10;
+                   }
+                   else
+                   {
+                       t_com09_rep = vbat_val;
+                   }
+               }
             }
 //            interrupt_status_of_vol(vbat_val);
         }
         vadc_enable_ctrl(ENABLE);
+
+
 
         temp_val =  (float)vbat_val/1000;// 转换成浮点，单位V
         /*单节电池电压V*/
@@ -582,7 +617,8 @@ void init_soc_input_state(void)
  if (DF_FCC == 0) // FCC is not initialized with Flexible data
 	{
 		DF_MAXLOADCUR = D_INITMAXLOADCUR;
-		DF_QMAX = D_DCAP;
+		DF_QMAX =D_DCAP;
+        t_ipaQmax=INIT_IDRFCC;
 		DF_SOH = 100;
 		t_com10 = INIT_FCC; // set initial FCC
 		IdealFcc = INIT_IDRFCC;

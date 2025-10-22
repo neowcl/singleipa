@@ -39,6 +39,9 @@ uint8_t subcmd_datalen;
 uint8_t t_com62Flg = 0;
 uint8_t t_com62Buf[34] = {0};
 
+
+int16_t t_com09_rep ;
+
 //uint8_t readIPA_huifu=0;
 // uint8_t subcmd_datalen;
 uint32_t iic_rx_type = 0;
@@ -184,7 +187,7 @@ uint8_t *pCMDAddress[100] =
 _ST_SMB ssmbdata;
 const _ST_SMB scom_no_tbl[] =
     {
-        {0x02, (uint8_t *)&t1_com00},          // 0x00
+        {0x02, (uint8_t *)&t_com00},          // 0x00
         {0x02, (uint8_t *)NULL},               // 0x01 RemainingCapacityAlarm()
         {0x02, (uint8_t *)&t_com02},           // 0x02 RemainingTimeAlarm()
         {0x02, (uint8_t *)&t_com03},           // 0x03 BatteryMode()
@@ -193,7 +196,7 @@ const _ST_SMB scom_no_tbl[] =
         {0x02, (uint8_t *)&t_com06},           // 0x06 AtRateTimeToEmpty()
         {0x02, (uint8_t *)NULL},               // 0x07 AtRateOK()
         {0x02, (uint8_t *)&t_com08},           // 0x08 Temperature()
-        {0x02, (uint8_t *)&t_com09},           // 0x09 Voltage()
+        {0x02, (uint8_t *)&t_com09_rep},           // 0x09 Voltage()
         {0x02, (uint8_t *)&t_com0a},           // 0x0a Current()
         {0x02, (uint8_t *)&t_com0b},           // 0x0b AverageCurrent()
         {0x02, (uint8_t *)NULL},               // 0x0c MaxError()
@@ -316,7 +319,7 @@ const _ST_SMB scom_no_tbl[] =
         {0x20, (uint8_t *)NULL},               // 0x81 ()
         {0x02, (uint8_t *)&t_com82},           // 0x82 ()
         {0x20, (uint8_t *)NULL},               // 0x83 ()
-        {0x02, (uint8_t *)&t_com84_cwh},       // 0x84 ()
+        {0x02, (uint8_t *)&t_ipaQmax},       // 0x84 ()
         {0x02, (uint8_t *)&t1_com85},          // 0x85 ()
         {0x04, (uint8_t *)&t_com86},           // 0x86 ()
         {0x02, (uint8_t *)&t_com87},           // 0x87 ()
@@ -843,6 +846,17 @@ void iic_isr_process(void)
                     
                    case 0x0000:
                     {
+                        uint32_t rs=16384;
+                        if(t_com0d>0)
+                        {
+                            //float dd=(D_COM66_END-D_COM66_HEAD)/97.0;
+                            rs=D_COM66_END-(((D_COM66_END-D_COM66_HEAD)/97.0)*(t_com0d-1));
+                        }
+                        else
+                        {
+                            rs=16384;
+                        }
+                        
                         t_com66[0] = 0xe8;
                         t_com66[1] = 0x03;
                         t_com66[2] = 0x00;
@@ -853,36 +867,41 @@ void iic_isr_process(void)
                         t_com66[6] = (uint8_t)(t_com11 >> 16);
                         t_com66[7] = (uint8_t)(t_com11 >> 24);
 
-                        uint16_t rs=16384*(100-t_com0d)/100;
-                        t_com66[8] = (uint8_t)rs;
-                        t_com66[9] = (uint8_t)(rs >> 8);
-                        t_com66[10] = (uint8_t)(rs >> 16);
-                        t_com66[11] =(uint8_t)(rs >> 24);
+                        t_com66[8] = (uint8_t)(rs);
+                        t_com66[9] = (uint8_t)((rs) >> 8);
+                        t_com66[10] = (uint8_t)((rs)>> 16);
+                        t_com66[11] =(uint8_t)((rs) >> 24);
 
                         
-                        uint32_t rcu32 = 175000000*t_com0d/100;
+                        // //uint32_t rcu32 = 175000000*0.88*dd/100;
+                        uint32_t rcu32 =(t_com0f_cwh)*59000;
                         t_com66[12] = (uint8_t)rcu32;
                         t_com66[13] = (uint8_t)(rcu32 >> 8);
                         t_com66[14] = (uint8_t)(rcu32 >> 16);
                         t_com66[15] = (uint8_t)(rcu32 >> 24);
+              
 
                         t_com66[16] = (uint8_t)rcu32;
                         t_com66[17] = (uint8_t)(rcu32 >> 8);
                         t_com66[18] = (uint8_t)(rcu32 >> 16);
                         t_com66[19] = (uint8_t)(rcu32 >> 24);
+                     
 
                         t_com66[20] = 0x00;
                         t_com66[21] = 0x40;
                         t_com66[22] = 0x00;
                         t_com66[23] = 0x00;
+            
                         
-                        uint32_t    QStart=175000000*(100-t_com0d)/100;
+                        // //uint32_t    QStart=175000000*0.88*(100-dd)/100;
+                        uint32_t   QStart=(t_com10_cwh-t_com0f_cwh)*59000;
                         t_com66[24] =(uint8_t)QStart;
                         t_com66[25] = (uint8_t)(QStart>> 8);
                         t_com66[26] = (uint8_t)(QStart >> 16);
                         t_com66[27] = (uint8_t)(QStart >> 24);
+                       
 
-                        t_com66[28] = 0x46;
+                        t_com66[28] = 0x59;
                         t_com66[29] = 0x00;
                         t_com66[30] = 0x00;
                         t_com66[31] = 0x00;
@@ -1706,8 +1725,8 @@ void SubCmdProcess(uint16_t Command)
     {
     case 0x0000:
     {
-        g_StdCmdData.Field.nMACData[0] = (uint8_t)g_StdCmdData.Field.nCtrlStatus1.data;
-        g_StdCmdData.Field.nMACData[1] = (uint8_t)(g_StdCmdData.Field.nCtrlStatus1.data >> 8);
+        // g_StdCmdData.Field.nMACData[0] = (uint8_t)g_StdCmdData.Field.nCtrlStatus1.data;
+        // g_StdCmdData.Field.nMACData[1] = (uint8_t)(g_StdCmdData.Field.nCtrlStatus1.data >> 8);
         subcmd_datalen = 2;
     }
     break;
@@ -1929,260 +1948,42 @@ void SubCmdProcess(uint16_t Command)
     }
     case 0x0065:
     {
-        g_StdCmdData.Field.nMACData[0] = T1_RSOC[0];
-        g_StdCmdData.Field.nMACData[1] = T1_RSOC[0] >> 8;
-        g_StdCmdData.Field.nMACData[2] = T1_RSOC[0] >> 16;
-        g_StdCmdData.Field.nMACData[3] = T1_RSOC[0] >> 24;
-        g_StdCmdData.Field.nMACData[4] = T1_RSOC[1];
-        g_StdCmdData.Field.nMACData[5] = T1_RSOC[1] >> 8;
-        g_StdCmdData.Field.nMACData[6] = T1_RSOC[1] >> 16;
-        g_StdCmdData.Field.nMACData[7] = T1_RSOC[1] >> 24;
-        g_StdCmdData.Field.nMACData[8] = T1_RSOC[2];
-        g_StdCmdData.Field.nMACData[9] = T1_RSOC[2] >> 8;
-        g_StdCmdData.Field.nMACData[10] = T1_RSOC[2] >> 16;
-        g_StdCmdData.Field.nMACData[11] = T1_RSOC[2] >> 24;
-        g_StdCmdData.Field.nMACData[12] = T1_RSOC[3];
-        g_StdCmdData.Field.nMACData[13] = T1_RSOC[3] >> 8;
-        g_StdCmdData.Field.nMACData[14] = T1_RSOC[3] >> 16;
-        g_StdCmdData.Field.nMACData[15] = T1_RSOC[3] >> 24;
-        g_StdCmdData.Field.nMACData[16] = T1_RSOC[4];
-        g_StdCmdData.Field.nMACData[17] = T1_RSOC[4] >> 8;
-        g_StdCmdData.Field.nMACData[18] = T1_RSOC[4] >> 16;
-        g_StdCmdData.Field.nMACData[19] = T1_RSOC[4] >> 24;
-        g_StdCmdData.Field.nMACData[20] = T1_RSOC[5];
-        g_StdCmdData.Field.nMACData[21] = T1_RSOC[5] >> 8;
-        g_StdCmdData.Field.nMACData[22] = T1_RSOC[5] >> 16;
-        g_StdCmdData.Field.nMACData[23] = T1_RSOC[5] >> 24;
-        g_StdCmdData.Field.nMACData[24] = T1_RSOC[6];
-        g_StdCmdData.Field.nMACData[25] = T1_RSOC[6] >> 8;
-        g_StdCmdData.Field.nMACData[26] = T1_RSOC[6] >> 16;
-        g_StdCmdData.Field.nMACData[27] = T1_RSOC[6] >> 24;
-        g_StdCmdData.Field.nMACData[28] = T1_RSOC[7];
-        g_StdCmdData.Field.nMACData[29] = T1_RSOC[7] >> 8;
-        g_StdCmdData.Field.nMACData[30] = T1_RSOC[7] >> 16;
-        g_StdCmdData.Field.nMACData[31] = T1_RSOC[7] >> 24;
         subcmd_datalen = 32;
         break;
     }
     case 0x0066:
     {
-        g_StdCmdData.Field.nMACData[0] = T2_RSOC[0];
-        g_StdCmdData.Field.nMACData[1] = T2_RSOC[0] >> 8;
-        g_StdCmdData.Field.nMACData[2] = T2_RSOC[0] >> 16;
-        g_StdCmdData.Field.nMACData[3] = T2_RSOC[0] >> 24;
-        g_StdCmdData.Field.nMACData[4] = T2_RSOC[1];
-        g_StdCmdData.Field.nMACData[5] = T2_RSOC[1] >> 8;
-        g_StdCmdData.Field.nMACData[6] = T2_RSOC[1] >> 16;
-        g_StdCmdData.Field.nMACData[7] = T2_RSOC[1] >> 24;
-        g_StdCmdData.Field.nMACData[8] = T2_RSOC[2];
-        g_StdCmdData.Field.nMACData[9] = T2_RSOC[2] >> 8;
-        g_StdCmdData.Field.nMACData[10] = T2_RSOC[2] >> 16;
-        g_StdCmdData.Field.nMACData[11] = T2_RSOC[2] >> 24;
-        g_StdCmdData.Field.nMACData[12] = T2_RSOC[3];
-        g_StdCmdData.Field.nMACData[13] = T2_RSOC[3] >> 8;
-        g_StdCmdData.Field.nMACData[14] = T2_RSOC[3] >> 16;
-        g_StdCmdData.Field.nMACData[15] = T2_RSOC[3] >> 24;
-        g_StdCmdData.Field.nMACData[16] = T2_RSOC[4];
-        g_StdCmdData.Field.nMACData[17] = T2_RSOC[4] >> 8;
-        g_StdCmdData.Field.nMACData[18] = T2_RSOC[4] >> 16;
-        g_StdCmdData.Field.nMACData[19] = T2_RSOC[4] >> 24;
-        g_StdCmdData.Field.nMACData[20] = T2_RSOC[5];
-        g_StdCmdData.Field.nMACData[21] = T2_RSOC[5] >> 8;
-        g_StdCmdData.Field.nMACData[22] = T2_RSOC[5] >> 16;
-        g_StdCmdData.Field.nMACData[23] = T2_RSOC[5] >> 24;
-        g_StdCmdData.Field.nMACData[24] = T2_RSOC[6];
-        g_StdCmdData.Field.nMACData[25] = T2_RSOC[6] >> 8;
-        g_StdCmdData.Field.nMACData[26] = T2_RSOC[6] >> 16;
-        g_StdCmdData.Field.nMACData[27] = T2_RSOC[6] >> 24;
-        g_StdCmdData.Field.nMACData[28] = T2_RSOC[7];
-        g_StdCmdData.Field.nMACData[29] = T2_RSOC[7] >> 8;
-        g_StdCmdData.Field.nMACData[30] = T2_RSOC[7] >> 16;
-        g_StdCmdData.Field.nMACData[31] = T2_RSOC[7] >> 24;
+      
         subcmd_datalen = 32;
         break;
     }
     case 0x0067:
     {
-        g_StdCmdData.Field.nMACData[0] = T3_RSOC[0];
-        g_StdCmdData.Field.nMACData[1] = T3_RSOC[0] >> 8;
-        g_StdCmdData.Field.nMACData[2] = T3_RSOC[0] >> 16;
-        g_StdCmdData.Field.nMACData[3] = T3_RSOC[0] >> 24;
-        g_StdCmdData.Field.nMACData[4] = T3_RSOC[1];
-        g_StdCmdData.Field.nMACData[5] = T3_RSOC[1] >> 8;
-        g_StdCmdData.Field.nMACData[6] = T3_RSOC[1] >> 16;
-        g_StdCmdData.Field.nMACData[7] = T3_RSOC[1] >> 24;
-        g_StdCmdData.Field.nMACData[8] = T3_RSOC[2];
-        g_StdCmdData.Field.nMACData[9] = T3_RSOC[2] >> 8;
-        g_StdCmdData.Field.nMACData[10] = T3_RSOC[2] >> 16;
-        g_StdCmdData.Field.nMACData[11] = T3_RSOC[2] >> 24;
-        g_StdCmdData.Field.nMACData[12] = T3_RSOC[3];
-        g_StdCmdData.Field.nMACData[13] = T3_RSOC[3] >> 8;
-        g_StdCmdData.Field.nMACData[14] = T3_RSOC[3] >> 16;
-        g_StdCmdData.Field.nMACData[15] = T3_RSOC[3] >> 24;
-        g_StdCmdData.Field.nMACData[16] = T3_RSOC[4];
-        g_StdCmdData.Field.nMACData[17] = T3_RSOC[4] >> 8;
-        g_StdCmdData.Field.nMACData[18] = T3_RSOC[4] >> 16;
-        g_StdCmdData.Field.nMACData[19] = T3_RSOC[4] >> 24;
-        g_StdCmdData.Field.nMACData[20] = T3_RSOC[5];
-        g_StdCmdData.Field.nMACData[21] = T3_RSOC[5] >> 8;
-        g_StdCmdData.Field.nMACData[22] = T3_RSOC[5] >> 16;
-        g_StdCmdData.Field.nMACData[23] = T3_RSOC[5] >> 24;
-        g_StdCmdData.Field.nMACData[24] = T3_RSOC[6];
-        g_StdCmdData.Field.nMACData[25] = T3_RSOC[6] >> 8;
-        g_StdCmdData.Field.nMACData[26] = T3_RSOC[6] >> 16;
-        g_StdCmdData.Field.nMACData[27] = T3_RSOC[6] >> 24;
-        g_StdCmdData.Field.nMACData[28] = T3_RSOC[7];
-        g_StdCmdData.Field.nMACData[29] = T3_RSOC[7] >> 8;
-        g_StdCmdData.Field.nMACData[30] = T3_RSOC[7] >> 16;
-        g_StdCmdData.Field.nMACData[31] = T3_RSOC[7] >> 24;
+       
         subcmd_datalen = 32;
         break;
     }
     case 0x0068:
     {
-        g_StdCmdData.Field.nMACData[0] = T4_RSOC[0];
-        g_StdCmdData.Field.nMACData[1] = T4_RSOC[0] >> 8;
-        g_StdCmdData.Field.nMACData[2] = T4_RSOC[0] >> 16;
-        g_StdCmdData.Field.nMACData[3] = T4_RSOC[0] >> 24;
-        g_StdCmdData.Field.nMACData[4] = T4_RSOC[1];
-        g_StdCmdData.Field.nMACData[5] = T4_RSOC[1] >> 8;
-        g_StdCmdData.Field.nMACData[6] = T4_RSOC[1] >> 16;
-        g_StdCmdData.Field.nMACData[7] = T4_RSOC[1] >> 24;
-        g_StdCmdData.Field.nMACData[8] = T4_RSOC[2];
-        g_StdCmdData.Field.nMACData[9] = T4_RSOC[2] >> 8;
-        g_StdCmdData.Field.nMACData[10] = T4_RSOC[2] >> 16;
-        g_StdCmdData.Field.nMACData[11] = T4_RSOC[2] >> 24;
-        g_StdCmdData.Field.nMACData[12] = T4_RSOC[3];
-        g_StdCmdData.Field.nMACData[13] = T4_RSOC[3] >> 8;
-        g_StdCmdData.Field.nMACData[14] = T4_RSOC[3] >> 16;
-        g_StdCmdData.Field.nMACData[15] = T4_RSOC[3] >> 24;
-        g_StdCmdData.Field.nMACData[16] = T4_RSOC[4];
-        g_StdCmdData.Field.nMACData[17] = T4_RSOC[4] >> 8;
-        g_StdCmdData.Field.nMACData[18] = T4_RSOC[4] >> 16;
-        g_StdCmdData.Field.nMACData[19] = T4_RSOC[4] >> 24;
-        g_StdCmdData.Field.nMACData[20] = T4_RSOC[5];
-        g_StdCmdData.Field.nMACData[21] = T4_RSOC[5] >> 8;
-        g_StdCmdData.Field.nMACData[22] = T4_RSOC[5] >> 16;
-        g_StdCmdData.Field.nMACData[23] = T4_RSOC[5] >> 24;
-        g_StdCmdData.Field.nMACData[24] = T4_RSOC[6];
-        g_StdCmdData.Field.nMACData[25] = T4_RSOC[6] >> 8;
-        g_StdCmdData.Field.nMACData[26] = T4_RSOC[6] >> 16;
-        g_StdCmdData.Field.nMACData[27] = T4_RSOC[6] >> 24;
-        g_StdCmdData.Field.nMACData[28] = T4_RSOC[7];
-        g_StdCmdData.Field.nMACData[29] = T4_RSOC[7] >> 8;
-        g_StdCmdData.Field.nMACData[30] = T4_RSOC[7] >> 16;
-        g_StdCmdData.Field.nMACData[31] = T4_RSOC[7] >> 24;
+       
         subcmd_datalen = 32;
         break;
     }
     case 0x0069:
     {
-        g_StdCmdData.Field.nMACData[0] = T5_RSOC[0];
-        g_StdCmdData.Field.nMACData[1] = T5_RSOC[0] >> 8;
-        g_StdCmdData.Field.nMACData[2] = T5_RSOC[0] >> 16;
-        g_StdCmdData.Field.nMACData[3] = T5_RSOC[0] >> 24;
-        g_StdCmdData.Field.nMACData[4] = T5_RSOC[1];
-        g_StdCmdData.Field.nMACData[5] = T5_RSOC[1] >> 8;
-        g_StdCmdData.Field.nMACData[6] = T5_RSOC[1] >> 16;
-        g_StdCmdData.Field.nMACData[7] = T5_RSOC[1] >> 24;
-        g_StdCmdData.Field.nMACData[8] = T5_RSOC[2];
-        g_StdCmdData.Field.nMACData[9] = T5_RSOC[2] >> 8;
-        g_StdCmdData.Field.nMACData[10] = T5_RSOC[2] >> 16;
-        g_StdCmdData.Field.nMACData[11] = T5_RSOC[2] >> 24;
-        g_StdCmdData.Field.nMACData[12] = T5_RSOC[3];
-        g_StdCmdData.Field.nMACData[13] = T5_RSOC[3] >> 8;
-        g_StdCmdData.Field.nMACData[14] = T5_RSOC[3] >> 16;
-        g_StdCmdData.Field.nMACData[15] = T5_RSOC[3] >> 24;
-        g_StdCmdData.Field.nMACData[16] = T5_RSOC[4];
-        g_StdCmdData.Field.nMACData[17] = T5_RSOC[4] >> 8;
-        g_StdCmdData.Field.nMACData[18] = T5_RSOC[4] >> 16;
-        g_StdCmdData.Field.nMACData[19] = T5_RSOC[4] >> 24;
-        g_StdCmdData.Field.nMACData[20] = T5_RSOC[5];
-        g_StdCmdData.Field.nMACData[21] = T5_RSOC[5] >> 8;
-        g_StdCmdData.Field.nMACData[22] = T5_RSOC[5] >> 16;
-        g_StdCmdData.Field.nMACData[23] = T5_RSOC[5] >> 24;
-        g_StdCmdData.Field.nMACData[24] = T5_RSOC[6];
-        g_StdCmdData.Field.nMACData[25] = T5_RSOC[6] >> 8;
-        g_StdCmdData.Field.nMACData[26] = T5_RSOC[6] >> 16;
-        g_StdCmdData.Field.nMACData[27] = T5_RSOC[6] >> 24;
-        g_StdCmdData.Field.nMACData[28] = T5_RSOC[7];
-        g_StdCmdData.Field.nMACData[29] = T5_RSOC[7] >> 8;
-        g_StdCmdData.Field.nMACData[30] = T5_RSOC[7] >> 16;
-        g_StdCmdData.Field.nMACData[31] = T5_RSOC[7] >> 24;
+        
         subcmd_datalen = 32;
         break;
     }
     case 0x006A:
     {
-        g_StdCmdData.Field.nMACData[0] = T6_RSOC[0];
-        g_StdCmdData.Field.nMACData[1] = T6_RSOC[0] >> 8;
-        g_StdCmdData.Field.nMACData[2] = T6_RSOC[0] >> 16;
-        g_StdCmdData.Field.nMACData[3] = T6_RSOC[0] >> 24;
-        g_StdCmdData.Field.nMACData[4] = T6_RSOC[1];
-        g_StdCmdData.Field.nMACData[5] = T6_RSOC[1] >> 8;
-        g_StdCmdData.Field.nMACData[6] = T6_RSOC[1] >> 16;
-        g_StdCmdData.Field.nMACData[7] = T6_RSOC[1] >> 24;
-        g_StdCmdData.Field.nMACData[8] = T6_RSOC[2];
-        g_StdCmdData.Field.nMACData[9] = T6_RSOC[2] >> 8;
-        g_StdCmdData.Field.nMACData[10] = T6_RSOC[2] >> 16;
-        g_StdCmdData.Field.nMACData[11] = T6_RSOC[2] >> 24;
-        g_StdCmdData.Field.nMACData[12] = T6_RSOC[3];
-        g_StdCmdData.Field.nMACData[13] = T6_RSOC[3] >> 8;
-        g_StdCmdData.Field.nMACData[14] = T6_RSOC[3] >> 16;
-        g_StdCmdData.Field.nMACData[15] = T6_RSOC[3] >> 24;
-        g_StdCmdData.Field.nMACData[16] = T6_RSOC[4];
-        g_StdCmdData.Field.nMACData[17] = T6_RSOC[4] >> 8;
-        g_StdCmdData.Field.nMACData[18] = T6_RSOC[4] >> 16;
-        g_StdCmdData.Field.nMACData[19] = T6_RSOC[4] >> 24;
-        g_StdCmdData.Field.nMACData[20] = T6_RSOC[5];
-        g_StdCmdData.Field.nMACData[21] = T6_RSOC[5] >> 8;
-        g_StdCmdData.Field.nMACData[22] = T6_RSOC[5] >> 16;
-        g_StdCmdData.Field.nMACData[23] = T6_RSOC[5] >> 24;
-        g_StdCmdData.Field.nMACData[24] = T6_RSOC[6];
-        g_StdCmdData.Field.nMACData[25] = T6_RSOC[6] >> 8;
-        g_StdCmdData.Field.nMACData[26] = T6_RSOC[6] >> 16;
-        g_StdCmdData.Field.nMACData[27] = T6_RSOC[6] >> 24;
-        g_StdCmdData.Field.nMACData[28] = T6_RSOC[7];
-        g_StdCmdData.Field.nMACData[29] = T6_RSOC[7] >> 8;
-        g_StdCmdData.Field.nMACData[30] = T6_RSOC[7] >> 16;
-        g_StdCmdData.Field.nMACData[31] = T6_RSOC[7] >> 24;
+        
         subcmd_datalen = 32;
         break;
     }
     case 0x006B: // 0x65 - 6B SOC - Temp  Runtime
     {
-        g_StdCmdData.Field.nMACData[0] = T7_RSOC[0];
-        g_StdCmdData.Field.nMACData[1] = T7_RSOC[0] >> 8;
-        g_StdCmdData.Field.nMACData[2] = T7_RSOC[0] >> 16;
-        g_StdCmdData.Field.nMACData[3] = T7_RSOC[0] >> 24;
-        g_StdCmdData.Field.nMACData[4] = T7_RSOC[1];
-        g_StdCmdData.Field.nMACData[5] = T7_RSOC[1] >> 8;
-        g_StdCmdData.Field.nMACData[6] = T7_RSOC[1] >> 16;
-        g_StdCmdData.Field.nMACData[7] = T7_RSOC[1] >> 24;
-        g_StdCmdData.Field.nMACData[8] = T7_RSOC[2];
-        g_StdCmdData.Field.nMACData[9] = T7_RSOC[2] >> 8;
-        g_StdCmdData.Field.nMACData[10] = T7_RSOC[2] >> 16;
-        g_StdCmdData.Field.nMACData[11] = T7_RSOC[2] >> 24;
-        g_StdCmdData.Field.nMACData[12] = T7_RSOC[3];
-        g_StdCmdData.Field.nMACData[13] = T7_RSOC[3] >> 8;
-        g_StdCmdData.Field.nMACData[14] = T7_RSOC[3] >> 16;
-        g_StdCmdData.Field.nMACData[15] = T7_RSOC[3] >> 24;
-        g_StdCmdData.Field.nMACData[16] = T7_RSOC[4];
-        g_StdCmdData.Field.nMACData[17] = T7_RSOC[4] >> 8;
-        g_StdCmdData.Field.nMACData[18] = T7_RSOC[4] >> 16;
-        g_StdCmdData.Field.nMACData[19] = T7_RSOC[4] >> 24;
-        g_StdCmdData.Field.nMACData[20] = T7_RSOC[5];
-        g_StdCmdData.Field.nMACData[21] = T7_RSOC[5] >> 8;
-        g_StdCmdData.Field.nMACData[22] = T7_RSOC[5] >> 16;
-        g_StdCmdData.Field.nMACData[23] = T7_RSOC[5] >> 24;
-        g_StdCmdData.Field.nMACData[24] = T7_RSOC[6];
-        g_StdCmdData.Field.nMACData[25] = T7_RSOC[6] >> 8;
-        g_StdCmdData.Field.nMACData[26] = T7_RSOC[6] >> 16;
-        g_StdCmdData.Field.nMACData[27] = T7_RSOC[6] >> 24;
-        g_StdCmdData.Field.nMACData[28] = T7_RSOC[7];
-        g_StdCmdData.Field.nMACData[29] = T7_RSOC[7] >> 8;
-        g_StdCmdData.Field.nMACData[30] = T7_RSOC[7] >> 16;
-        g_StdCmdData.Field.nMACData[31] = T7_RSOC[7] >> 24;
+       
         subcmd_datalen = 32;
         break;
     }

@@ -33,7 +33,7 @@ uint16_t HTV_Cnt = 0;
 
 uint32_t  LtW_CntW;
 
-uint8_t SocCnt,TempCnt;
+//uint8_t SocCnt,TempCnt;
 uint16_t T_Cnt[7][8] = {0};
 //uint16_t Run_Cnt[4] = {0};
 
@@ -41,54 +41,7 @@ uint16_t T_Cnt[7][8] = {0};
 static void LTW_Index(void);
 static void LTR_Index(void);
 
-void SocTime(uint8_t TempCnt,uint8_t SocCnt) //TempCnt = temp , SocCnt = soc range 
-{
-	if(f_DP_SLP)
-	{
-			T_Cnt[TempCnt][SocCnt] += D_DSLPVOLTTIME;
-	}
-	else if(f_SLEEP)
-	{
-			T_Cnt[TempCnt][SocCnt] += D_VOLTTIME;
-	}
-	else
-	{
-			T_Cnt[TempCnt][SocCnt] += 1;
-	}
-    if (T_Cnt[TempCnt][SocCnt] >= (3600 / lt_test))
-    {
-        T_Cnt[TempCnt][SocCnt] = 0;
-        f_ltreq = ON;
-        if (TempCnt == 0)
-        {
-            T1_RSOC[SocCnt] += 1;
-        }
-        else if (TempCnt == 1)
-        {
-            T2_RSOC[SocCnt] += 1;
-        }
-        else if (TempCnt == 2)
-        {
-            T3_RSOC[SocCnt] += 1;
-        }
-        else if (TempCnt == 3)
-        {
-            T4_RSOC[SocCnt] += 1;
-        }
-        else if (TempCnt == 4)
-        {
-            T5_RSOC[SocCnt] += 1;
-        }
-        else if (TempCnt == 5)
-        {
-            T6_RSOC[SocCnt] += 1;
-        }
-        else if (TempCnt == 6)
-        {
-            T7_RSOC[SocCnt] += 1;
-        }
-    }
-}
+
 
 //static void RunTime(uint32_t* Run_time,uint16_t* Run_Cnt)
 //{
@@ -417,72 +370,39 @@ void LifeTime_Calc(void)
             }
         }
 
-        if (t_com0d <= D_LFRSOCG)
-        {
-            SocCnt = 0;
-        }
-        else if (t_com0d <= D_LFRSOCF)
-        {
-            SocCnt = 1;
-        }
-        else if (t_com0d <= D_LFRSOCE)
-        {
-            SocCnt = 2;
-        }
-        else if (t_com0d <= D_LFRSOCD)
-        {
-            SocCnt = 3;
-        }
-        else if (t_com0d <= D_LFRSOCC)
-        {
-            SocCnt = 4;
-        }
-        else if (t_com0d <= D_LFRSOCB)
-        {
-            SocCnt = 5;
-        }
-        else if (t_com0d <= D_LFRSOCA)
-        {
-            SocCnt = 6;
-        }
-        else
-        {
-            SocCnt = 7;
-        }
+        // if (t_com0d <= D_LFRSOCG)
+        // {
+        //     SocCnt = 0;
+        // }
+        // else if (t_com0d <= D_LFRSOCF)
+        // {
+        //     SocCnt = 1;
+        // }
+        // else if (t_com0d <= D_LFRSOCE)
+        // {
+        //     SocCnt = 2;
+        // }
+        // else if (t_com0d <= D_LFRSOCD)
+        // {
+        //     SocCnt = 3;
+        // }
+        // else if (t_com0d <= D_LFRSOCC)
+        // {
+        //     SocCnt = 4;
+        // }
+        // else if (t_com0d <= D_LFRSOCB)
+        // {
+        //     SocCnt = 5;
+        // }
+        // else if (t_com0d <= D_LFRSOCA)
+        // {
+        //     SocCnt = 6;
+        // }
+        // else
+        // {
+        //     SocCnt = 7;
+        // }
 
-        switch (TempRange.data)
-        {
-        case TR_UT:
-						TempCnt = 0;
-						SocTime(TempCnt,SocCnt);
-						break;
-        case TR_LT:
-						TempCnt = 1;
-						SocTime(TempCnt,SocCnt);
-						break;				
-        case TR_STL:
-						TempCnt = 2; 
-						SocTime(TempCnt,SocCnt);
-						break;				
-        case TR_RT:
-            TempCnt = 3;
-						SocTime(TempCnt,SocCnt);
-						break;
-        case TR_STH:
-						TempCnt = 4;
-						SocTime(TempCnt,SocCnt);
-						break;				
-				case TR_HT:
-						TempCnt = 5;
-						SocTime(TempCnt,SocCnt);
-						break;				
-        case TR_OT:
-						TempCnt = 6;
-						SocTime(TempCnt,SocCnt);
-						break;
-        default:   
-						break;
-        }
 
         if(f_ltreq)
         {

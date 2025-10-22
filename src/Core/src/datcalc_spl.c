@@ -70,7 +70,7 @@ uint16_t t_com10_cwh;
 uint8_t sochold1;
 uint8_t isochold1;
 uint8_t Count_0volt;
-uint8_t Count_0Vlt_soctimehold0 ;
+
 
 uint8_t f_study_d1;
 uint8_t f_study_d2;

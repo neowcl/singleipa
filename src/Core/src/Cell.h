@@ -537,6 +537,8 @@ typedef struct
 	uint16_t d_0PVOLT5_Tempera_10 ;
 	uint16_t d_0PVOLT_Tempera_less_than_5;
 	uint16_t d_IPA_ManufactureDate;
+	uint16_t d_com66_end;
+	uint16_t d_com66_head;
 
 } _ST_FIXED_DATA;
 #pragma pack()
@@ -704,18 +706,6 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define D_MinStepCC     u_fd_rom.d_MinStepCC
 
 #define D_CTLFLG1		u_fd_rom.d_CTLFLG1				// [2byte] Control flag 
-// #define F_FCCUPDATADEL	u_fd_rom.d_CTLFLG1.f_FccUpdateDel	// bit 0
-// #define F_CORRRCTRCL    u_fd_rom.d_CTLFLG1.f_CorrectRCL		// bit 1
-// #define F_DHGRELPOINT 	u_fd_rom.d_CTLFLG1.f_DhgRelPoint    // bit 2
-// #define	F_INITCAP		u_fd_rom.d_CTLFLG1.f_initcap		// bit 3
-// #define	F_SYSCONEN		u_fd_rom.d_CTLFLG1.f_sysconen		// bit 4
-// #define F_DISRELCHG     u_fd_rom.d_CTLFLG1.f_DisRelChg		// bit 5
-// #define F_DISRELDHG     u_fd_rom.d_CTLFLG1.f_DisRelDhg		// bit 6
-// #define	F_USEDFDAT		u_fd_rom.d_CTLFLG1.f_usedfdat		// bit 7
-// #define F_100TOFCC      u_fd_rom.d_CTLFLG1.f_100ToFcc      // bit 8
-// #define F_CAPUINT       u_fd_rom.d_CTLFLG1.f_Cap_uint   
-// #define F_QMAXCHGUPDATA u_fd_rom.d_CTLFLG1.f_QMaxChgUpdata
-// #define F_QMAXDSGUPDATA u_fd_rom.d_CTLFLG1.f_QMaxDsgUpdata
 
 #define F_FCCUPDATADEL	DEF_BIT0(&D_CTLFLG1)	// bit 0
 #define F_CORRRCTRCL    DEF_BIT1(&D_CTLFLG1)		// bit 1
@@ -928,6 +918,8 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define D_0PVOLT_Tempera_less_than_5   u_fd_rom.d_0PVOLT_Tempera_less_than_5
 
 #define D_IPA_MANUFACTURE_DATE  u_fd_rom.d_IPA_ManufactureDate
+#define D_COM66_END         u_fd_rom.d_com66_end
+#define D_COM66_HEAD        u_fd_rom.d_com66_head
 
 void StaticDFCrc_Chk(void);
 void DynamicDFCrc_Chk(void);
