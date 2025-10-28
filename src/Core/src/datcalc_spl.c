@@ -70,10 +70,10 @@ uint16_t t_com10_cwh;
 uint8_t sochold1;
 uint8_t isochold1;
 uint8_t Count_0volt;
-uint8_t Count_0Vlt_soctimehold0 ;
 
-uint8_t f_study_d1;
-uint8_t f_study_d2;
+
+// uint8_t f_study_d1;
+// uint8_t f_study_d2;
 uint8_t f_bat_init;
 uint8_t f_count3s_en;
 uint8_t f_count3s_en_b;
@@ -122,17 +122,19 @@ uint8_t f_relax_last_dsgupdate_use  ;
 uint8_t	f_charge_last_dsgupdate_use  ;
 
 
+	uint8_t beilv;
+
 // dsg inner  resis
-uint8_t f_cnt_30m_start;
-uint8_t f_chg_last_state1;
-uint8_t f_cnt_30m_start;
-uint16_t cnt_30m;
-uint8_t cnt5_i; //
-uint8_t f_relex3_last;
-uint8_t cnt5_j;
+// uint8_t f_cnt_30m_start;
+// uint8_t f_chg_last_state1;
+// uint8_t f_cnt_30m_start;
+// uint16_t cnt_30m;
+// uint8_t cnt5_i; //
+// uint8_t f_relex3_last;
+// uint8_t cnt5_j;
 // uint16_t save_volstart_dsg_inner;
 // uint16_t save_volend_dsg_inner;
-uint8_t f_start_save;
+// uint8_t f_start_save;
 uint8_t f_cp_h_fccupdated ;
 uint8_t	f_cp_l_fccupdated ;
 int32_t lrc_w_last ;
@@ -141,105 +143,112 @@ int8_t CellTemp_last_time_update ;
 // uint16_t  inner_res_dsg_100 ;  // t_com2a
 // uint16_t  temp_dsg_inner_res;  // t_com2b
 
-uint16_t Vol3[5];
+// uint16_t Vol3[5];
 
 // uint16_t outer_tinreg ;
-uint16_t inner_res_old_buchang_vol;
-uint16_t inner_res_buchang_vol;
-uint16_t f_calc_inner_3res_work = 0;
+// uint16_t inner_res_old_buchang_vol;
+// uint16_t inner_res_buchang_vol;
+// uint16_t f_calc_inner_3res_work = 0;
 
 int16_t dis_fac_cpl = 100  ; // discharge factor when reach cpl voltage .
 int16_t t_com0dlast ; 
 uint8_t f_cp_l_last ;
 uint16_t fcc_last_cpl_pinghua  ;
-
 // dsg inner  resis
-
 nFLAG_PINGHUA FLAG_PINGHUA;
 
+
+uint16_t current_continue_last  ;
+uint16_t CellTemp_continue_last ;
+uint16_t FCC_continue_last  ;
+uint8_t f_cpl_d3_updated ;  
+
+
+
+uint16_t keep_cur_study_d3 ;
 /***********************************************************************
 ** Announcement of internal function prototype
 ***********************************************************************/
 static void Calc_NormalRC(uint32_t lrc);
 
-void Calc_inner_3res(void)
-{
-	uint32_t restemp_vol;
+// void Calc_inner_3res(void)
+// {
+// 	uint32_t restemp_vol;
 
-	if (t_com0d != 100 || f_fullchg == OFF || f_charge == ON)
-	{
-		f_cnt_30m_start = 0;
-		cnt5_i = 0;
-		cnt5_j = 0;
-		cnt_30m = 0;
-		f_start_save = 0;
-		f_cnt_30m_start = 0;
-	}
+// 	if (t_com0d != 100 || f_fullchg == OFF || f_charge == ON)
+// 	{
+// 		f_cnt_30m_start = 0;
+// 		cnt5_i = 0;
+// 		cnt5_j = 0;
+// 		cnt_30m = 0;
+// 		f_start_save = 0;
+// 		f_cnt_30m_start = 0;
+// 	}
 
-	if (f_fullchg && f_chg_last_state1 == ON && f_charge == OFF && f_relax == ON)
-	{
+// 	if (f_fullchg && f_chg_last_state1 == ON && f_charge == OFF && f_relax == ON)
+// 	{
 
-		f_cnt_30m_start = 1; // 1. fullchg 2. last state chg 3. this state relax
-	}
+// 		f_cnt_30m_start = 1; // 1. fullchg 2. last state chg 3. this state relax
+// 	}
 
-	f_chg_last_state1 = f_charge;
-	// //1. fullchg 2. last state chg 3. this state relax , start count
-	if (f_cnt_30m_start == 1)
-	{
-		cnt_30m++;
-		if (cnt_30m >= 1795)
-		{
-			Vol3[cnt5_i] = t_com09; //
-			//	Cur3[cnt5_i] = t_com0a;
-			cnt5_i++;
-			if (cnt5_i >= 5)
-			{
-				cnt5_i = 0;
-			}
-			if (cnt_30m >= 1800)
-			{
-				cnt_30m = 1800;
-				if (f_relex3_last == ON && f_discharge == ON)
-				{
-					save_volstart_dsg_inner = Vol3[cnt5_i];
-					// save_curstart_inner = tabsc ;
-					f_start_save = 1;
-				}
-				if (f_start_save == 1 && f_discharge == ON)
-				{
-					cnt5_j++;
-				}
+// 	f_chg_last_state1 = f_charge;
+// 	// //1. fullchg 2. last state chg 3. this state relax , start count
+// 	if (f_cnt_30m_start == 1)
+// 	{
+// 		cnt_30m++;
+// 		if (cnt_30m >= 1795)
+// 		{
+// 			Vol3[cnt5_i] = t_com09; //
+// 			//	Cur3[cnt5_i] = t_com0a;
+// 			cnt5_i++;
+// 			if (cnt5_i >= 5)
+// 			{
+// 				cnt5_i = 0;
+// 			}
+// 			if (cnt_30m >= 1800)
+// 			{
+// 				cnt_30m = 1800;
+// 				if (f_relex3_last == ON && f_discharge == ON)
+// 				{
+// 					save_volstart_dsg_inner = Vol3[cnt5_i];
+// 					// save_curstart_inner = tabsc ;
+// 					f_start_save = 1;
+// 				}
+// 				if (f_start_save == 1 && f_discharge == ON)
+// 				{
+// 					cnt5_j++;
+// 				}
 
-				if (cnt5_j >= 5)
-				{
-					cnt5_i = 0;
-					cnt5_j = 0;
-					cnt_30m = 0;
-					f_start_save = 0;
-					f_cnt_30m_start = 0;
-					// save_curend_dsg_inner = tabsc ;
-					// save_volend_dsg_inner = t_com09 ;
+// 				if (cnt5_j >= 5)
+// 				{
+// 					cnt5_i = 0;
+// 					cnt5_j = 0;
+// 					cnt_30m = 0;
+// 					f_start_save = 0;
+// 					f_cnt_30m_start = 0;
+// 					// save_curend_dsg_inner = tabsc ;
+// 					// save_volend_dsg_inner = t_com09 ;
 
-					if (tabsc > t_com18 / 10 && tabsc < t_com18 / 2) // t_com18  Design Capacity
-					{
-						// (volt start - vol end ) / tabsc
-						save_volend_dsg_inner = t_com09;
-						restemp_vol = save_volstart_dsg_inner - save_volend_dsg_inner;
-						save_tabsc3 = tabsc;
-						inner_res_dsg_100 = restemp_vol * 1000 / tabsc; // the result of inner resistance
-						temp_dsg_inner_res = CellTemp;
-						f_calc_inner_3res_work = 1;
-					}
-				}
-			}
-			else
-			{
-				f_start_save = 0;
-			}
-		}
-	}
-	f_relex3_last = f_relax;
-}
+// 					if (tabsc > t_com18 / 10 && tabsc < t_com18 / 2) // t_com18  Design Capacity
+// 					{
+// 						// (volt start - vol end ) / tabsc
+// 						save_volend_dsg_inner = t_com09;
+// 						restemp_vol = save_volstart_dsg_inner - save_volend_dsg_inner;
+// 						save_tabsc3 = tabsc;
+// 						inner_res_dsg_100 = restemp_vol * 1000 / tabsc; // the result of inner resistance
+// 						temp_dsg_inner_res = CellTemp;
+// 						f_calc_inner_3res_work = 1;
+// 					}
+// 				}
+// 			}
+// 			else
+// 			{
+// 				f_start_save = 0;
+// 			}
+// 		}
+// 	}
+// 	f_relex3_last = f_relax;
+// }
 
 /*""FUNC COMMENT""***************************************************
  * ID			: 1.0
@@ -331,6 +340,9 @@ void Calc_factor_of_fcc(void)
 	uint16_t tinreg;
 	int32_t ccwork;
 	int32_t dcwork;
+
+
+	keep_cur_study_d3 = tabsc ;
 
 	// Calc [C]x100 from current
 	twork1 = (uint16_t)((long)tabsc * 100 / D_DCAP); // eg :   3600 mAh  = 3600mA * 1h
@@ -740,8 +752,8 @@ void Calc_CPVolt(void)
 			t_com2e = 100;
 		}
 	}
-	tcph_v_out = tcph_v;		
-	tcpl_v_out = tcpl_v;		
+	// tcph_v_out = tcph_v;		
+	// tcpl_v_out = tcpl_v;		
 }
 
 /*""FUNC COMMENT""**********************************************************
@@ -1295,10 +1307,10 @@ void Calc_RSOC(void)
 
 	t_com0d = twork; // Set to RSOC
 
-	if (CellTemp > 20 && CellTemp < 30)
-	{
-		Calc_inner_3res(); //
-	}
+	// if (CellTemp > 20 && CellTemp < 30)
+	// {
+	// 	Calc_inner_3res(); //
+	// }
 
 	Dsg_Update_work();
 	if (F_CAPUINT == ON)
@@ -1404,6 +1416,11 @@ void Calc_CP1RelRC(uint32_t lrc)
 void Calc_HoseiRC(uint32_t lrc)
 {
 	uint32_t lwork;
+
+	uint8_t f_con_cur ;
+	uint8_t f_con_CellTemp  ; 
+	uint8_t f_con_FCC;
+
 	// int16_t dis_fac_cpl = 100  ; // discharge factor when reach cpl voltage . 
 
 	//if (f_study_d == ON && f_cp_l == ON)
@@ -1421,6 +1438,10 @@ void Calc_HoseiRC(uint32_t lrc)
 	// 	}
 	//}
 
+
+
+
+
 	if (f_cp_l == OFF) // CP_L not detected ?
 	{
 		// lwork = (long)t_com10 * D_CP_L * 36; // Calculation the CP_L capacity
@@ -1428,12 +1449,20 @@ void Calc_HoseiRC(uint32_t lrc)
 		// {
 		// 	lrc_w = lwork; // hold on CP_L capacity
 		// }
-		if(t_com0d <= D_CP_L)
-		{
-			lrc_w -= lrc/2;	   // Subtruct correction value  18*3600
-		}else{
-			lrc_w -= lrc;	   // Subtruct correction value  18*3600
-		}
+
+
+// delete  wait on 20251024  Version 3.29 
+
+		// if(t_com0d <= D_CP_L)
+		// {
+		// 	lrc_w -= lrc/2;	   // Subtruct correction value  18*3600
+		// }else{
+		// 	lrc_w -= lrc;	   // Subtruct correction value  18*3600
+		// }
+
+		lrc_w -= lrc;	
+
+//  delete  wait on 20251024  Version 3.29 
 
 
 		if (lrc_w <= t_com10 * 36) // t_com10/36 / 10 * 2 =  0.2 rsoc  FCC *3600 * /100/2
@@ -1448,6 +1477,8 @@ void Calc_HoseiRC(uint32_t lrc)
 	}
 	else   			   // cpl ==ON ;
 	{				   // CP_L detected ?
+
+
 		if( f_cp_l_last == OFF)  // to do clear 0 . / can come here , must means this time cpl ON . 
 		{
 			// dis_fcc = t_com0d / 5.5;    // enlarge 100 times .  100/5.5*t_com0d  = 18.2 about 18 
@@ -1510,6 +1541,66 @@ void Calc_HoseiRC(uint32_t lrc)
 			{
 				dis_fac_cpl = 100 ;
 			}
+
+
+
+			    /* for logic cpl_d3 updated CPH 用比例计算方式 。
+放电不平滑条件 ：
+
+连续满充满放条件下： 
+电流变化 ： 误差上次放电的10% 以内
+current_continue_last 
+温度变化： 3 摄氏度以内
+CellTemp_continue_last
+FCC 在2% 以内 。 
+FCC_continue_last logic */
+
+
+
+/*  part a */
+		if (f_study_d3_ful == 0)
+		{
+			if (f_discharge)
+			{
+				f_cpl_d3_updated = 0;  // have ful chg and ful dsg 
+			}
+		}
+
+		if (ABS(current_continue_last - tabsc) < current_continue_last/5)
+		{
+			f_con_cur = 1;
+		}
+		else
+		{
+			f_con_cur = 0;
+		}
+		if (ABS(CellTemp_continue_last - CellTemp) <= 3)
+		{
+			f_con_CellTemp = 1;
+		}
+		else
+		{
+			f_con_CellTemp = 0;
+		}
+
+		if (ABS(FCC_continue_last - t_com10) <= FCC_continue_last/50)
+		{
+			f_con_FCC = 1;
+		}
+		else
+		{
+			f_con_FCC = 0;
+		}
+/*  part a */
+		if (f_cpl_d3_updated == 1)
+		{
+			if(f_con_cur && f_con_CellTemp && f_con_FCC)
+			{
+				f_cpl_d3_updated = 0 ;
+				dis_fac_cpl = 100 ;
+			}
+		}
+
 		}
 
 		lrc_w -= dis_fac_cpl*lrc/100;
@@ -1724,7 +1815,6 @@ void Make_Relearning(uint8_t acp)
 
 	if (f_study_d == ON && f_study_d1 == ON && CellTemp >= D_STUDYT) // GAo zong add need <15 update cph		// Discharge relearning = ON
 																	 // & Temp >= Relearn temp ?
-
 	{
 		f_relearn = OFF;  // Clear Relearn flag
 		arelearn_cnt = 0; // Clear Relearn counter
@@ -1732,7 +1822,35 @@ void Make_Relearning(uint8_t acp)
 		// newFCC = relearn capcity * (100 / (100-CP_x)) / 60*60
 		//		  = relearn capacity / ( (100-CP_x) * 36 )
 		// tcom10c_w = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
-		tcom10c_w = (uint16_t)(lrcdr_w/ 3600 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
+		// newFCC = relearn capcity / ((100-CP_x)/100) / 60*60
+		temp_CPH_FCC  = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
+
+	//	tcom10c_w = (uint16_t)(lrcdr_w/3600 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
+
+		//tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph/1000 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
+
+		if (CellTemp>15)  // 
+		{
+			tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph/1000 +(t_com10/10*acp/10));  // leiji + fcc*rsoc
+		}else   // xiaoyu 15 not update cpl or ful chg and dsg ? 
+		{
+			tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph_low_temp/1000 +(t_com10/10*acp/10));
+		}
+
+
+		if (!(((CellTemp >0) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70))) )
+		{
+			tcom10c_w = (uint16_t)(lrcdr_w/3600 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
+		}
+		
+
+		t_com2c_fcc_cph =  tcom10c_w  ;
+
+		// tcom10c_w = tcom10c_w * fac_fccold_chu_new_cpl /1000 ;
+
+	// 	tcom10c_w  = tcom10c_w *(fac_fccold_chu_new_cpl /1000)+ tcom10c_w/10 *(fac_fccold_chu_new_cpl %1000/100) \
+	//  + tcom10c_w/100*(fac_fccold_chu_new_cpl%100/10)+ tcom10c_w/1000*(fac_fccold_chu_new_cpl%10/1) ;
+
 		FCC_Limit_Chk(); // FCC Limit check
 
 		if (F_FCCUPDATADEL == OFF) // Update FCC at CP detect ?
@@ -1743,6 +1861,8 @@ void Make_Relearning(uint8_t acp)
 		{					// Update FCC at start chg.
 			f_studied = ON; // Set studied flag
 		}
+
+
 
 		tcom2a_w = t_com17; // Set CycleCount
 							// Save CycleCount at relearn
@@ -1807,6 +1927,28 @@ void Make_Relearning_cpl(uint8_t acp)
 
 		rsoc_enlarge_1000= (uint16_t)(((((uint32_t)t_com0f * 200) * 10 / t_com10) ) / 2); // already sishewuru .
 		tcom10c_w = (uint16_t)(lrcdr_w/ (((uint16_t)100 - acp) * 36));
+
+        Fcc_cpl_temp =  tcom10c_w ;
+
+
+
+
+		if (CellTemp>15)
+		{
+			tcom10c_w  = tcom10c_w *(fac_fccold_chu_new_cpl /1000)+ tcom10c_w/10 *(fac_fccold_chu_new_cpl %1000/100) \
+	 + tcom10c_w/100*(fac_fccold_chu_new_cpl%100/10)+ tcom10c_w/1000*(fac_fccold_chu_new_cpl%10/1) ;
+		}else
+		{
+				tcom10c_w  = tcom10c_w *(fac_fccold_chu_new_cpl_low_temp /1000)+ tcom10c_w/10 *(fac_fccold_chu_new_cpl_low_temp %1000/100) \
+	 + tcom10c_w/100*(fac_fccold_chu_new_cpl_low_temp%100/10)+ tcom10c_w/1000*(fac_fccold_chu_new_cpl_low_temp%10/1) ;
+		}
+
+
+		if (!(((CellTemp > 5) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70))))
+		{
+			tcom10c_w = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
+		}
+
 		FCC_Limit_Chk(); // FCC Limit check
 
 		if (F_FCCUPDATADEL == OFF) // Update FCC at CP detect ?
@@ -1817,6 +1959,8 @@ void Make_Relearning_cpl(uint8_t acp)
 		{					// Update FCC at start chg.
 			f_studied = ON; // Set studied flag
 		}
+
+
 		tcom2a_w = t_com17; // Set CycleCount
 							// Save CycleCount at relearn
 		Fccfar = (uint32_t)tcom10c_w * 10000 / Dischargefactor *10 / IdealFcc;
@@ -2018,6 +2162,176 @@ void chg_pinghua(void)
 	}
 }
 
+void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity 
+{
+
+
+	static int32_t ful_dsg_cap;
+	static uint8_t  Count_xiao_beilv_3s ;
+	uint16_t ful_dsg_cap_FCC;
+
+	t_com2d_f_study_d3_ful = f_study_d3_ful  ;
+	t_com2e_ful_dsg_cap = ful_dsg_cap / 3600 ;
+
+	// static uint16_t ful_dsg_cap_FCC;
+
+	beilv = (uint16_t)((long)tabsc * 100 / D_DCAP);
+
+	if ((f_charge == ON) && (t_com0a > 0)) // Charging ?
+	{
+		if (f_fullchg == OFF)
+		{
+			t_com39_out = 1 ;
+			f_study_d3_ful = OFF;
+		}else
+		{
+			t_com39_out = 0 ;
+		}
+	}
+
+	if (((CellTemp >=5) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70)))  // must charge or dsg .
+	{// chg clear . dsg : use 
+		if (t_com09 > t_com33)
+		{
+			if (!f_charge) // must dsg not relax 
+			{
+				if (f_study_d3_ful == ON)
+				{
+					ful_dsg_cap += tabsc;
+					t_com3a_out = 0 ;
+				}else
+				{
+					t_com3a_out = 1 ;
+					f_study_d3_ful = OFF;
+					ful_dsg_cap = 0;
+				}
+			} // else  no need else , cause f_charge will clear all 
+		}else  // t_com09 < t_com33 .
+		{
+			if (!f_charge)
+			{
+				if (f_study_d3_ful == ON)  
+				{
+					t_com3b_out = 1 ;
+					// can go here , must have updated cpl . 
+					//cause  f_study_d3_ful == ON means have f_study_d2 have dupdated ..
+					ful_dsg_cap += tabsc;
+					f_study_d3_ful = OFF;
+					ful_dsg_cap_FCC = ful_dsg_cap/3600;
+     // t_com10 / ful_dsg_cap_FCC    ===  new factor .
+					// t_com10 = (ful_dsg_cap_FCC+t_com10) / 2  ; 
+					if(Fcc_cpl_temp)
+					{
+						if(CellTemp > 15)
+						{
+							fac_fccold_chu_new_cpl = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ;
+							fac_fccold_chu_new_cph = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;
+						}else
+						{
+							fac_fccold_chu_new_cpl_low_temp = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ;
+							fac_fccold_chu_new_cph_low_temp = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;
+						}	
+						t_com3c_out = temp_CPH_FCC ;
+					//	fac_fccold_chu_new_cpl_low_temp ; 
+					}else
+					{
+						t_com3c_out = 3 ;
+						fac_fccold_chu_new_cpl = 1000 ; 
+						fac_fccold_chu_new_cph  = 1000 ;
+						fac_fccold_chu_new_cpl_low_temp = 1000 ;
+						fac_fccold_chu_new_cph_low_temp = 1000 ;
+					}
+					t_com10 = ful_dsg_cap_FCC  ; //update 0_voltage FCC
+					save_dsg_upd_fcc = t_com10;
+					Calc_factor_of_fcc(); // update fcc , fcc factor and save into  save_fac_dsg_upd
+					CellTemp_last_time_update= CellTemp ;
+					f_cpl_d3_updated = 1 ; // cpl _d3  fulchg_fuldsg 
+					
+					current_continue_last =  keep_cur_study_d3 ; ;
+					CellTemp_continue_last = CellTemp  ;
+					FCC_continue_last =  t_com10 ;
+				}
+				else
+				{
+					t_com3b_out = 1 ;
+					f_study_d3_ful = OFF;
+					ful_dsg_cap = 0;
+				}
+			}
+		}
+	}
+	else
+	{
+
+
+		// 1. jingzhi qudiao 
+		// 2. > 45
+		// 3. < 5  gaicheng <= 5  yijing
+
+	
+		
+		if ((f_discharge == ON) && (f_relax == OFF))  // must dsg , ifcharge already clear  0 . 
+		{
+			t_com55_out =1 ;   
+
+			// must dsg state  ? 
+			// if((discharge == ON) && ())
+
+			if(f_study_d3_ful)
+			{
+					t_com56_out =1 ; 
+				if (!((beilv >= 10) && (beilv <= 70)))
+				{
+					Count_xiao_beilv_3s++;
+					t_com57_out =1 ; 
+
+				}else
+				{
+					Count_xiao_beilv_3s = 0 ;
+					t_com57_out =0 ; 
+				}
+
+				if (Count_xiao_beilv_3s >= 3)
+				{
+					t_com58_out =1 ; 
+					Count_xiao_beilv_3s = 0;
+					// fac_fccold_chu_new_cpl = 1000;
+					// fac_fccold_chu_new_cph  = 1000 ;
+					// fac_fccold_chu_new_cpl_low_temp = 1000 ;
+					// fac_fccold_chu_new_cph_low_temp = 1000 ;
+					f_study_d3_ful = OFF;  //if  not ful chg and ful dsg , do not update fcc 
+					ful_dsg_cap = 0;
+				}else
+				{
+				t_com58_out =0 ; 
+				}
+
+				// beilv tioajian 
+				if (!(((CellTemp >= 5) && (CellTemp <= 45)))) // <5 or > 45
+				{
+					t_com54_out = 1;
+					Count_xiao_beilv_3s = 0;
+					// fac_fccold_chu_new_cpl = 1000;
+					// fac_fccold_chu_new_cph  = 1000 ;
+					// fac_fccold_chu_new_cpl_low_temp = 1000 ;
+					f_study_d3_ful = OFF; // if  not ful chg and ful dsg , do not update fcc
+					ful_dsg_cap = 0;
+				}
+				else
+				{
+					t_com54_out = 0;
+				}
+			}else
+			{
+				t_com56_out =0 ; 
+			}
+		}else
+		{
+			t_com55_out =0 ; 
+		}
+	}
+}
+
 /*""FUNC COMMENT""**********************************************************
  * ID				: 1.0
  * module outline	: RemainingCapacity() calculation function
@@ -2043,10 +2357,15 @@ void chg_pinghua(void)
  * Caution			:
  *--------------------------------------------------------------------------
  *""FUNC COMMENT END""*****************************************************/
+
+
+
+
 void Calc_RC(void)
 {
 	static uint8_t acpl_cnt;
 	static uint8_t acph_cnt;
+	
 	static uint8_t adlogc; // Power consumption 10times counter
 	int32_t x;
 	int32_t y;
@@ -2054,8 +2373,16 @@ void Calc_RC(void)
 	uint32_t lwork;
 	uint8_t divi_by_1k;
 
-	if (t_com0a > 0) // Charging ?
+Calc_fulchg_fuldsg_cap();
+
+//   ful dsg leiji rongliang 
+
+
+
+	if(t_com0a > 0) // Charging ?
 	{
+
+
 		if (f_charge == ON) // Charging ?
 		{
 			if (f_studied == ON) // Studied flag = ON ?
@@ -2069,6 +2396,7 @@ void Calc_RC(void)
 				f_study_d = OFF;  // Clear discharge relearn flag
 				f_study_d1 = OFF; // Clear discharge relearn flag
 				f_study_d2 = OFF; // Clear discharge relearn flag
+				f_study_d3_ful  = OFF ;
 			}
 
 			if ((f_cp_h == ON)		   // CP_H detected ?
@@ -2163,6 +2491,9 @@ void Calc_RC(void)
 	{							// Discahrging or No current
 		if (t_com09 <= t_com33) // lower than 0% voltage ?
 		{
+
+			f_study_d3_ful  = OFF ;
+
 			if (Count_0volt >= 5)
 			{	
 				Count_0volt = 0; // when decetc voltage for zero soc, keep 5 seconds .					
@@ -2235,29 +2566,29 @@ void Calc_RC(void)
 			// - degC interpolation -
 			// tcpl_v = twork1 + (uint16_t)((((long)twork2 - twork1) * awork3 / awork4)) - tinreg;
 			// f_calc_inner_3res_work = 1 ; to make sure calc_inner_3res_work have worked .
-			if (t_com17 > 10000 && f_calc_inner_3res_work == 1) // 温度加到计算内阻的函数
-			{
-				// tcpl_v =  tcpl_v + tinreg + tabsc * (R1 - R2);//
-				if (inner_res_dsg_100 > 75)
-				{
-					// inner_res_buchang_vol = tabsc/10 * ((inner_res_dsg_100 -  75) /2)/ 50;  // - innder resistance
-					// become + inner resistance
-					inner_res_buchang_vol = tabsc / 10 * ((inner_res_dsg_100 + 75) / 2) / 50;
-				}
-				if (inner_res_old_buchang_vol > inner_res_buchang_vol)
-				{
-					inner_res_buchang_vol = inner_res_old_buchang_vol;
-				}
-				inner_res_old_buchang_vol = inner_res_buchang_vol;
-				// tcpl_v = (tcpl_v + outer_tinreg + inner_res);
+			// if (t_com17 > 10000 && f_calc_inner_3res_work == 1) // 温度加到计算内阻的函数
+			// {
+			// 	// tcpl_v =  tcpl_v + tinreg + tabsc * (R1 - R2);//
+			// 	if (inner_res_dsg_100 > 75)
+			// 	{
+			// 		// inner_res_buchang_vol = tabsc/10 * ((inner_res_dsg_100 -  75) /2)/ 50;  // - innder resistance
+			// 		// become + inner resistance
+			// 		inner_res_buchang_vol = tabsc / 10 * ((inner_res_dsg_100 + 75) / 2) / 50;
+			// 	}
+			// 	if (inner_res_old_buchang_vol > inner_res_buchang_vol)
+			// 	{
+			// 		inner_res_buchang_vol = inner_res_old_buchang_vol;
+			// 	}
+			// 	inner_res_old_buchang_vol = inner_res_buchang_vol;
+			// 	// tcpl_v = (tcpl_v + outer_tinreg + inner_res);
 
-				tabsc_out = tabsc; // t_com2e
-				// inner_res_dsg_100   // t_com2c
-				tcpl_v_start1 = tcpl_v;				   // t_com2a
-				inner_res_out = inner_res_buchang_vol; // t_com2b
-				tcpl_v -= inner_res_buchang_vol;
-				tcpl_v_end_out = tcpl_v;
-			}
+			// 	tabsc_out = tabsc; // t_com2e
+			// 	// inner_res_dsg_100   // t_com2c
+			// 	tcpl_v_start1 = tcpl_v;				   // t_com2a
+			// 	inner_res_out = inner_res_buchang_vol; // t_com2b
+			// 	tcpl_v -= inner_res_buchang_vol;
+			// 	tcpl_v_end_out = tcpl_v;
+			// }
 
 			lwork = tabsc;	 // Make data for RC integration
 			if (adlogc == 9) // Consumption current piles up 10 times ?

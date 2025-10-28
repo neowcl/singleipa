@@ -194,16 +194,16 @@ extern uint16_t new_fcc ;
 
 
 
-extern uint16_t save_tabsc3;
+// extern uint16_t save_tabsc3;
 extern uint16_t outer_tinreg ;
 
-extern  uint16_t tcpl_v_start1;  // t_com2a 
-extern uint16_t tcpl_v_out ;     // t_com2a
-extern uint16_t tcph_v_out ;     // t_com2a
-extern  uint16_t inner_res_out;   // t_com2b
-extern uint16_t inner_res_dsg_100;
-extern uint16_t tabsc_out;       // t_com2e
-extern uint16_t tcpl_v_end_out ;       // t_com2d
+// extern  uint16_t tcpl_v_start1;  // t_com2a 
+// extern uint16_t tcpl_v_out ;     // t_com2a
+// extern uint16_t tcph_v_out ;     // t_com2a
+// extern  uint16_t inner_res_out;   // t_com2b
+// extern uint16_t inner_res_dsg_100;
+// extern uint16_t tabsc_out;       // t_com2e
+// extern uint16_t tcpl_v_end_out ;       // t_com2d
 extern uint16_t   LifeTimeprt;
 
 void iic_isr_process(void);
@@ -219,6 +219,30 @@ extern uint16_t open_IPA;
 extern uint8_t t_com62Flg;
 extern uint32_t chargetv;
 extern uint32_t chargetC;
+
+
+extern uint16_t fac_fccold_chu_new_cpl; 
+extern uint16_t fac_fccold_chu_new_cph ; 
+extern uint16_t fac_fccold_chu_new_cpl_low_temp ; 
+extern uint16_t fac_fccold_chu_new_cph_low_temp ; 
+extern uint16_t temp_CPH_FCC  ;
+extern uint16_t  Fcc_cpl_temp ;
+extern uint16_t  t_com2c_fcc_cph ;
+extern uint16_t t_com2d_f_study_d3_ful ;
+extern uint16_t t_com2e_ful_dsg_cap ;
+
+extern uint16_t  t_com39_out ;
+extern uint16_t  t_com3a_out ;
+extern uint16_t t_com3b_out ;
+extern uint16_t t_com3c_out ;
+
+
+extern uint16_t  t_com54_out ;
+extern uint16_t  t_com55_out ;
+extern uint16_t t_com56_out ;
+extern uint16_t t_com57_out ;
+extern uint16_t t_com58_out ;
+
 
 void set_iic_rx_handle_type(uint32_t val, uint8_t add_rm);
 

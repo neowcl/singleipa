@@ -81,14 +81,18 @@ extern uint16_t oldNcc;
 //extern uint16_t t_com17_new;
 extern uint16_t t_com0f_cwh;
 extern uint16_t t_com10_cwh;
-extern uint8_t  f_study_d1 ;
-extern uint8_t  f_study_d2 ;
+// extern uint8_t  f_study_d1 ;
+// extern uint8_t  f_study_d2 ;
 extern uint32_t cap_accmu_chg_update ;
 extern uint16_t fcc_last_cpl_pinghua  ;
 
 
  extern uint8_t f_ful_chg_once ;
 // extern uint8_t  f_chg_update_20 ;
+
+
+
+
 
 //extern uint8_t  f_init_first_time; 
 // extern uint16_t fcc_last ;

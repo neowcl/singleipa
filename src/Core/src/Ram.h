@@ -19,16 +19,6 @@ typedef struct
     uint16_t   df_QMax;
     int16_t    df_ChargingVolt;
     int16_t    df_ChargingCur;
-//    uint16_t   df_PackStatus;
-//    uint16_t   df_CtrlStatus;
-//    uint16_t   df_InterruptStatus;
-//    uint32_t   df_GaugingStatus;
-//    uint16_t   df_OperationStatusA;
-//    uint16_t   df_OperationStatusB;
-//    uint8_t    df_TempRange;
-//    uint16_t   df_ChargingStatus;
-//    uint16_t   df_ManufacturingStatus;
-//    uint16_t   df_BatteryStatus;
     int32_t    df_lrc_w;
     uint16_t   df_tcc_cnt;
     uint16_t   df_trek_cnt;
@@ -70,16 +60,6 @@ extern  uint8_t	ReadRecord[DFSIZE];
 #define  DF_QMAX            sdf.sdfdat.df_QMax
 #define  DF_CV              sdf.sdfdat.df_ChargingVolt
 #define  DF_CC              sdf.sdfdat.df_ChargingCur
-//#define  DF_PACKSTATUS      sdf.sdfdat.df_PackStatus
-//#define  DF_CTRLSTATUS      sdf.sdfdat.df_CtrlStatus
-//#define  DF_INTSTATUS       sdf.sdfdat.df_InterruptStatus
-//#define  DF_GAUGESTATUE     sdf.sdfdat.df_GaugingStatus
-//#define  DF_OSA             sdf.sdfdat.df_OperationStatusA   
-//#define  DF_OSB             sdf.sdfdat.df_OperationStatusB 
-//#define  DF_TEMPRANGE       sdf.sdfdat.df_TempRange
-//#define  DF_CHARGESTATUS    sdf.sdfdat.df_ChargingStatus
-//#define  DF_MFS             sdf.sdfdat.df_ManufacturingStatus
-//#define  DF_BATTERYSTATUS   sdf.sdfdat.df_BatteryStatus
 #define  lrc_w		        sdf.sdfdat.df_lrc_w		// RC correction capacity
 #define  tcc_cnt		    sdf.sdfdat.df_tcc_cnt	// CycleCount RC counter
 #define  trek_cnt	        sdf.sdfdat.df_trek_cnt	// Degradation counter

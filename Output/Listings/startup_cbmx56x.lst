@@ -286,12 +286,11 @@ ARM Macro Assembler    Page 5
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0 --depend=..\o
 utput\objects\startup_cbmx56x.d -o..\output\objects\startup_cbmx56x.o -I.\RTE\_
-Target_1 -IC:\Users\12267\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\In
-clude -IC:\Users\12267\AppData\Local\Arm\Packs\Chipsea\CBMX56X_DFP\1.0.5\Device
-\Driver\inc -IC:\Users\12267\AppData\Local\Arm\Packs\Chipsea\CBMX56X_DFP\1.0.5\
-Device\Include --predefine="__UVISION_VERSION SETA 533" --predefine="_RTE_ SETA
- 1" --predefine="CBMX56X SETA 1" --predefine="_RTE_ SETA 1" --list=..\output\li
-stings\startup_cbmx56x.lst RTE\Device\CBM6560\startup_cbmx56x.S
+Target_1 -ID:\Keil_v5\ARM\CMSIS\5.9.0\CMSIS\Core\Include -ID:\Keil_v5\Chipsea\C
+BMX56X_DFP\1.0.5\Device\Driver\inc -ID:\Keil_v5\Chipsea\CBMX56X_DFP\1.0.5\Devic
+e\Include --predefine="__UVISION_VERSION SETA 531" --predefine="_RTE_ SETA 1" -
+-predefine="CBMX56X SETA 1" --predefine="_RTE_ SETA 1" --list=..\output\listing
+s\startup_cbmx56x.lst RTE\Device\CBM6560\startup_cbmx56x.S
 
 
 

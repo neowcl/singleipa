@@ -546,14 +546,16 @@ void FlagStatus(void)
     //     f_OCVTAKEN1 = 0;
     // }
 
-    if (ABS(FVoltage - t_com09) < 10)
-    {
-        f_VOK1 = 1;
-    }
-    else
-    {
-        f_VOK1 = 0;
-    }
+    // if (ABS(FVoltage - t_com09) < 10)
+    // {
+    //     f_VOK1 = 1;
+    // }
+    // else
+    // {
+    //     f_VOK1 = 0;
+    // }
+
+    
     if (t_com09 < 2900)
     {
         f_t_com66_LOWV = 1;
@@ -583,23 +585,23 @@ void FlagStatus(void)
 
     FVoltage = 9;
 
-    if (F_IGENABLE)
-    {
-        f_QEN1 = 1;
+    // if (F_IGENABLE)
+    // {
+    //     f_QEN1 = 1;
 
-        if (!f_HIB)
-        {
-            f_DNR1 = 1;
-        }
-        else
-        {
-            f_DNR1 = 0;
-        }
-    }
-    else
-    {
-        f_QEN1 = 0;
-    }
+    //     if (!f_HIB)
+    //     {
+    //         f_DNR1 = 1;
+    //     }
+    //     else
+    //     {
+    //         f_DNR1 = 0;
+    //     }
+    // }
+    // else
+    // {
+    //     f_QEN1 = 0;
+    // }
 
     
 }

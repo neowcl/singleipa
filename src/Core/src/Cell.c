@@ -455,6 +455,8 @@ const _ST_FIXED_DATA u_fd_rom __attribute__((used)) __attribute__((section(".ARM
 3100, 
 3000,
 0x2240,
+15564,
+2293,
 };
 
 

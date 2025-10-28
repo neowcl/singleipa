@@ -127,7 +127,7 @@ void Calc_ATTF(void)
 
 void Calc_FullCharge(void)
 {
-	if (f_charge == ON && t_com0a > 50) // Charging current detection ?
+	if (f_charge == ON ) // Charging current detection ?
 	{
 		if (f_fullchg == ON) // FULLY_CHARGED = ON ?
 		{
@@ -197,6 +197,7 @@ void FullCharge(void)
 		f_study_d = ON;	 // Set discharge relearn flag
 		f_study_d1 = ON; // Set discharge relearn flag
 		f_study_d2 = ON; // Set discharge relearn flag
+		f_study_d3_ful = ON;
 	}
 	if (CellTemp < D_STUDYT	 // Less than relearn limit temp
 		|| f_study_c == OFF) // or Charge relearn flag=OFF ?

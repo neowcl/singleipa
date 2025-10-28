@@ -16,7 +16,7 @@ int32_t tcom89_new;
 BMS_CMD_DATA_T g_StdCmdData;
 // BMS_CMD_DATA_T1 g_StdCmdData1;
 nManufacturingStatus ManufacturingStatus;
-newChargingStatus newChargingStatu;
+//newChargingStatus newChargingStatu;
 ut_com66_f ut_com66;
 uint16_t oldNcc;
 uint8_t readIphCnt=1;
@@ -178,8 +178,8 @@ f_FAS = 0;
 f_SS = 0;
 f_SEC0 = 1;
 f_SEC1 = 0;
-f_FAS1 = 0;
-f_SS1 = 0;
+//f_FAS1 = 0;
+//f_SS1 = 0;
 
 
 }
@@ -201,17 +201,17 @@ void bi2cs_dataCmd_Save(void)
 
   DF_CC = t_com32;
   
-  f_LDMD1 = OFF;
-  f_FULLSLEEP1 = f_DP_SLP;
-  f_HIBERNATE1 = f_HIB;
-  f_SHUTDOWN1 = OFF;
-  f_QMAXUPDATE1 = OFF;
-  f_CALMODE1 = f_CAL_EN;
-  f_FAS1 = f_FAS;
-  f_SS1 = f_SS;
+  // f_LDMD1 = OFF;
+  // f_FULLSLEEP1 = f_DP_SLP;
+  // f_HIBERNATE1 = f_HIB;
+  // f_SHUTDOWN1 = OFF;
+  // f_QMAXUPDATE1 = OFF;
+  // f_CALMODE1 = f_CAL_EN;
+  // f_FAS1 = f_FAS;
+  // f_SS1 = f_SS;
 
 
-  f_SLEEP1 = f_SLEEP;
+  // f_SLEEP1 = f_SLEEP;
   /////////////////////////////////////////////////////////////////////////////////
 
   ///////////////////////////////////////////////
@@ -244,18 +244,28 @@ t_com86Change();
   t1_com88 = 0x0000;
   t_com0b = t_com89;
 
-  t_com47[0] = 0x61;
-  t_com47[1] = 0xa6;
-  t_com47[2] = 0x4b;
-  t_com47[3] = 0x00;
+  uint32_t t47=(uint32_t)(536870912*(t_com0d / 100.0));
+  t_com47[0] = (uint8_t)t47;
+  t_com47[1] =(uint8_t)(t47 >> 8);
+  t_com47[2] = (uint8_t)(t47 >> 16);
+  t_com47[3] = (uint8_t)(t47 >> 24);
+
+  t_com7e[0]=(uint8_t)t47;
+  t_com7e[1]=(uint8_t)(t47 >> 8);
+  t_com7e[2]=(uint8_t)(t47 >> 16);
+  t_com7e[3]=(uint8_t)(t47 >> 24);
+  t_com7e[16]=(uint8_t)t47;
+  t_com7e[17]=(uint8_t)(t47 >> 8);
+  t_com7e[18]=(uint8_t)(t47 >> 16);
+  t_com7e[19]=(uint8_t)(t47 >> 24);
 
   t_coma2 = 0x0ba8;
   t_com87 = t_com0a;
 
-  f_CFET = ON;
-  f_DFET = ON;
-  f_SETC = f_charge;
-  f_SOKC = f_charge;
+  //f_CFET = ON;
+  //f_DFET = ON;
+ // f_SETC = f_charge;
+ // f_SOKC = f_charge;
   ECCVerify();
 
 
@@ -276,10 +286,10 @@ t_com86Change();
 }
 void t_comA8Change()
 {
-  t_com09_new = (t_com09 * 131072) / 1000;
-  t_com0a_new = (t_com0a * 131072) / 1000;
-  t_com08_new = (t_com08 * 131072) / 10;
-  t_com75_new = (t_com75 * 131072) / 10;
+  t_com09_new = ((uint32_t)t_com09 * IPA_32) / 1000;
+  t_com0a_new = ((uint32_t)t_com0a * IPA_32) / 1000;
+  t_com08_new = ((uint32_t)t_com08 * IPA_32) / 10;
+  t_com75_new = ((uint32_t)t_com75 * IPA_32) / 10;
 
   // t_coma8[0]=0x18;
   t_coma8[0] = (uint8_t)t_com09_new;
@@ -311,7 +321,9 @@ void t_comA8Change()
 void t_comA0Change()
 {
   t_coma0 = IdealFcc;
-  
+
+  t_ipaQmax=IdealFcc;
+
   if (IdealFcc >= 1.02*D_DCAP)
   {
     t_coma0 =1.02*D_DCAP;
@@ -364,7 +376,7 @@ void t_comA0Change()
 
 void t_com7dChange()
 {
-  uint32_t t_com7d_new = t_com09*131072*2+200;
+  uint32_t t_com7d_new = ((uint32_t)t_com09*IPA_32*2)+200;
   t_com7d[0]= (uint8_t)t_com7d_new;
   t_com7d[1]= (uint8_t)(t_com7d_new >> 8);
   t_com7d[2]= (uint8_t)(t_com7d_new >> 16);
@@ -387,7 +399,7 @@ void ECCVerify()
 }
 void t_com8cChange()
 {
-  t_com8c_new = (t_com09 * 131072) * 2.048;
+  t_com8c_new = ((uint32_t)t_com09 * IPA_32) * 2.048;
   t_com8c[0] = (uint8_t)t_com8c_new;
   t_com8c[1] = (uint8_t)(t_com8c_new >> 8);
   t_com8c[2] = (uint8_t)(t_com8c_new >> 16);
