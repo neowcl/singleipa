@@ -89,16 +89,19 @@ uint16_t fac_fccold_chu_new_cpl_low_temp = 1000;
 uint16_t fac_fccold_chu_new_cph_low_temp = 1000; 
 uint16_t temp_CPH_FCC  ;
 
+
+
+uint16_t  t_com35_out ;
 uint16_t  t_com39_out ;
 uint16_t  t_com3a_out ;
 uint16_t t_com3b_out ;
 uint16_t t_com3c_out ;
 
-uint16_t  t_com54_out ;
-uint16_t  t_com55_out ;
-uint16_t t_com56_out ;
-uint16_t t_com57_out ;
-uint16_t t_com58_out ;
+uint16_t  t_com59_out ;
+uint16_t  t_com5e_out ;
+uint16_t t_com5f_out ;
+uint16_t t_com48_out ;
+uint16_t t_com49_out ;
 
 
 // TODO  2% 内去平滑。
@@ -265,7 +268,7 @@ const _ST_SMB scom_no_tbl[] =
         {0x02, (uint8_t *)NULL},               // 0x32
         {0x02, (uint8_t *)&t_com33},           // 0x33//鍗曡妭34
         {0x02, (uint8_t *)NULL},               // 0x34  shipmode
-        {0x02, (uint8_t *)NULL},               // 0x35
+        {0x02, (uint8_t *)&t_com35_out},               // 0x35
         {0x02, (uint8_t *)&t_com36},           // 0x36
         {0x09, (uint8_t *)NULL},               // 0x37
         {0x02, (uint8_t *)&t_com38},           // 0x38
@@ -284,8 +287,8 @@ const _ST_SMB scom_no_tbl[] =
         {0x04, (uint8_t *)&chargetv},          // 0x45
         {0x04, (uint8_t *)&chargetC},          // 0x46
         {0x04, (uint8_t *)&t_com47},           // 0x47
-        {0x02, (uint8_t *)NULL},               // 0x48 GPIORead()
-        {0x02, (uint8_t *)NULL},               // 0x49 GPIOWrite()
+        {0x02, (uint8_t *)&t_com48_out},               // 0x48 GPIORead()
+        {0x02, (uint8_t *)&t_com49_out},               // 0x49 GPIOWrite()
         {0x02, (uint8_t *)NULL},               // 0x4a BTPDischargeSet()
         {0x02, (uint8_t *)NULL},               // 0x4b BTPChargeSet()
         {0x04, (uint8_t *)&t_com4c},           // 0x4c
@@ -296,18 +299,18 @@ const _ST_SMB scom_no_tbl[] =
         {0x04, (uint8_t *)NULL},               // 0x51 SafetyStatus()
         {0x04, (uint8_t *)&t1_com52},          // 0x52 PFAlert()
         {0x20, (uint8_t *)t_com53},               // 0x53 PFStatus
-        {0x04, (uint8_t *)&t_com54_out},               // 0x54 OperationStatus()
-        {0x04, (uint8_t *)&t_com55_out},               // 0x55 ChargingStatus()
-        {0x04, (uint8_t *)&t_com56_out},               // 0x56 GaugingStatus()
-        {0x04, (uint8_t *)&t_com57_out},               // 0x57 ManufacturingStatus()
-        {0x15, (uint8_t *)&t_com58_out},               // 0x58 AFERegister()
+        {0x04, (uint8_t *)NULL},               // 0x54 OperationStatus()
+        {0x04, (uint8_t *)NULL},               // 0x55 ChargingStatus()
+        {0x04, (uint8_t *)NULL},               // 0x56 GaugingStatus()
+        {0x04, (uint8_t *)NULL},               // 0x57 ManufacturingStatus()
+        {0x15, (uint8_t *)NULL},               // 0x58 AFERegister()
         {0x02, (uint8_t *)NULL},               // 0x59 MaxTurboPwr()
         {0x02, (uint8_t *)&fac_fccold_chu_new_cpl_low_temp},               // 0x5a SusTurboPwr()
         {0x02, (uint8_t *)&fac_fccold_chu_new_cpl},               // 0x5b TurboPackR()
         {0x02, (uint8_t *)&fac_fccold_chu_new_cph_low_temp},               // 0x5c TurboSysR()
         {0x02, (uint8_t *)&fac_fccold_chu_new_cph},               // 0x5d TurboEdv()
-        {0x02, (uint8_t *)NULL},               // 0x5e MaxTurboCurr()
-        {0x02, (uint8_t *)NULL},               // 0x5f SusTurboCurr()
+        {0x02, (uint8_t *)&t_com5e_out},               // 0x5e MaxTurboCurr()
+        {0x02, (uint8_t *)&t_com5f_out},               // 0x5f SusTurboCurr()
         {0x02, (uint8_t *)&t_com60},           // 0x60 Available Continuous Discharge Power
         {0x20, (uint8_t *)NULL},               // 0x61
         {0x20, (uint8_t *)&t_com62},           // 0x62

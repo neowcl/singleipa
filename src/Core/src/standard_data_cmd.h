@@ -231,17 +231,19 @@ extern uint16_t  t_com2c_fcc_cph ;
 extern uint16_t t_com2d_f_study_d3_ful ;
 extern uint16_t t_com2e_ful_dsg_cap ;
 
+
+extern uint16_t  t_com35_out ;
 extern uint16_t  t_com39_out ;
 extern uint16_t  t_com3a_out ;
 extern uint16_t t_com3b_out ;
 extern uint16_t t_com3c_out ;
 
 
-extern uint16_t  t_com54_out ;
-extern uint16_t  t_com55_out ;
-extern uint16_t t_com56_out ;
-extern uint16_t t_com57_out ;
-extern uint16_t t_com58_out ;
+extern uint16_t  t_com59_out ;
+extern uint16_t  t_com5e_out ;
+extern uint16_t t_com5f_out ;
+extern uint16_t t_com48_out ;
+extern uint16_t t_com49_out ;
 
 
 void set_iic_rx_handle_type(uint32_t val, uint8_t add_rm);
