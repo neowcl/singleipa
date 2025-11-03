@@ -2228,6 +2228,7 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 
 	// if (((CellTemp >=0) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70)))  // must charge or dsg .
 	if (((CellTemp >=0) && (CellTemp <= 45)) && (tabsc > D_DCDET ))  // must charge or dsg .
+	// fulchg ful dsg cancel current rate 
 	{// chg clear . dsg : use 
 		if (t_com09 > t_com33)
 		{
