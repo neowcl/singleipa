@@ -240,14 +240,24 @@ void bi2cs_dataCmd_Save(void)
   t_com7dChange();
   t_com8cChange();
   t_com43Change();
-t_com86Change();
+  t_com86Change();
   t1_com88 = 0x0000;
   t_com0b = t_com89;
 
-  t_com47[0] = 0x61;
-  t_com47[1] = 0xa6;
-  t_com47[2] = 0x4b;
-  t_com47[3] = 0x00;
+  uint32_t t47=(uint32_t)(536870912*(t_com0d / 100.0));
+  t_com47[0] = (uint8_t)t47;
+  t_com47[1] =(uint8_t)(t47 >> 8);
+  t_com47[2] = (uint8_t)(t47 >> 16);
+  t_com47[3] = (uint8_t)(t47 >> 24);
+
+  t_com7e[0]=(uint8_t)t47;
+  t_com7e[1]=(uint8_t)(t47 >> 8);
+  t_com7e[2]=(uint8_t)(t47 >> 16);
+  t_com7e[3]=(uint8_t)(t47 >> 24);
+  t_com7e[16]=(uint8_t)t47;
+  t_com7e[17]=(uint8_t)(t47 >> 8);
+  t_com7e[18]=(uint8_t)(t47 >> 16);
+  t_com7e[19]=(uint8_t)(t47 >> 24);
 
   t_coma2 = 0x0ba8;
   t_com87 = t_com0a;

@@ -910,32 +910,76 @@ void iic_isr_process(void)
                     }
                    case 0x0001:
                     {
-                        t_com66[0] = 0xa5;
-                        t_com66[1] = 0x00;
-                        t_com66[2] = 0x00;
-                        t_com66[3] = 0x00;
+                        if (f_charge)
+                        {
+                            t_com66[0] =(uint8_t)t_com13;
+                            t_com66[1] =(uint8_t)(t_com13>> 8);
+                            t_com66[2] =(uint8_t)(t_com13 >> 16);
+                            t_com66[3] =(uint8_t)(t_com13 >> 24);
+
+                            t_com66[8] = 0x68;
+                            t_com66[9] = 0x42;
+
+                            t_com66[10] =(uint8_t)t_com13;
+                            t_com66[11] =(uint8_t)(t_com13>> 8);
+
+                            uint32_t cu= (uint32_t)(tabsc*406);
+                            t_com66[20] = (uint8_t)cu;
+                            t_com66[21] = (uint8_t)(cu>>8);
+                            t_com66[22] = (uint8_t)(cu>>16);
+                            t_com66[23] = 0x00;
+                        }
+                        else
+                        {
+                            t_com66[0] = 0x1c;
+                            t_com66[1] = 0x00;
+                            t_com66[2] = 0x00;
+                            t_com66[3] = 0x00;
+                            
+                            t_com11= t_com11>17000?17000:t_com11;
+                            t_com66[8] = (uint8_t)t_com11;
+                            t_com66[9] = (uint8_t)(t_com11 >> 8);
+
+                            t_com66[10] = 0x1c;
+                            t_com66[11] = 0x00;
+
+                            if(f_discharge)
+                            {
+                                uint32_t cu =(uint32_t)(0x0095ffff-(uint32_t)(tabsc * 406));
+                                t_com66[20] = (uint8_t)cu;
+                                t_com66[21] = (uint8_t)(cu >> 8);
+                                t_com66[22] = (uint8_t)(cu >> 16);
+                                t_com66[23] = 0x01;
+                            }
+                            else
+                            {
+                                t_com66[20] = 0x00;
+                                t_com66[21] = 0x00;
+                                t_com66[22] = 0x00;
+                                t_com66[23] = 0x00;
+                            }
+                                
+                           
+                        }
 
                         t_com66[4] = (uint8_t)t_com66_2;
                         t_com66[5] = (uint8_t)(t_com66_2 >> 8);
 
-                        t_com66[6] = 0x1b;
-                        t_com66[7] = 0xe8;
-                        t_com66[8] = 0x0a;
-                        t_com66[9] = 0x01;
-                        t_com66[10] = 0xa5;
-                        t_com66[11] = 0x00;
+                        t_com66[6] = 0x00;
+                        t_com66[7] = 0x00;
+
                         t_com66[12] = 0x00;
                         t_com66[13] = 0x00;
                         t_com66[14] = 0x00;
                         t_com66[15] = 0x00;
-                        t_com66[16] = 0x88;
-                        t_com66[17] = 0x2b;
-                        t_com66[18] = 0x08;
+
+                        t_com66[16] = 0xdb;
+                        t_com66[17] = 0xac;
+                        t_com66[18] = 0x07;
                         t_com66[19] = 0x00;
-                        t_com66[20] = 0xde;
-                        t_com66[21] = 0x35;
-                        t_com66[22] = 0x01;
-                        t_com66[23] = 0x00;
+
+                       
+
                         t_com66[24] = 0x01;
                         t_com66[25] = 0x00;
                         t_com66[26] = 0x00;

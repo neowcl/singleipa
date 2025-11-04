@@ -42,7 +42,8 @@
 			"mode.h": "c",
 			"modules_fmc.h": "c",
 			"stdio.h": "c",
-			"modules_vbat.h": "c"
+			"modules_vbat.h": "c",
+			"main_interface.h": "c"
 		},
 		"marscode.chatLanguage": "cn",
 		"marscode.codeCompletionPro": {
