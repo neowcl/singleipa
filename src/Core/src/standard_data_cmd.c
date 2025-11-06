@@ -304,7 +304,7 @@ const _ST_SMB scom_no_tbl[] =
         {0x04, (uint8_t *)NULL},               // 0x56 GaugingStatus()
         {0x04, (uint8_t *)NULL},               // 0x57 ManufacturingStatus()
         {0x15, (uint8_t *)NULL},               // 0x58 AFERegister()
-        {0x02, (uint8_t *)NULL},               // 0x59 MaxTurboPwr()
+        {0x02, (uint8_t *)&t_com59_out},               // 0x59 MaxTurboPwr()
         {0x02, (uint8_t *)&fac_fccold_chu_new_cpl_low_temp},               // 0x5a SusTurboPwr()
         {0x02, (uint8_t *)&fac_fccold_chu_new_cpl},               // 0x5b TurboPackR()
         {0x02, (uint8_t *)&fac_fccold_chu_new_cph_low_temp},               // 0x5c TurboSysR()
