@@ -1888,11 +1888,16 @@ void Make_Relearning(uint8_t acp)
 		}
 
 
-		if (!(((CellTemp >0) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70))) )
+		// if (!(((CellTemp >0) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70))) )
+		if (((CellTemp < 0)|| (CellTemp > 45)))
 		{
 			tcom10c_w = (uint16_t)(lrcdr_w/3600 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
 		}
 		
+
+
+
+	
 
 		t_com2c_fcc_cph =  tcom10c_w  ;
 
@@ -1980,7 +1985,6 @@ void Make_Relearning_cpl(uint8_t acp)
 
 		t_com35_out  = Fcc_cpl_temp ;
 
-
 		if (CellTemp>15)
 		{
 			tcom10c_w  = tcom10c_w *(fac_fccold_chu_new_cpl /1000)+ tcom10c_w/10 *(fac_fccold_chu_new_cpl %1000/100) \
@@ -1992,16 +1996,15 @@ void Make_Relearning_cpl(uint8_t acp)
 
 		}
 
+		// if (!(((CellTemp > 0) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70))))
+		// {
+		// 	tcom10c_w = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
+		// }
 
-		if (!(((CellTemp > 0) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70))))
+		if (((CellTemp < 0) || (CellTemp > 45)))
 		{
 			tcom10c_w = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
 		}
-
-
-
-
-
 
 		FCC_Limit_Chk(); // FCC Limit check
 
@@ -2215,14 +2218,12 @@ void chg_pinghua(void)
 
 void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity 
 {
-
-
 	static int32_t ful_dsg_cap;
 	static uint8_t  Count_xiao_beilv_3s ;
 	uint16_t ful_dsg_cap_FCC;
 
 	t_com2d_f_study_d3_ful = f_study_d3_ful  ;
-	t_com2e_ful_dsg_cap = ful_dsg_cap / 3600 ;
+	t_com2e_ful_dsg_cap = ful_dsg_cap/3600 ;
 
 	// static uint16_t ful_dsg_cap_FCC;
 

@@ -24,7 +24,7 @@ extern "C" {
 #define SEAL_ENABLE                0x00
 #define SLEEP_ENABLE               0x01
 
-#define FW_VERSION                 0x030306 // T1
+#define FW_VERSION                 0x030307 // T1
 
 #define FW_SUB_VERSION             0x0501
 #define HW_VERSION                 0x333150
