@@ -225,6 +225,25 @@ extern uint16_t fac_fccold_chu_new_cpl;
 extern uint16_t fac_fccold_chu_new_cph ; 
 extern uint16_t fac_fccold_chu_new_cpl_low_temp ; 
 extern uint16_t fac_fccold_chu_new_cph_low_temp ; 
+
+extern uint16_t fac_fccold_chu_new_cpl_xiaobeilv ;    // xiaobeilv bili 
+extern uint16_t fac_fccold_chu_new_cph_xiaobeilv; 
+extern uint16_t fac_fccold_chu_new_cpl_low_temp_xiaobeilv ; 
+extern uint16_t fac_fccold_chu_new_cph_low_temp_xiaobeilv ; 
+
+
+extern uint16_t xiaobeilv_last_low_temp_cpl ;   //beilv itself
+extern uint16_t xiaobeilv_last_high_temp_cpl   ;
+extern uint16_t xiaobeilv_last_low_temp_cph  ;
+extern uint16_t xiaobeilv_last_high_temp_cph  ;
+
+
+
+
+
+
+
+
 extern uint16_t temp_CPH_FCC  ;
 extern uint16_t  Fcc_cpl_temp ;
 extern uint16_t  t_com2c_fcc_cph ;
@@ -232,18 +251,19 @@ extern uint16_t t_com2d_f_study_d3_ful ;
 extern uint16_t t_com2e_ful_dsg_cap ;
 
 
-extern uint16_t  t_com35_out ;
-extern uint16_t  t_com39_out ;
-extern uint16_t  t_com3a_out ;
-extern uint16_t t_com3b_out ;
-extern uint16_t t_com3c_out ;
+
+// extern uint16_t  t_com35_out ;
+// extern uint16_t  t_com39_out ;
+// extern uint16_t  t_com3a_out ;
+// extern uint16_t t_com3b_out ;
+// extern uint16_t t_com3c_out ;
 
 
-extern uint16_t  t_com59_out ;
-extern uint16_t  t_com5e_out ;
-extern uint16_t t_com5f_out ;
-extern uint16_t t_com48_out ;
-extern uint16_t t_com49_out ;
+// extern uint16_t  t_com59_out ;
+// extern uint16_t  t_com5e_out ;
+// extern uint16_t t_com5f_out ;
+// extern uint16_t t_com48_out ;
+// extern uint16_t t_com49_out ;
 
 
 void set_iic_rx_handle_type(uint32_t val, uint8_t add_rm);

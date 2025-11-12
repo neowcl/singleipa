@@ -1557,7 +1557,7 @@ FCC_continue_last logic */
 				}
 			}
 
-			if (ABS(current_continue_last - tabsc) < current_continue_last / 5)
+			if (ABS(current_continue_last - tabsc) < current_continue_last/5)
 			{
 				f_con_cur = 1;
 			}
@@ -1574,7 +1574,7 @@ FCC_continue_last logic */
 				f_con_CellTemp = 0;
 			}
 
-			if (ABS(FCC_continue_last - t_com10) <= FCC_continue_last / 50)
+			if (ABS(FCC_continue_last - t_com10) <= FCC_continue_last/50)
 			{
 				f_con_FCC = 1;
 			}
@@ -1682,7 +1682,7 @@ FCC_continue_last logic */
 		two2_hold_voltage_range = 8;
 	}
 
-	t_com5f_out = two2_hold_voltage_range;
+	// t_com5f_out = two2_hold_voltage_range;
 
 
 	if((f_discharge==ON)&&(f_relax ==OFF))
@@ -1872,32 +1872,57 @@ void Make_Relearning(uint8_t acp)
 		// newFCC = relearn capcity / ((100-CP_x)/100) / 60*60
 		temp_CPH_FCC  = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
 
+		// t_com3c_out = temp_CPH_FCC ;
 
-		t_com3c_out = temp_CPH_FCC ;
-
-	//	tcom10c_w = (uint16_t)(lrcdr_w/3600 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
-
+		//tcom10c_w = (uint16_t)(lrcdr_w/3600 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
 		//tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph/1000 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
 
 		if (CellTemp>15)  // 
 		{
-			tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph/1000 +(t_com10/10*acp/10));  // leiji + fcc*rsoc
-		}else   // xiaoyu 15 not update cpl or ful chg and dsg ? 
+			if(beilv<10)  
+			{
+						if((xiaobeilv_last_high_temp_cph <11 )&&(beilv -xiaobeilv_last_high_temp_cph>2)||(xiaobeilv_last_high_temp_cph-beilv>2))
+						{
+							tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph_xiaobeilv/1000 +(t_com10/10*acp/10));  // leiji + fcc*rsoc
+						}else
+						{
+							tcom10c_w = (uint16_t)(lrcdr_w/3600 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
+						}
+						xiaobeilv_last_high_temp_cph = beilv ;
+
+			}else
+			{
+				tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph/1000 +(t_com10/10*acp/10));  // leiji + fcc*rsoc
+			}
+		}else   // xiaoyu 15 not update cpl or ful chg and dsg ?   >= 15
 		{
-			tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph_low_temp/1000 +(t_com10/10*acp/10));
+			if(beilv<10) // <15 degree  && beilv< 0.1 
+			{
+				if((xiaobeilv_last_low_temp_cph<11)&&(beilv -xiaobeilv_last_low_temp_cph>2)||(xiaobeilv_last_low_temp_cph-beilv>2))
+				{
+					tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph_low_temp_xiaobeilv/1000 +(t_com10/10*acp/10));
+				}else
+				{
+					tcom10c_w = (uint16_t)(lrcdr_w/3600 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
+				}
+
+				xiaobeilv_last_low_temp_cph = beilv ;
+				
+			}else //  < 15  degree   beilv> 0.1 
+			{
+				tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph_low_temp/1000 +(t_com10/10*acp/10));
+			}
 		}
 
+	
 
 		// if (!(((CellTemp >0) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70))) )
 		if (((CellTemp < 0)|| (CellTemp > 45)))
 		{
+
 			tcom10c_w = (uint16_t)(lrcdr_w/3600 +(t_com10 / 10 * acp / 10));  // leiji + fcc*rsoc
+
 		}
-		
-
-
-
-	
 
 		t_com2c_fcc_cph =  tcom10c_w  ;
 
@@ -1983,17 +2008,60 @@ void Make_Relearning_cpl(uint8_t acp)
 
         Fcc_cpl_temp =  tcom10c_w ;
 
-		t_com35_out  = Fcc_cpl_temp ;
+		// t_com35_out  = Fcc_cpl_temp ;
 
 		if (CellTemp>15)
 		{
-			tcom10c_w  = tcom10c_w *(fac_fccold_chu_new_cpl /1000)+ tcom10c_w/10 *(fac_fccold_chu_new_cpl %1000/100) \
-	 + tcom10c_w/100*(fac_fccold_chu_new_cpl%100/10)+ tcom10c_w/1000*(fac_fccold_chu_new_cpl%10/1) ;
-		}else
-		{
-				tcom10c_w  = tcom10c_w *(fac_fccold_chu_new_cpl_low_temp /1000)+ tcom10c_w/10 *(fac_fccold_chu_new_cpl_low_temp %1000/100) \
-			 + tcom10c_w/100*(fac_fccold_chu_new_cpl_low_temp%100/10)+ tcom10c_w/1000*(fac_fccold_chu_new_cpl_low_temp%10/1) ;
 
+			if (beilv < 10)
+			{
+				if((xiaobeilv_last_high_temp_cpl<11)&&(beilv -xiaobeilv_last_high_temp_cpl>2)||(xiaobeilv_last_high_temp_cpl-beilv>2))
+				{
+						tcom10c_w = tcom10c_w * (fac_fccold_chu_new_cpl_xiaobeilv / 1000) +\
+							tcom10c_w / 10 * (fac_fccold_chu_new_cpl_xiaobeilv % 1000 / 100) + \
+							tcom10c_w / 100 * (fac_fccold_chu_new_cpl_xiaobeilv % 100 / 10) +\
+							tcom10c_w / 1000 * (fac_fccold_chu_new_cpl_xiaobeilv % 10 / 1);
+				}else
+				{
+					tcom10c_w = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
+				}
+				xiaobeilv_last_high_temp_cpl = beilv ;
+			}
+			else
+			{
+
+				tcom10c_w = tcom10c_w * (fac_fccold_chu_new_cpl / 1000) +  \
+							tcom10c_w / 10 * (fac_fccold_chu_new_cpl % 1000 / 100) +\
+							 tcom10c_w / 100 * (fac_fccold_chu_new_cpl % 100 / 10) +\
+							tcom10c_w / 1000 * (fac_fccold_chu_new_cpl % 10 / 1);
+			}
+		}
+		else  //CellTem<=15
+		{
+			if (beilv < 10)
+			{
+				if((xiaobeilv_last_low_temp_cpl<11)&&(beilv -xiaobeilv_last_low_temp_cpl>2)||(xiaobeilv_last_low_temp_cpl-beilv>2))
+				{
+													
+				tcom10c_w = tcom10c_w * (fac_fccold_chu_new_cpl_low_temp_xiaobeilv / 1000) +
+							tcom10c_w / 10 * (fac_fccold_chu_new_cpl_low_temp_xiaobeilv % 1000 / 100) + \
+							tcom10c_w / 100 * (fac_fccold_chu_new_cpl_low_temp_xiaobeilv % 100 / 10) +\
+							tcom10c_w / 1000 * (fac_fccold_chu_new_cpl_low_temp_xiaobeilv % 10 / 1);
+				}else
+				{
+					tcom10c_w = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
+				}
+
+				xiaobeilv_last_low_temp_cpl = beilv ;
+
+			}
+			else
+			{
+				tcom10c_w = tcom10c_w * (fac_fccold_chu_new_cpl_low_temp / 1000) +
+							tcom10c_w / 10 * (fac_fccold_chu_new_cpl_low_temp % 1000 / 100) +\
+							 tcom10c_w / 100 * (fac_fccold_chu_new_cpl_low_temp % 100 / 10) +\
+							tcom10c_w / 1000 * (fac_fccold_chu_new_cpl_low_temp % 10 / 1);
+			}
 		}
 
 		// if (!(((CellTemp > 0) && (CellTemp <= 45)) && ((beilv >= 10) && (beilv <= 70))))
@@ -2233,11 +2301,11 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 	{
 		if (f_fullchg == OFF)
 		{
-			t_com39_out = 1 ;
+			// t_com39_out = 1 ;
 			f_study_d3_ful = OFF;
 		}else
 		{
-			t_com39_out = 2 ;
+			// t_com39_out = 2 ;
 		}
 		ful_dsg_cap = 0 ;
 	}
@@ -2253,10 +2321,10 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 				if (f_study_d3_ful == ON)
 				{
 					ful_dsg_cap += tabsc;// 
-					t_com3a_out = 2 ;
+				
 				}else
 				{
-					t_com3a_out = 1 ;
+				
 					f_study_d3_ful = OFF;
 					ful_dsg_cap = 0;
 				}
@@ -2267,7 +2335,7 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 			{
 				if (f_study_d3_ful == ON)  
 				{
-					t_com3b_out = 1 ;
+				
 					// can go here , must have updated cpl . 
 					//cause  f_study_d3_ful == ON means have f_study_d2 have dupdated ..
 					ful_dsg_cap += tabsc;
@@ -2290,18 +2358,43 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 					{
 						if(CellTemp > 15)
 						{
-							fac_fccold_chu_new_cpl = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ; //5b
-							fac_fccold_chu_new_cph = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;  //5d
-						}else
+
+							if(beilv<10)
+							{
+							fac_fccold_chu_new_cpl_xiaobeilv = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ; //5b
+							fac_fccold_chu_new_cph_xiaobeilv = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;  //5d
+
+							}else    //beilv > 10 
+							{
+
+								fac_fccold_chu_new_cpl = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ; //5b
+								fac_fccold_chu_new_cph = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;  //5d
+							}
+						}else // CellTemp >=15 du 
 						{
-							fac_fccold_chu_new_cpl_low_temp = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ; //5a
+
+
+							if(beilv<10)
+							{
+								fac_fccold_chu_new_cpl_low_temp_xiaobeilv = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ; //5a
+							  fac_fccold_chu_new_cph_low_temp_xiaobeilv = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;  // 5c
+
+							}
+							else // CellTemp >=15 du   beilv > 0.1 
+							{
+								fac_fccold_chu_new_cpl_low_temp = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ; //5a
 							fac_fccold_chu_new_cph_low_temp = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;  // 5c
+
+							}
+
+
+							
 						}	
-						t_com3c_out = temp_CPH_FCC ;
+						// t_com3c_out = temp_CPH_FCC ;
 					//	fac_fccold_chu_new_cpl_low_temp ; 
 					}else
 					{
-						t_com3c_out = 3 ;
+				
 						fac_fccold_chu_new_cpl = 1000 ; 
 						fac_fccold_chu_new_cph  = 1000 ;
 						fac_fccold_chu_new_cpl_low_temp = 1000 ;
@@ -2319,7 +2412,7 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 				}
 				else
 				{
-					t_com3b_out = 2 ;
+				
 					f_study_d3_ful = OFF;
 					ful_dsg_cap = 0;
 				}
@@ -2334,44 +2427,41 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 		// 3. < 5  gaicheng <= 5  yijing
 		if ((f_discharge == ON) && (f_relax == OFF))  // must dsg , ifcharge already clear  0 . 
 		{
-			t_com5e_out =1 ;   
+			// t_com5e_out =1 ;   
 
 			// must dsg state  ? 
 			// if((discharge == ON) && ())
 
 			if(f_study_d3_ful)
 			{
-					t_com5f_out =1 ; 
+				
 				if (!((beilv >= 10) && (beilv <= 70)))
 				{
 					Count_xiao_beilv_3s++;
-					t_com48_out =1 ; 
+			
 
 				}else
 				{
 					Count_xiao_beilv_3s = 0 ;
-					t_com48_out =0 ; 
+				
 				}
 
 				if (Count_xiao_beilv_3s >= 10)
 				{
-					t_com49_out =1 ; 
+					
 					Count_xiao_beilv_3s = 0;
-					// fac_fccold_chu_new_cpl = 1000;
-					// fac_fccold_chu_new_cph  = 1000 ;
-					// fac_fccold_chu_new_cpl_low_temp = 1000 ;
-					// fac_fccold_chu_new_cph_low_temp = 1000 ;
+
 					f_study_d3_ful = OFF;  //if  not ful chg and ful dsg , do not update fcc 
 					ful_dsg_cap = 0;
 				}else
 				{
-				t_com49_out =3 ; 
+				
 				}
 
 				// beilv tioajian 
 				if (!(((CellTemp >= 0) && (CellTemp <= 45)))) // <5 or > 45
 				{
-					t_com59_out = 1;
+				
 					Count_xiao_beilv_3s = 0;
 					// fac_fccold_chu_new_cpl = 1000;
 					// fac_fccold_chu_new_cph  = 1000 ;
@@ -2381,15 +2471,15 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 				}
 				else
 				{
-					t_com59_out = 2;
+					// t_com59_out = 2;
 				}
 			}else
 			{
-				t_com59_out = 3;
+				// t_com59_out = 3;
 			}
 		}else
 		{
-			t_com5e_out =0 ; 
+			// t_com5e_out =0 ; 
 		}
 	}
 
@@ -2432,8 +2522,6 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
  *""FUNC COMMENT END""*****************************************************/
 
 
-
-
 void Calc_RC(void)
 {
 	static uint8_t acpl_cnt;
@@ -2446,9 +2534,9 @@ void Calc_RC(void)
 	uint32_t lwork;
 	uint8_t divi_by_1k;
 
-Calc_fulchg_fuldsg_cap();
+    Calc_fulchg_fuldsg_cap();
 
-//   ful dsg leiji rongliang 
+	//   ful dsg leiji rongliang 
 
 	if(t_com0a > 0) // Charging ?
 	{

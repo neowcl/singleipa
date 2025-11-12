@@ -328,164 +328,165 @@ void DCR_Mode(void)
 
 void Calc_QMax(void)
 {
-	uint8_t aidx = 0;
-	uint8_t dropSoc;
 
-	if (CellTemp >= TEMPLIMIT_L && CellTemp <= TEMPLIMIT_H && t_com17 > CYCLELIMIT)
-	{
-		if (f_relax == ON)
-		{
-			if (f_Qmax_start == OFF)
-			{
-				if (f_DP_SLP)
-				{
-					at_startqmax_cnt += D_DSLPVOLTTIME;
-				}
-				else if (f_SLEEP)
-				{
-					at_startqmax_cnt += D_VOLTTIME;
-				}
-				else
-				{
-					at_startqmax_cnt += 1;
-				}
-				// at_startqmax_cnt++;
-				if (at_startqmax_cnt >= 18000) // Calc SOC init
-				{
-					for (aidx = 0; (aidx < 19) && (t_com09 > OCV_SOC[aidx + 1]); aidx++);
-					SOC_Init = (int8_t)aidx * 5 + (int16_t)((int16_t)(t_com09 - OCV_SOC[aidx]) * 5) / (int16_t)(OCV_SOC[aidx + 1] - OCV_SOC[aidx]);
-					f_Qmax_start = ON;
-					f_Qmax_end = OFF;
-					at_startqmax_cnt = 0;
-					at_endqmax_cnt = 0;
-					QmaxCapcity_Calc = 0;
-				}
-			}
-			else
-			{
-				if (f_DP_SLP)
-				{
-					at_endqmax_cnt += D_DSLPVOLTTIME;
-				}
-				else if (f_SLEEP)
-				{
-					at_endqmax_cnt += D_VOLTTIME;
-				}
-				else
-				{
-					at_endqmax_cnt += 1;
-				}
-				// at_endqmax_cnt++;
-				if (at_endqmax_cnt >= 18000) // Calc SOC end
-				{
-					for (aidx = 0; (aidx < 19) && (t_com09 > OCV_SOC[aidx + 1]); aidx++)
-						;
-					SOC_End = (int8_t)aidx * 5 + (int16_t)((int16_t)(t_com09 - OCV_SOC[aidx]) * 5) / (int16_t)(OCV_SOC[aidx + 1] - OCV_SOC[aidx]);
-					f_Qmax_end = ON;
-					f_Qmax_start = OFF;
-					at_endqmax_cnt = 0;
-					at_startqmax_cnt = 0;
-				}
-			}
+	// uint8_t aidx = 0;
+	// uint8_t dropSoc;
 
-			if (f_Qmax_end == ON)
-			{
-				if (SOC_Init <= SOC_L || SOC_Init >= SOC_H)
-				{
-					if (SOC_End <= SOC_L || SOC_End >= SOC_H)
-					{
-						dropSoc = ABS(SOC_Init - SOC_End);
-						if (dropSoc > VARSOC)
-						{
-							t_com84 = QmaxCapcity_Calc / 36 / dropSoc;
-							QMaxUpdataCnt++;
-							LastQMaxUpdataCycle = t_com17;
-							LastQMaxUpdataValue = t_com84;
-							f_ltreq = ON;
-							f_Qmax_start = OFF;
-							f_Qmax_end = OFF;
-							at_endqmax_cnt = 0;
-							at_startqmax_cnt = 0;
-							QmaxCapcity_Calc = 0;
-						}
-						else
-						{
-							f_Qmax_start = OFF;
-							f_Qmax_end = OFF;
-							at_endqmax_cnt = 0;
-							at_startqmax_cnt = 0;
-							QmaxCapcity_Calc = 0;
-						}
-					}
-					else
-					{
-						f_Qmax_start = OFF;
-						f_Qmax_end = OFF;
-						at_endqmax_cnt = 0;
-						at_startqmax_cnt = 0;
-						QmaxCapcity_Calc = 0;
-					}
-				}
-				else
-				{
-					f_Qmax_start = OFF;
-					f_Qmax_end = OFF;
-					at_endqmax_cnt = 0;
-					at_startqmax_cnt = 0;
-					QmaxCapcity_Calc = 0;
-				}
-			}
-		}
-		else
-		{
-			if (tabsc >= (long)C_RATE_L * D_DCAP / 10 && tabsc <= (long)C_RATE_H * D_DCAP / 10 && f_Qmax_start == ON) // 0.1C
-			{
-				if (F_QMAXDSGUPDATA == ON)
-				{
-					if (f_charge == ON)
-					{
-						f_Qmax_start = OFF;
-						f_Qmax_end = OFF;
-						at_startqmax_cnt = 0;
-						QmaxCapcity_Calc = 0;
-					}
-					else
-					{
-						QmaxCapcity_Calc += tabsc;
-					}
-				}
+	// if (CellTemp >= TEMPLIMIT_L && CellTemp <= TEMPLIMIT_H && t_com17 > CYCLELIMIT)
+	// {
+	// 	if (f_relax == ON)
+	// 	{
+	// 		if (f_Qmax_start == OFF)
+	// 		{
+	// 			if (f_DP_SLP)
+	// 			{
+	// 				at_startqmax_cnt += D_DSLPVOLTTIME;
+	// 			}
+	// 			else if (f_SLEEP)
+	// 			{
+	// 				at_startqmax_cnt += D_VOLTTIME;
+	// 			}
+	// 			else
+	// 			{
+	// 				at_startqmax_cnt += 1;
+	// 			}
+	// 			// at_startqmax_cnt++;
+	// 			if (at_startqmax_cnt >= 18000) // Calc SOC init
+	// 			{
+	// 				for (aidx = 0; (aidx < 19) && (t_com09 > OCV_SOC[aidx + 1]); aidx++);
+	// 				SOC_Init = (int8_t)aidx * 5 + (int16_t)((int16_t)(t_com09 - OCV_SOC[aidx]) * 5) / (int16_t)(OCV_SOC[aidx + 1] - OCV_SOC[aidx]);
+	// 				f_Qmax_start = ON;
+	// 				f_Qmax_end = OFF;
+	// 				at_startqmax_cnt = 0;
+	// 				at_endqmax_cnt = 0;
+	// 				QmaxCapcity_Calc = 0;
+	// 			}
+	// 		}
+	// 		else
+	// 		{
+	// 			if (f_DP_SLP)
+	// 			{
+	// 				at_endqmax_cnt += D_DSLPVOLTTIME;
+	// 			}
+	// 			else if (f_SLEEP)
+	// 			{
+	// 				at_endqmax_cnt += D_VOLTTIME;
+	// 			}
+	// 			else
+	// 			{
+	// 				at_endqmax_cnt += 1;
+	// 			}
+	// 			// at_endqmax_cnt++;
+	// 			if (at_endqmax_cnt >= 18000) // Calc SOC end
+	// 			{
+	// 				for (aidx = 0; (aidx < 19) && (t_com09 > OCV_SOC[aidx + 1]); aidx++)
+	// 					;
+	// 				SOC_End = (int8_t)aidx * 5 + (int16_t)((int16_t)(t_com09 - OCV_SOC[aidx]) * 5) / (int16_t)(OCV_SOC[aidx + 1] - OCV_SOC[aidx]);
+	// 				f_Qmax_end = ON;
+	// 				f_Qmax_start = OFF;
+	// 				at_endqmax_cnt = 0;
+	// 				at_startqmax_cnt = 0;
+	// 			}
+	// 		}
 
-				if (F_QMAXCHGUPDATA == ON)
-				{
-					if (f_discharge == ON)
-					{
-						f_Qmax_start = OFF;
-						f_Qmax_end = OFF;
-						at_startqmax_cnt = 0;
-						QmaxCapcity_Calc = 0;
-					}
-					else
-					{
-						QmaxCapcity_Calc += tabsc;
-					}
-				}
-			}
-			else
-			{
-				//				f_Qmax_start = OFF;
-				f_Qmax_end = OFF;
-				at_startqmax_cnt = 0;
-				//				QmaxCapcity_Calc = 0;
-			}
-			at_endqmax_cnt = 0;
-		}
-	}
-	else
-	{
-		f_Qmax_start = OFF;
-		f_Qmax_end = OFF;
-		at_endqmax_cnt = 0;
-		at_startqmax_cnt = 0;
-		QmaxCapcity_Calc = 0;
-	}
+	// 		if (f_Qmax_end == ON)
+	// 		{
+	// 			if (SOC_Init <= SOC_L || SOC_Init >= SOC_H)
+	// 			{
+	// 				if (SOC_End <= SOC_L || SOC_End >= SOC_H)
+	// 				{
+	// 					dropSoc = ABS(SOC_Init - SOC_End);
+	// 					if (dropSoc > VARSOC)
+	// 					{
+	// 						t_com84 = QmaxCapcity_Calc / 36 / dropSoc;
+	// 						QMaxUpdataCnt++;
+	// 						LastQMaxUpdataCycle = t_com17;
+	// 						LastQMaxUpdataValue = t_com84;
+	// 						f_ltreq = ON;
+	// 						f_Qmax_start = OFF;
+	// 						f_Qmax_end = OFF;
+	// 						at_endqmax_cnt = 0;
+	// 						at_startqmax_cnt = 0;
+	// 						QmaxCapcity_Calc = 0;
+	// 					}
+	// 					else
+	// 					{
+	// 						f_Qmax_start = OFF;
+	// 						f_Qmax_end = OFF;
+	// 						at_endqmax_cnt = 0;
+	// 						at_startqmax_cnt = 0;
+	// 						QmaxCapcity_Calc = 0;
+	// 					}
+	// 				}
+	// 				else
+	// 				{
+	// 					f_Qmax_start = OFF;
+	// 					f_Qmax_end = OFF;
+	// 					at_endqmax_cnt = 0;
+	// 					at_startqmax_cnt = 0;
+	// 					QmaxCapcity_Calc = 0;
+	// 				}
+	// 			}
+	// 			else
+	// 			{
+	// 				f_Qmax_start = OFF;
+	// 				f_Qmax_end = OFF;
+	// 				at_endqmax_cnt = 0;
+	// 				at_startqmax_cnt = 0;
+	// 				QmaxCapcity_Calc = 0;
+	// 			}
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		if (tabsc >= (long)C_RATE_L * D_DCAP / 10 && tabsc <= (long)C_RATE_H * D_DCAP / 10 && f_Qmax_start == ON) // 0.1C
+	// 		{
+	// 			if (F_QMAXDSGUPDATA == ON)
+	// 			{
+	// 				if (f_charge == ON)
+	// 				{
+	// 					f_Qmax_start = OFF;
+	// 					f_Qmax_end = OFF;
+	// 					at_startqmax_cnt = 0;
+	// 					QmaxCapcity_Calc = 0;
+	// 				}
+	// 				else
+	// 				{
+	// 					QmaxCapcity_Calc += tabsc;
+	// 				}
+	// 			}
+
+	// 			if (F_QMAXCHGUPDATA == ON)
+	// 			{
+	// 				if (f_discharge == ON)
+	// 				{
+	// 					f_Qmax_start = OFF;
+	// 					f_Qmax_end = OFF;
+	// 					at_startqmax_cnt = 0;
+	// 					QmaxCapcity_Calc = 0;
+	// 				}
+	// 				else
+	// 				{
+	// 					QmaxCapcity_Calc += tabsc;
+	// 				}
+	// 			}
+	// 		}
+	// 		else
+	// 		{
+	// 			//				f_Qmax_start = OFF;
+	// 			f_Qmax_end = OFF;
+	// 			at_startqmax_cnt = 0;
+	// 			//				QmaxCapcity_Calc = 0;
+	// 		}
+	// 		at_endqmax_cnt = 0;
+	// 	}
+	// }
+	// else
+	// {
+	// 	f_Qmax_start = OFF;
+	// 	f_Qmax_end = OFF;
+	// 	at_endqmax_cnt = 0;
+	// 	at_startqmax_cnt = 0;
+	// 	QmaxCapcity_Calc = 0;
+	// }
 }
