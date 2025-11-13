@@ -857,7 +857,23 @@ static void Calc_NormalRC(uint32_t lrc)
 	// 	// 1% percent 5minutes , err 1% , lower time/2 .
 	// 	lrc /= 1; // Correction coefficient = 0.5
 	// }
-	lrc_w -= lrc; // Substruct correction value
+
+
+	// if((f_discharge==1)||(f_relax==1))  // fangdian huo jingzhi
+	// {
+		if(t_com0d>98)
+		{
+			lrc_w -= lrc/2; // Substruct correction value
+		}else
+		{
+			lrc_w -= lrc; // Substruct correction value
+		}
+	// }
+
+
+	// lrc_w -= lrc; // Substruct correction value
+
+	
 
 	if (lrc_w <= 0)
 	{
