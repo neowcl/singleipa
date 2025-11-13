@@ -103,6 +103,7 @@ int16_t curr_keep[3];
 uint8_t i;
 uint8_t j;
 uint16_t rsoc_enlarge_1000 ;
+uint16_t rsoc_enlarge_1000_cph ;
 
 uint8_t f_chg_last2;
 
@@ -1886,6 +1887,10 @@ void Make_Relearning(uint8_t acp)
 		//		  = relearn capacity / ( (100-CP_x) * 36 )
 		// tcom10c_w = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
 		// newFCC = relearn capcity / ((100-CP_x)/100) / 60*60
+
+
+		rsoc_enlarge_1000_cph = (uint16_t)(((((uint32_t)t_com0f * 200) * 10 / t_com10) ) / 2); // already sishewuru .
+
 		temp_CPH_FCC  = (uint16_t)(lrcdr_w / (((uint16_t)100 - acp) * 36));
 
 		// t_com3c_out = temp_CPH_FCC ;
@@ -1967,6 +1972,7 @@ void Make_Relearning(uint8_t acp)
 		f_cp_h_fccupdated = 1;
 		//lrc_w_last  = lrc_w ;
 		clr_flg_fulchg_update();
+
 		save_dsg_upd_fcc = tcom10c_w;
 		f_bigger_than_zero = 1;
 		Calc_factor_of_fcc(); // update fcc , fcc factor and save into  save_fac_dsg_upd
@@ -2020,6 +2026,7 @@ void Make_Relearning_cpl(uint8_t acp)
 		//		  = relearn capacity / ( (100-CP_x) * 36 )
 
 		rsoc_enlarge_1000= (uint16_t)(((((uint32_t)t_com0f * 200) * 10 / t_com10) ) / 2); // already sishewuru .
+		
 		tcom10c_w = (uint16_t)(lrcdr_w/ (((uint16_t)100 - acp) * 36));
 
         Fcc_cpl_temp =  tcom10c_w ;
@@ -2800,7 +2807,8 @@ void Calc_RC(void)
 							// CP_H capacity = FCC*60*60*(D_CP_H/100)
 							//               = FCC*D_CP_H*36
 							// lrccr_w = (uint32_t)t_com10 * D_CP_H * 36;
-							lrccr_w = (uint32_t)t_com10 * t_com0d * 36;   // fcc*rsoc   // here soc never changed , so can be put here .
+							lrccr_w = (long)t_com10* rsoc_enlarge_1000 *18/5;
+							// lrccr_w = (uint32_t)t_com10 * t_com0d * 36;   // fcc*rsoc   // here soc never changed , so can be put here .
 							lrc_w = lrccr_w;
 							lrc_w_last  = lrc_w ;
 							f_rcsame = OFF; // Clear RC same flag
