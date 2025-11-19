@@ -1902,7 +1902,7 @@ void Make_Relearning(uint8_t acp)
 		{
 			if(beilv<10)  
 			{
-						if((xiaobeilv_last_high_temp_cph <11 )&&(beilv -xiaobeilv_last_high_temp_cph>2)||(xiaobeilv_last_high_temp_cph-beilv>2))
+						if((xiaobeilv_last_high_temp_cph <=11 )&&(beilv -xiaobeilv_last_high_temp_cph<=2)||(xiaobeilv_last_high_temp_cph-beilv<=2))
 						{
 							tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph_xiaobeilv/1000 +(t_com10/10*acp/10));  // leiji + fcc*rsoc
 						}else
@@ -1919,7 +1919,7 @@ void Make_Relearning(uint8_t acp)
 		{
 			if(beilv<10) // <15 degree  && beilv< 0.1 
 			{
-				if((xiaobeilv_last_low_temp_cph<11)&&(beilv -xiaobeilv_last_low_temp_cph>2)||(xiaobeilv_last_low_temp_cph-beilv>2))
+				if((xiaobeilv_last_low_temp_cph<=11)&&(beilv -xiaobeilv_last_low_temp_cph<=2)||(xiaobeilv_last_low_temp_cph-beilv<=2))
 				{
 					tcom10c_w = (uint16_t)(lrcdr_w/3600*fac_fccold_chu_new_cph_low_temp_xiaobeilv/1000 +(t_com10/10*acp/10));
 				}else
@@ -2038,7 +2038,7 @@ void Make_Relearning_cpl(uint8_t acp)
 
 			if (beilv < 10)
 			{
-				if((xiaobeilv_last_high_temp_cpl<11)&&(beilv -xiaobeilv_last_high_temp_cpl>2)||(xiaobeilv_last_high_temp_cpl-beilv>2))
+				if((xiaobeilv_last_high_temp_cpl<=11)&&(beilv -xiaobeilv_last_high_temp_cpl<=2)||(xiaobeilv_last_high_temp_cpl-beilv<=2))
 				{
 						tcom10c_w = tcom10c_w * (fac_fccold_chu_new_cpl_xiaobeilv / 1000) +\
 							tcom10c_w / 10 * (fac_fccold_chu_new_cpl_xiaobeilv % 1000 / 100) + \
@@ -2063,7 +2063,7 @@ void Make_Relearning_cpl(uint8_t acp)
 		{
 			if (beilv < 10)
 			{
-				if((xiaobeilv_last_low_temp_cpl<11)&&(beilv -xiaobeilv_last_low_temp_cpl>2)||(xiaobeilv_last_low_temp_cpl-beilv>2))
+				if((xiaobeilv_last_low_temp_cpl<=11)&&(beilv -xiaobeilv_last_low_temp_cpl<=2)||(xiaobeilv_last_low_temp_cpl-beilv<=2))
 				{
 													
 				tcom10c_w = tcom10c_w * (fac_fccold_chu_new_cpl_low_temp_xiaobeilv / 1000) +
@@ -2147,6 +2147,7 @@ void Make_Relearning_cpl(uint8_t acp)
 		// dsg_upfcc_keep_temp = CellTemp  ;
 		// dsg_upfcc_keep_current = tabsc ;  // this time should be
 		// rsoc_enlarge_1000  = t_com0d *10  ;
+		// lrccr_w = (long)t_com10* rsoc_enlarge_1000 *3600/1000;
 		lrccr_w = (long)t_com10* rsoc_enlarge_1000 *18/5;
 		lrc_w = lrccr_w;
 		lrc_w_last = lrc_w;
@@ -2399,18 +2400,16 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 
 							if(beilv<10)
 							{
-								fac_fccold_chu_new_cpl_low_temp_xiaobeilv = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ; //5a
+							  fac_fccold_chu_new_cpl_low_temp_xiaobeilv = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ; //5a
 							  fac_fccold_chu_new_cph_low_temp_xiaobeilv = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;  // 5c
 
 							}
 							else // CellTemp >=15 du   beilv > 0.1 
 							{
 								fac_fccold_chu_new_cpl_low_temp = (uint16_t)((long) ful_dsg_cap_FCC * 1000 / Fcc_cpl_temp ) ; //5a
-							fac_fccold_chu_new_cph_low_temp = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;  // 5c
+							   fac_fccold_chu_new_cph_low_temp = (uint16_t)((long)ful_dsg_cap_FCC*1000/ temp_CPH_FCC ) ;  // 5c
 
 							}
-
-
 							
 						}	
 						// t_com3c_out = temp_CPH_FCC ;
@@ -2807,7 +2806,7 @@ void Calc_RC(void)
 							// CP_H capacity = FCC*60*60*(D_CP_H/100)
 							//               = FCC*D_CP_H*36
 							// lrccr_w = (uint32_t)t_com10 * D_CP_H * 36;
-							lrccr_w = (long)t_com10* rsoc_enlarge_1000 *18/5;
+							lrccr_w = (long)t_com10* rsoc_enlarge_1000_cph *18/5;
 							// lrccr_w = (uint32_t)t_com10 * t_com0d * 36;   // fcc*rsoc   // here soc never changed , so can be put here .
 							lrc_w = lrccr_w;
 							lrc_w_last  = lrc_w ;
