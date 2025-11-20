@@ -623,6 +623,7 @@ void init_soc_input_state(void)
 		t_com10 = INIT_FCC; // set initial FCC
 		IdealFcc = INIT_IDRFCC;
 		
+    
 		Del_lrc = 0;
 		Chargefactor = 1000;
 		Dischargefactor = 1000;

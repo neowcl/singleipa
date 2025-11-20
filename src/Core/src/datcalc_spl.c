@@ -122,7 +122,7 @@ uint16_t save_fac_dsg_upd;
 uint8_t f_relax_last_dsgupdate_use  ; 
 uint8_t	f_charge_last_dsgupdate_use  ;
 
-
+uint8_t f_cpl_have_updated_hoseirc ;
 uint16_t beilv;
 
 // dsg inner  resis
@@ -1440,6 +1440,14 @@ void Calc_HoseiRC(uint32_t lrc)
 	uint16_t t_work1;
 	uint16_t two2_hold_voltage_range;
 
+	int32_t fcc_differ;  // thsi time cpl fcc - last time ful chg ful dsg FCC 
+	int32_t fcc_differ_ratio ;
+	uint16_t D_CP_L_temp ;
+
+
+	D_CP_L_temp =  D_CP_L ;
+
+
 	// int16_t dis_fac_cpl = 100  ; // discharge factor when reach cpl voltage .
 
 	// if (f_study_d == ON && f_cp_l == ON)
@@ -1495,63 +1503,121 @@ void Calc_HoseiRC(uint32_t lrc)
 		{
 			// dis_fcc = t_com0d / 5.5;    // enlarge 100 times .  100/5.5*t_com0d  = 18.2 about 18
 			// dis_fac_cpl = t_com0d*18 +t_com0d/5  ;              // discharge factor when reach cpl .
-			dis_fac_cpl = t_com0d * D_DSG_PINGHUA_MUL + t_com0d * 6 / D_DSG_PINGHUA_DIV; // discharge factor when reach cpl .
+			if (f_cpl_have_updated_hoseirc)
+			{
+				f_cpl_have_updated_hoseirc = 0;
+				if (FCC_continue_last - t_com10 >= 0) // shiji  - cpll gengxin
+				{
+					fcc_differ = FCC_continue_last - t_com10;
+					fcc_differ_ratio = fcc_differ * 1000 / FCC_continue_last * 10;
+					// fcc_differ /FCC_continue_last*100 * 100  dianliu beilv  : dis_fac_cpl : 100
+					if (0 != D_CP_L_temp)
+					{
+						dis_fac_cpl = (fcc_differ_ratio + D_CP_L_temp * 100) / D_CP_L_temp;
+					}
+
+					if (dis_fac_cpl < 16)
+					{
+						dis_fac_cpl = 16; // Subtruct correction value
+					}
+					else if (dis_fac_cpl >= 400) // 5---92
+					{
+						dis_fac_cpl = 400;
+					}
+				}
+				else
+				{ // FCC_continue_last < t_com10
+
+					fcc_differ = t_com10 - FCC_continue_last;
+					fcc_differ_ratio = fcc_differ * 1000 / FCC_continue_last * 10;
+
+					if (fcc_differ_ratio >= D_CP_L_temp * 100)
+					{
+						dis_fac_cpl = 100 / D_CP_L_temp;
+					}
+					else // D_CP_L_temp * 100 < fcc_differ_ratio
+					{
+						dis_fac_cpl = (D_CP_L_temp * 100 - fcc_differ_ratio) / D_CP_L_temp;
+					}
+
+					if (dis_fac_cpl < 16)
+					{
+						dis_fac_cpl = 16; // Subtruct correction value
+					}
+					else if (dis_fac_cpl >= 400) // 5---92
+					{
+						dis_fac_cpl = 400;
+					}
+				}
+			}
+			else
+			{
+				dis_fac_cpl = t_com0d * D_DSG_PINGHUA_MUL + t_com0d * 6 / D_DSG_PINGHUA_DIV; // discharge factor when reach cpl .
+				if (t_com0d < D_CP_L)														 // t_com0d = rsoc  D_CP_L = 6 ;
+				{
+					if (dis_fac_cpl < 16)
+					{
+						dis_fac_cpl = 16; // Subtruct correction value
+					}
+					else if (dis_fac_cpl >= 109) // 5---92
+					{
+						dis_fac_cpl = 100;
+					}
+				}
+				else if (t_com0d > D_CP_L)
+				{
+
+					// if(cpl gengxin ) // if not update ?  // no need to judge update .
+					// if(t_com10  < fcc_last_cpl_pinghua )
+					// {
+					// 	dis_fac_cpl = (lrc_w/3600 - t_com10/50)*100 / (t_com10*3/50)  ;
+
+					// // (new RC  - 0.01 newFCC )/(fcc*0.06)    // 0.06 cpl
+					// }else if(t_com10 > fcc_last_cpl_pinghua )
+					// {
+					// 	dis_fac_cpl = (lrc_w/3600 - t_com10/100)*100 / (t_com10*3/50)  ;
+					// }
+					if (f_cp_l_fccupdated)
+					{
+						if (t_com10 < fcc_last_cpl_pinghua)
+						{
+							// (new RC  - 0.01 newFCC )/(fcc*0.06)    // 0.06 cpl
+							dis_fac_cpl = (lrc_w / 36 - t_com10 * 2) / (t_com10 * D_CP_L / 100);
+						}
+						else if (t_com10 >= fcc_last_cpl_pinghua)
+						{
+							dis_fac_cpl = (lrc_w / 36 - t_com10) / (t_com10 * D_CP_L / 100);
+						}
+						fcc_last_cpl_pinghua = t_com10;
+					}
+
+					if (dis_fac_cpl <= 109)
+					{
+						dis_fac_cpl = 100; // Subtruct correction value
+					}
+					else if (dis_fac_cpl >= 400) // 5---92
+					{
+						dis_fac_cpl = 400;
+					}
+				}
+				else
+				{
+					dis_fac_cpl = 100;
+				}
+			}
 
 			// if (t_com0d < D_CP_L)
 			// {
 			// 	dis_fac_cpl+=8 ;
 			// }
 
-			if (t_com0d < D_CP_L) // t_com0d = rsoc  D_CP_L = 6 ;
+			if (dis_fac_cpl < 16)
 			{
-				if (dis_fac_cpl < 30)
-				{
-					dis_fac_cpl = 30; // Subtruct correction value
-				}
-				else if (dis_fac_cpl >= 109) // 5---92
-				{
-					dis_fac_cpl = 100;
-				}
+				dis_fac_cpl = 16; // Subtruct correction value
 			}
-			else if (t_com0d > D_CP_L)
+			else if (dis_fac_cpl >= 400) // 5---92
 			{
-
-				// if(cpl gengxin ) // if not update ?  // no need to judge update .
-				// if(t_com10  < fcc_last_cpl_pinghua )
-				// {
-				// 	dis_fac_cpl = (lrc_w/3600 - t_com10/50)*100 / (t_com10*3/50)  ;
-
-				// // (new RC  - 0.01 newFCC )/(fcc*0.06)    // 0.06 cpl
-				// }else if(t_com10 > fcc_last_cpl_pinghua )
-				// {
-				// 	dis_fac_cpl = (lrc_w/3600 - t_com10/100)*100 / (t_com10*3/50)  ;
-				// }
-				if (f_cp_l_fccupdated)
-				{
-					if (t_com10 < fcc_last_cpl_pinghua)
-					{
-						// (new RC  - 0.01 newFCC )/(fcc*0.06)    // 0.06 cpl
-						dis_fac_cpl = (lrc_w / 36 - t_com10 * 2) / (t_com10 * D_CP_L / 100);
-					}
-					else if (t_com10 >= fcc_last_cpl_pinghua)
-					{
-						dis_fac_cpl = (lrc_w / 36 - t_com10) / (t_com10 * D_CP_L / 100);
-					}
-					fcc_last_cpl_pinghua = t_com10;
-				}
-
-				if (dis_fac_cpl <= 109)
-				{
-					dis_fac_cpl = 100; // Subtruct correction value
-				}
-				else if (dis_fac_cpl >= 400) // 5---92
-				{
-					dis_fac_cpl = 400;
-				}
-			}
-			else
-			{
-				dis_fac_cpl = 100;
+				dis_fac_cpl = 400;
 			}
 
 			/* for logic cpl_d3 updated CPH 用比例计算方式 。
@@ -2156,6 +2222,8 @@ void Make_Relearning_cpl(uint8_t acp)
 		Calc_factor_of_fcc(); // update fcc , fcc factor and save into  save_fac_dsg_upd
 		f_bigger_than_zero = 1;
 		CellTemp_last_time_update= CellTemp ;
+
+		f_cpl_have_updated_hoseirc = 1 ;
 	}
 
 	//**************************delete for update both cph and cpl ***************** //
@@ -2560,8 +2628,14 @@ void Calc_RC(void)
 
 	//   ful dsg leiji rongliang 
 
+	if((f_charge == ON)||(t_com0a > 0)) // Charging ?
+	{
+		f_cpl_have_updated_hoseirc = 0 ;
+	}
+
 	if(t_com0a > 0) // Charging ?
 	{
+
 		if (f_charge == ON) // Charging ?
 		{
 			if (f_studied == ON) // Studied flag = ON ?
@@ -3117,6 +3191,8 @@ void Init_Cap(void)
 	uint8_t aidx;
 	uint8_t aresult;
 
+	 FCC_continue_last = INIT_FCC ;
+
 	f_init_first_time = 1; // in case discharge update , when less it 0 , it will always be  0 .
 						   // Search using table
 	
@@ -3162,6 +3238,8 @@ void Init_Cap(void)
 	
 	lrc_w_last = lrc_w ;
 	t_com0dlast = t_com0d ;
+
+
 	fcc_last_cpl_pinghua = t_com10  ; 
 	CellTemp_last_time_update= CellTemp ;
 	Make_RC();	 // Calculate RemainingCapacity
@@ -3179,6 +3257,9 @@ void Init_Cap(void)
 	{
 		f_cp_l = ON; // Set CCP detect flag
 	}
+
+
+
 }
 
 void ClearStudey(void)
