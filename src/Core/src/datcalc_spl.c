@@ -3252,7 +3252,7 @@ fac_fccold_chu_new_cph = D_FAC_FCCOLD_CHU_NEW_CPH        ;
 fac_fccold_chu_new_cpl_low_temp = D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP    ;        
 fac_fccold_chu_new_cph_low_temp = D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP  ;
 fac_fccold_chu_new_cpl_xiaobeilv =  D_FAC_FCCOLD_CHU_NEW_CPL_XIAOBEILV ;
-fac_fccold_chu_new_cph_xiaobeilv D_FAC_FCCOLD_CHU_NEW_CPH_XIAOBEILV      ;      
+fac_fccold_chu_new_cph_xiaobeilv =  D_FAC_FCCOLD_CHU_NEW_CPH_XIAOBEILV      ;      
 fac_fccold_chu_new_cpl_low_temp_xiaobeilv =  D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP_XIAOBEILV  ;
 fac_fccold_chu_new_cph_low_temp_xiaobeilv =  D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP_XIAOBEILV  ;
 

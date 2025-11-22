@@ -452,11 +452,20 @@ const _ST_FIXED_DATA u_fd_rom __attribute__((used)) __attribute__((section(".ARM
 {0x36,0x00,0x00,0x00,0x23,0x00,0x00,0x20,0x15,0x00,0x00,0x40},
 18,  // DSG_PINGHUA_MUL
 10,  // DSG_PINGHUA_DIV
-3100, 
-3000,
-0x2240,
-15564,
-2293,
+3100,   //D_0PVOLT5_Tempera_10  
+3000,   // D_0PVOLT_Tempera_less_than_5 
+0x2240,   // D_IPA_MANUFACTURE_DATE
+15564,   // D_COM66_END 
+2293,   // D_COM66_HEAD 
+1000, //  D_FAC_FCCOLD_CHU_NEW_CPL    fac_fccold_chu_new_cplh
+1000,  // D_FAC_FCCOLD_CHU_NEW_CPH   fac_fccold_chu_new_cph
+1000,  // D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP  fac_fccold_chu_new_cpl_low_temp
+1000,  //D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP  fac_fccold_chu_new_cph_low_temp
+1000,   //  D_FAC_FCCOLD_CHU_NEW_CPL_XIAOBEILV    fac_fccold_chu_new_cpl_xiaobeilv
+1000,  //  D_FAC_FCCOLD_CHU_NEW_CPH_XIAOBEILV  fac_fccold_chu_new_cph_xiaobeilv
+1000,  //  D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP_XIAOBEILV fac_fccold_chu_new_cpl_low_temp_xiaobeilv
+1000,  // D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP_XIAOBEILV    fac_fccold_chu_new_cph_low_temp_xiaobeilv
+
 };
 
 
