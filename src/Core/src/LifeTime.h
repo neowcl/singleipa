@@ -35,7 +35,11 @@ typedef struct
     uint32_t   lt_HighTempTime;
     uint32_t   lt_HighVoltTime;
     uint32_t   lt_HighTVTime;
-    int16_t     lt_MinChargeVoltage;
+    int16_t    lt_MinChargeVoltage;
+
+
+
+
 }_LifTimes;
 
 #pragma pack()

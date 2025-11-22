@@ -540,6 +540,16 @@ typedef struct
 	uint16_t d_com66_end;
 	uint16_t d_com66_head;
 
+	uint16_t d_fac_fccold_chu_new_cpl; // dabeilv bili
+	uint16_t d_fac_fccold_chu_new_cph;
+	uint16_t d_fac_fccold_chu_new_cpl_low_temp;
+	uint16_t d_fac_fccold_chu_new_cph_low_temp;
+
+	uint16_t d_fac_fccold_chu_new_cpl_xiaobeilv; // xiaobeilv bili
+	uint16_t d_fac_fccold_chu_new_cph_xiaobeilv;
+	uint16_t d_fac_fccold_chu_new_cpl_low_temp_xiaobeilv;
+	uint16_t d_fac_fccold_chu_new_cph_low_temp_xiaobeilv;
+
 } _ST_FIXED_DATA;
 #pragma pack()
 
@@ -920,6 +930,18 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define D_IPA_MANUFACTURE_DATE  u_fd_rom.d_IPA_ManufactureDate
 #define D_COM66_END         u_fd_rom.d_com66_end
 #define D_COM66_HEAD        u_fd_rom.d_com66_head
+
+
+#define D_FAC_FCCOLD_CHU_NEW_CPL                     u_fd_rom.d_fac_fccold_chu_new_cpl
+#define D_FAC_FCCOLD_CHU_NEW_CPH                     u_fd_rom.d_fac_fccold_chu_new_cph
+#define D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP            u_fd_rom.d_fac_fccold_chu_new_cpl_low_temp
+#define D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP            u_fd_rom.d_fac_fccold_chu_new_cph_low_temp
+#define D_FAC_FCCOLD_CHU_NEW_CPL_XIAOBEILV           u_fd_rom.d_fac_fccold_chu_new_cpl_xiaobeilv
+#define D_FAC_FCCOLD_CHU_NEW_CPH_XIAOBEILV           u_fd_rom.d_fac_fccold_chu_new_cph_xiaobeilv
+#define D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP_XIAOBEILV  u_fd_rom.d_fac_fccold_chu_new_cpl_low_temp_xiaobeilv
+#define D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP_XIAOBEILV  u_fd_rom.d_fac_fccold_chu_new_cph_low_temp_xiaobeilv
+
+
 
 void StaticDFCrc_Chk(void);
 void DynamicDFCrc_Chk(void);

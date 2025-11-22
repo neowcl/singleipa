@@ -164,7 +164,7 @@ uint16_t CellTemp_continue_last ;
 uint16_t FCC_continue_last  ;
 uint8_t f_cpl_d3_updated ;  
 
-
+ uint16_t leiji_fcc_dsg_cpl_per_soc_average;
 
 uint16_t keep_cur_study_d3 ;
 /***********************************************************************
@@ -1503,12 +1503,17 @@ void Calc_HoseiRC(uint32_t lrc)
 		{
 			// dis_fcc = t_com0d / 5.5;    // enlarge 100 times .  100/5.5*t_com0d  = 18.2 about 18
 			// dis_fac_cpl = t_com0d*18 +t_com0d/5  ;              // discharge factor when reach cpl .
+
 			if (f_cpl_have_updated_hoseirc)
 			{
+
+
 				f_cpl_have_updated_hoseirc = 0;
 				if (FCC_continue_last - t_com10 >= 0) // shiji  - cpll gengxin
 				{
-					fcc_differ = FCC_continue_last - t_com10;
+				// 	fcc_differ = FCC_continue_last - t_com10;
+
+				    fcc_differ = leiji_fcc_dsg_cpl_per_soc_average - t_com10;  // 
 					fcc_differ_ratio = fcc_differ * 1000 / FCC_continue_last * 10;
 					// fcc_differ /FCC_continue_last*100 * 100  dianliu beilv  : dis_fac_cpl : 100
 					if (0 != D_CP_L_temp)
@@ -1526,9 +1531,11 @@ void Calc_HoseiRC(uint32_t lrc)
 					}
 				}
 				else
-				{ // FCC_continue_last < t_com10
+				{ // FCC_continue_last < t_com10   // leiji_fcc_dsg_cpl_per_soc_average < t_com10
 
-					fcc_differ = t_com10 - FCC_continue_last;
+					// fcc_differ = t_com10 - FCC_continue_last;
+
+					fcc_differ = t_com10 - leiji_fcc_dsg_cpl_per_soc_average;
 					fcc_differ_ratio = fcc_differ * 1000 / FCC_continue_last * 10;
 
 					if (fcc_differ_ratio >= D_CP_L_temp * 100)
@@ -2223,6 +2230,7 @@ void Make_Relearning_cpl(uint8_t acp)
 		f_bigger_than_zero = 1;
 		CellTemp_last_time_update= CellTemp ;
 
+
 		f_cpl_have_updated_hoseirc = 1 ;
 	}
 
@@ -2381,6 +2389,16 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 	static int32_t ful_dsg_cap;
 	static uint8_t  Count_xiao_beilv_3s ;
 	uint16_t ful_dsg_cap_FCC;
+
+
+
+
+
+
+
+
+
+
 
 	t_com2d_f_study_d3_ful = f_study_d3_ful  ;
 	t_com2e_ful_dsg_cap = ful_dsg_cap/3600 ;
@@ -2585,6 +2603,38 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 
 }
 
+
+
+void calc_leiji_dsg_2cpl()
+{
+	static uint32_t leiji_fcc_dsg_cpl_per_soc;
+	static uint8_t leiji_fcc_dsg_cpl_per_soc_cnt = 0  ;
+	static uint8_t soc_last_leiji_fcc_dsg_cpl_per_soc = 0  ;
+	if(f_study_d2)
+	{
+		if(!f_charge)
+		{
+			if(t_com0d!=soc_last_leiji_fcc_dsg_cpl_per_soc)
+			{
+				leiji_fcc_dsg_cpl_per_soc_cnt++ ;
+				leiji_fcc_dsg_cpl_per_soc += t_com10 ;
+				leiji_fcc_dsg_cpl_per_soc_average = leiji_fcc_dsg_cpl_per_soc / leiji_fcc_dsg_cpl_per_soc_cnt ;
+			}
+		}else
+		{
+			leiji_fcc_dsg_cpl_per_soc_cnt = 0 ;
+			leiji_fcc_dsg_cpl_per_soc = 0 ;
+		}
+
+	}else{
+		
+		leiji_fcc_dsg_cpl_per_soc_cnt = 0 ;
+		leiji_fcc_dsg_cpl_per_soc = 0 ;
+	}
+
+	soc_last_leiji_fcc_dsg_cpl_per_soc = t_com0d ;
+
+}
 /*""FUNC COMMENT""**********************************************************
  * ID				: 1.0
  * module outline	: RemainingCapacity() calculation function
@@ -2623,6 +2673,10 @@ void Calc_RC(void)
 
 	uint32_t lwork;
 	uint8_t divi_by_1k;
+
+
+calc_leiji_dsg_2cpl();
+
 
     Calc_fulchg_fuldsg_cap();
 
@@ -3190,6 +3244,19 @@ void Init_Cap(void)
 {
 	uint8_t aidx;
 	uint8_t aresult;
+
+
+
+fac_fccold_chu_new_cpl = D_FAC_FCCOLD_CHU_NEW_CPL      ;                
+fac_fccold_chu_new_cph = D_FAC_FCCOLD_CHU_NEW_CPH        ;            
+fac_fccold_chu_new_cpl_low_temp = D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP    ;        
+fac_fccold_chu_new_cph_low_temp = D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP  ;
+fac_fccold_chu_new_cpl_xiaobeilv =  D_FAC_FCCOLD_CHU_NEW_CPL_XIAOBEILV ;
+fac_fccold_chu_new_cph_xiaobeilv D_FAC_FCCOLD_CHU_NEW_CPH_XIAOBEILV      ;      
+fac_fccold_chu_new_cpl_low_temp_xiaobeilv =  D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP_XIAOBEILV  ;
+fac_fccold_chu_new_cph_low_temp_xiaobeilv =  D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP_XIAOBEILV  ;
+
+
 
 	 FCC_continue_last = INIT_FCC ;
 
