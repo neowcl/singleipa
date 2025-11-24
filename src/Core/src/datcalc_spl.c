@@ -1503,16 +1503,12 @@ void Calc_HoseiRC(uint32_t lrc)
 		{
 			// dis_fcc = t_com0d / 5.5;    // enlarge 100 times .  100/5.5*t_com0d  = 18.2 about 18
 			// dis_fac_cpl = t_com0d*18 +t_com0d/5  ;              // discharge factor when reach cpl .
-
 			if (f_cpl_have_updated_hoseirc)
 			{
-
-
 				f_cpl_have_updated_hoseirc = 0;
 				if (FCC_continue_last - t_com10 >= 0) // shiji  - cpll gengxin
 				{
 				// 	fcc_differ = FCC_continue_last - t_com10;
-
 				    fcc_differ = leiji_fcc_dsg_cpl_per_soc_average - t_com10;  // 
 					fcc_differ_ratio = fcc_differ * 1000 / FCC_continue_last * 10;
 					// fcc_differ /FCC_continue_last*100 * 100  dianliu beilv  : dis_fac_cpl : 100
@@ -1749,49 +1745,42 @@ FCC_continue_last logic */
 	// }
 	/*temperature less than 10 */
 
-	t_work1 = (uint16_t)((long)tabsc * 100 / D_DCAP); // eg :   3600 mAh  = 3600mA * 1h
+	// // hold 2   /* hold 2 8/
+	// t_work1 = (uint16_t)((long)tabsc * 100 / D_DCAP); // eg :   3600 mAh  = 3600mA * 1h   	//zhuyao he beilv guanxi da .
+	// if (t_work1 <= 10) // two2_hold_voltage_range  = 108
+	// {
+	// 	two2_hold_voltage_range = 108;
+	// }
+	// else if (t_work1 <= 30) // y = -4.5x +155   3200mV   10 ---108  32---20
+	// {
+	// 	two2_hold_voltage_range = 155 - t_work1 * 9 / 2;
+	// }
+	// else if (t_work1 <= 50) // y = -0.5x +35   3200mV    32---20  40-----8
+	// {
+	// 	two2_hold_voltage_range = 35 - t_work1 / 2;
+	// }
+	// else if (t_work1 <= 70) // y = -0.1x +15   3200mV    32---20  40-----8
+	// {
+	// 	two2_hold_voltage_range = 15 - t_work1 / 10;
+	// }
+	// else
+	// {
+	// 	two2_hold_voltage_range = 8;
+	// }
 
-	if (t_work1 <= 10) // two2_hold_voltage_range  = 108
-	{
-		two2_hold_voltage_range = 108;
-	}
-	else if (t_work1 <= 30) // y = -4.5x +155   3200mV   10 ---108  32---20
-	{
-		two2_hold_voltage_range = 155 - t_work1 * 9 / 2;
-	}
-	else if (t_work1 <= 50) // y = -0.5x +35   3200mV    32---20  40-----8
-	{
-		two2_hold_voltage_range = 35 - t_work1 / 2;
-	}
-	else if (t_work1 <= 70) // y = -0.1x +15   3200mV    32---20  40-----8
-	{
-		two2_hold_voltage_range = 15 - t_work1 / 10;
-	}
-	else
-	{
-		two2_hold_voltage_range = 8;
-	}
+	// if((f_discharge==ON)&&(f_relax ==OFF))
+	// {
+	// 	if ((t_com09 > t_com33 + two2_hold_voltage_range) && (t_com0d == 2)) // Record_lrc_w = t_com10*0.02* 3600*;    // rc
+	// 	{
+	// 		if (lrc_w <= t_com10 * 80) // rsoc have already 4 she 5 ru // 	t_com0d = 2;		 // soc = 2
+	// 		{
+	// 			lrc_w = t_com10 * 80; // rc twork = (uint16_t)(lrc_w / (60 * 60)); // RC = RC_W / (60min*60sec) FCC * aresult / 100 * 3600			 
+	// 		}
+	// 		lrc_w_last = lrc_w;  // twork = (uint16_t)(((((uint32_t)t_com0f * 200) * 10 / t_com10) ) / 2); // not  sishewuru .
+	// 	}
+	// }
 
-	// t_com5f_out = two2_hold_voltage_range;
-
-
-	if((f_discharge==ON)&&(f_relax ==OFF))
-	{
-		if ((t_com09 > t_com33 + two2_hold_voltage_range) && (t_com0d == 2))
-		{
-			// Record_lrc_w = t_com10*0.02* 3600*;    // rc
-
-			// 	t_com0d = 2;		 // soc = 2
-			if (lrc_w <= t_com10 * 80) // rsoc have already 4 she 5 ru
-			{
-				lrc_w = t_com10 * 80; // rc
-									  //	twork = (uint16_t)(lrc_w / (60 * 60)); // RC = RC_W / (60min*60sec) FCC * aresult / 100 * 3600
-									  // twork = (uint16_t)(((((uint32_t)t_com0f * 200) * 10 / t_com10) ) / 2); // not  sishewuru .
-			}
-			lrc_w_last = lrc_w;
-		}
-	}
-
+	// // hold 2 /* hold 2 8/
 
 	if ((t_com09 <= t_com33 + two2_hold_voltage_range) && (t_com0d > 1)) //
 	{

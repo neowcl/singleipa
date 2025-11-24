@@ -1,3 +1,15 @@
+
+1000, //  D_FAC_FCCOLD_CHU_NEW_CPL    fac_fccold_chu_new_cplh
+1000,  // D_FAC_FCCOLD_CHU_NEW_CPH   fac_fccold_chu_new_cph
+1000,  // D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP  fac_fccold_chu_new_cpl_low_temp
+1000,  //D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP  fac_fccold_chu_new_cph_low_temp
+1000,   //  D_FAC_FCCOLD_CHU_NEW_CPL_XIAOBEILV    fac_fccold_chu_new_cpl_xiaobeilv
+1000,  //  D_FAC_FCCOLD_CHU_NEW_CPH_XIAOBEILV  fac_fccold_chu_new_cph_xiaobeilv
+1000,  //  D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP_XIAOBEILV fac_fccold_chu_new_cpl_low_temp_xiaobeilv
+1000,  // D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP_XIAOBEILV    fac_fccold_chu_new_cph_low_temp_xiaobeilv
+
+
+
 SFG2022_P13_IIC_V2.27
 在2.25的基础上调整算法，不带电压加10mV
 
