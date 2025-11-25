@@ -1442,8 +1442,7 @@ void Calc_HoseiRC(uint32_t lrc)
 	int32_t fcc_differ;  // thsi time cpl fcc - last time ful chg ful dsg FCC 
 	int32_t fcc_differ_ratio ;
 	uint16_t D_CP_L_temp ;
-
-
+	uint32_t rsoc_temp_hoise ;
 	D_CP_L_temp =  D_CP_L ;
 	// int16_t dis_fac_cpl = 100  ; // discharge factor when reach cpl voltage .
 	if (f_cp_l == OFF) // CP_L not detected  cph detected .
@@ -1502,13 +1501,23 @@ void Calc_HoseiRC(uint32_t lrc)
 					{
 						dis_fac_cpl = (D_CP_L_temp * 100 - fcc_differ_ratio) / D_CP_L_temp;
 					}
-
 				}
 			}
-			else
+			else // f_cp_l_last  = OFF  ,cpl = ON  f_cpl_have_updated_hoseirc =OFF ;
 			{
-				//dis_fac_cpl = //t_com0d * D_DSG_PINGHUA_MUL + t_com0d * 6 / D_DSG_PINGHUA_DIV; // discharge factor when reach cpl .
-				if (t_com0d < D_CP_L)														 // t_com0d = rsoc  D_CP_L = 6 ;
+				//dis_fac_cpl = t_com0d * D_DSG_PINGHUA_MUL + t_com0d * 6 / D_DSG_PINGHUA_DIV; // discharge factor when reach cpl .
+				
+				rsoc_temp_hoise = t_com0d ;
+
+				if(D_CP_L_temp>=1 && D_CP_L_temp<100)
+				{
+					dis_fac_cpl = rsoc_temp_hoise*1000/(D_CP_L_temp*10-5) ; // eg  rsoc = 12 , 12000/55
+				}else
+				{
+					dis_fac_cpl  = 100 ;
+				}
+				
+				if (t_com0d < D_CP_L)							a							 // t_com0d = rsoc  D_CP_L = 6 ;
 				{
 					if (dis_fac_cpl < 16)
 					{
@@ -1516,7 +1525,7 @@ void Calc_HoseiRC(uint32_t lrc)
 					}
 					else if (dis_fac_cpl >= 109) // 5---92
 					{
-						dis_fac_cpl = 100;
+						dis_fac_cpl = 100;a
 					}
 				}
 				else if (t_com0d > D_CP_L)
@@ -1535,17 +1544,16 @@ void Calc_HoseiRC(uint32_t lrc)
 					dis_fac_cpl = 100;
 				}
 			}
+		}
 
-			
-
-			if (dis_fac_cpl < 16)
-			{
-				dis_fac_cpl = 16; // Subtruct correction value
-			}
-			else if (dis_fac_cpl >= 400) // 5---92
-			{
-				dis_fac_cpl = 400;
-			}
+		if (dis_fac_cpl < 16)
+		{
+			dis_fac_cpl = 16; // Subtruct correction value
+		}
+		else if (dis_fac_cpl >= 400) // 5---92
+		{
+			dis_fac_cpl = 400;
+		}
 
 		lrc_w -= dis_fac_cpl * lrc / 100;
 		if (t_com0d != 0)
@@ -1584,7 +1592,6 @@ void Calc_HoseiRC(uint32_t lrc)
 			{
 				lrc_w_last = 0; // 40 is right number ,since t_com10*36/3600 ,maybe rsoc == 0 ;
 			}
-		}
 		}
 	}
 

@@ -1,4 +1,9 @@
 
+SFG2022_P13_IIC_V3.31
+修复3.26 引入的cph点bug， 根新soc 精度放错。 
+
+
+在2.25的基础上调整算法，不带电压加10mV
 1000, //  D_FAC_FCCOLD_CHU_NEW_CPL    fac_fccold_chu_new_cplh
 1000,  // D_FAC_FCCOLD_CHU_NEW_CPH   fac_fccold_chu_new_cph
 1000,  // D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP  fac_fccold_chu_new_cpl_low_temp

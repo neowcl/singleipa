@@ -29,7 +29,7 @@
 "..\output\objects\mode.o"
 "..\output\objects\protect.o"
 "..\src\MyI2C\MyI2C.lib"
-"..\..\..\..\AppData\Local\Arm\Packs\Chipsea\CBMX56X_DFP\1.0.5\Device\Driver\cbmx56x.lib"
+"D:\Keil_v5\Chipsea\CBMX56X_DFP\1.0.5\Device\Driver\cbmx56x.lib"
 "..\output\objects\system_cbmx56x.o"
 "..\output\objects\startup_cbmx56x.o"
 --strict --scatter "..\Output\Objects\CBMX56X_fw.sct"
