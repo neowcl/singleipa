@@ -1486,14 +1486,6 @@ void Calc_HoseiRC(uint32_t lrc)
 					{
 						dis_fac_cpl = (fcc_differ_ratio + D_CP_L_temp * 100) / D_CP_L_temp;
 					}
-					if (dis_fac_cpl < 16)
-					{
-						dis_fac_cpl = 16; // Subtruct correction value
-					}
-					else if (dis_fac_cpl >= 400) // 5---92
-					{
-						dis_fac_cpl = 400;
-					}
 				}
 				else
 				{ // FCC_continue_last < t_com10   // leiji_fcc_dsg_cpl_per_soc_average < t_com10
@@ -1511,14 +1503,6 @@ void Calc_HoseiRC(uint32_t lrc)
 						dis_fac_cpl = (D_CP_L_temp * 100 - fcc_differ_ratio) / D_CP_L_temp;
 					}
 
-					if (dis_fac_cpl < 16)
-					{
-						dis_fac_cpl = 16; // Subtruct correction value
-					}
-					else if (dis_fac_cpl >= 400) // 5---92
-					{
-						dis_fac_cpl = 400;
-					}
 				}
 			}
 			else
