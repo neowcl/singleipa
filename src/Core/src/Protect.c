@@ -259,66 +259,7 @@ void ProtectProcess(void)
     ProtectIO_Alarm(); // 触发保护后主机中断标志置一
 }
 
-void BatteryTripPoint(void)
-{
-    if (f_BTP_En)
-    {
-        if (f_BTP_SRC)
-        {
-            if (t_com0a <= 0)
-            {
-                if (t_com0d < D_INITDSGRSOC)
-                {
-                    if (f_BTP_POL)
-                    {
-                        f_BTP_INT = ON;
-                        f_rca = ON;
-                        // IOCTRL->INT_CFG_F.INT_POL=1;   //1为高电平（High）
-                    }
-                }
-            }
-            else
-            {
-                if (t_com0d > D_INITCHGRSOC)
-                {
-                    if (f_BTP_POL)
-                    {
-                        f_BTP_INT = OFF;
-                        f_rca = OFF;
-                        // IOCTRL->INT_CFG_F.INT_POL=0;   //0为低电平（High）
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (t_com0a <= 0)
-            {
-                if (t_com0f < D_INITDSGRC)
-                {
-                    if (f_BTP_POL)
-                    {
-                        f_BTP_INT = ON;
-                        f_rca = ON;
-                        // IOCTRL->INT_CFG_F.INT_POL=1;   //1为高电平（High）
-                    }
-                }
-            }
-            else
-            {
-                if (t_com0f > D_INITCHGRC)
-                {
-                    if (f_BTP_POL)
-                    {
-                        f_BTP_INT = OFF;
-                        f_rca = OFF;
-                        // IOCTRL->INT_CFG_F.INT_POL=0;   //0为低电平（High）
-                    }
-                }
-            }
-        }
-    }
-}
+
 
 // void Calc_Dischargefactor(void)
 // {

@@ -1433,55 +1433,22 @@ void Calc_HoseiRC(uint32_t lrc)
 {
 	uint32_t lwork;
 
-	uint8_t f_con_cur;
-	uint8_t f_con_CellTemp;
-	uint8_t f_con_FCC;
+	// uint8_t f_con_cur;
+	// uint8_t f_con_CellTemp;
+	// uint8_t f_con_FCC;
 
 	uint16_t t_work1;
-	uint16_t two2_hold_voltage_range;
-
+	// uint16_t two2_hold_voltage_range;
 	int32_t fcc_differ;  // thsi time cpl fcc - last time ful chg ful dsg FCC 
 	int32_t fcc_differ_ratio ;
 	uint16_t D_CP_L_temp ;
 
 
 	D_CP_L_temp =  D_CP_L ;
-
-
 	// int16_t dis_fac_cpl = 100  ; // discharge factor when reach cpl voltage .
-
-	// if (f_study_d == ON && f_cp_l == ON)
-	//{
-	//  	if (lrc_w != lrccr_w) // Correction cap. != Chg rel.cap ?
-	//  	{
-	//  		if (lrccr_w < 16) // Charge rel.cap = 0 ?
-	//  		{
-	//  			lrc *= 2; // Correction coefficient = 2
-	//  		}
-	//  		// else
-	//  		// { // Calc correction coefficient
-	//  		// 	lrc = (uint16_t)(((lrc_w / (lrccr_w / 16)) * lrc) / 16);
-	//  		// }
-	//  	}
-	// }
-
-	if (f_cp_l == OFF) // CP_L not detected ?
+	if (f_cp_l == OFF) // CP_L not detected  cph detected .
 	{
-		// lwork = (long)t_com10 * D_CP_L * 36; // Calculation the CP_L capacity
-		// if (lrc_w < lwork)					 // less than CP_L ?
-		// {
-		// 	lrc_w = lwork; // hold on CP_L capacity
-		// }
-
-		// delete  wait on 20251024  Version 3.29
-
-		// if(t_com0d <= D_CP_L)
-		// {
-		// 	lrc_w -= lrc/2;	   // Subtruct correction value  18*3600
-		// }else{
-		// 	lrc_w -= lrc;	   // Subtruct correction value  18*3600
-		// }
-
+	
 		lrc_w -= lrc;
 
 		//  delete  wait on 20251024  Version 3.29
@@ -1499,16 +1466,19 @@ void Calc_HoseiRC(uint32_t lrc)
 	else // cpl ==ON ;
 	{	 // CP_L detected ?
 
-		if (f_cp_l_last == OFF) // to do clear 0 . / can come here , must means this time cpl ON .
+		if (f_cp_l_last == OFF) // f_cp_l = ON  ；to do clear 0 . / can come here , must means this time cpl ON .
 		{
 			// dis_fcc = t_com0d / 5.5;    // enlarge 100 times .  100/5.5*t_com0d  = 18.2 about 18
 			// dis_fac_cpl = t_com0d*18 +t_com0d/5  ;              // discharge factor when reach cpl .
 			if (f_cpl_have_updated_hoseirc)
 			{
 				f_cpl_have_updated_hoseirc = 0;
-				if (FCC_continue_last - t_com10 >= 0) // shiji  - cpll gengxin
+				FCC_continue_last = t_com10 ;
+				// if (FCC_continue_last - t_com10 >= 0) // shiji  - cpll gengxin
+				if (leiji_fcc_dsg_cpl_per_soc_average - t_com10 >= 0) // shiji  - cpll gengxin
 				{
 				// 	fcc_differ = FCC_continue_last - t_com10;
+				
 				    fcc_differ = leiji_fcc_dsg_cpl_per_soc_average - t_com10;  // 
 					fcc_differ_ratio = fcc_differ * 1000 / FCC_continue_last * 10;
 					// fcc_differ /FCC_continue_last*100 * 100  dianliu beilv  : dis_fac_cpl : 100
@@ -1516,7 +1486,6 @@ void Calc_HoseiRC(uint32_t lrc)
 					{
 						dis_fac_cpl = (fcc_differ_ratio + D_CP_L_temp * 100) / D_CP_L_temp;
 					}
-
 					if (dis_fac_cpl < 16)
 					{
 						dis_fac_cpl = 16; // Subtruct correction value
@@ -1530,7 +1499,6 @@ void Calc_HoseiRC(uint32_t lrc)
 				{ // FCC_continue_last < t_com10   // leiji_fcc_dsg_cpl_per_soc_average < t_com10
 
 					// fcc_differ = t_com10 - FCC_continue_last;
-
 					fcc_differ = t_com10 - leiji_fcc_dsg_cpl_per_soc_average;
 					fcc_differ_ratio = fcc_differ * 1000 / FCC_continue_last * 10;
 
@@ -1555,7 +1523,7 @@ void Calc_HoseiRC(uint32_t lrc)
 			}
 			else
 			{
-				dis_fac_cpl = t_com0d * D_DSG_PINGHUA_MUL + t_com0d * 6 / D_DSG_PINGHUA_DIV; // discharge factor when reach cpl .
+				//dis_fac_cpl = //t_com0d * D_DSG_PINGHUA_MUL + t_com0d * 6 / D_DSG_PINGHUA_DIV; // discharge factor when reach cpl .
 				if (t_com0d < D_CP_L)														 // t_com0d = rsoc  D_CP_L = 6 ;
 				{
 					if (dis_fac_cpl < 16)
@@ -1569,31 +1537,6 @@ void Calc_HoseiRC(uint32_t lrc)
 				}
 				else if (t_com0d > D_CP_L)
 				{
-
-					// if(cpl gengxin ) // if not update ?  // no need to judge update .
-					// if(t_com10  < fcc_last_cpl_pinghua )
-					// {
-					// 	dis_fac_cpl = (lrc_w/3600 - t_com10/50)*100 / (t_com10*3/50)  ;
-
-					// // (new RC  - 0.01 newFCC )/(fcc*0.06)    // 0.06 cpl
-					// }else if(t_com10 > fcc_last_cpl_pinghua )
-					// {
-					// 	dis_fac_cpl = (lrc_w/3600 - t_com10/100)*100 / (t_com10*3/50)  ;
-					// }
-					if (f_cp_l_fccupdated)
-					{
-						if (t_com10 < fcc_last_cpl_pinghua)
-						{
-							// (new RC  - 0.01 newFCC )/(fcc*0.06)    // 0.06 cpl
-							dis_fac_cpl = (lrc_w / 36 - t_com10 * 2) / (t_com10 * D_CP_L / 100);
-						}
-						else if (t_com10 >= fcc_last_cpl_pinghua)
-						{
-							dis_fac_cpl = (lrc_w / 36 - t_com10) / (t_com10 * D_CP_L / 100);
-						}
-						fcc_last_cpl_pinghua = t_com10;
-					}
-
 					if (dis_fac_cpl <= 109)
 					{
 						dis_fac_cpl = 100; // Subtruct correction value
@@ -1609,10 +1552,7 @@ void Calc_HoseiRC(uint32_t lrc)
 				}
 			}
 
-			// if (t_com0d < D_CP_L)
-			// {
-			// 	dis_fac_cpl+=8 ;
-			// }
+			
 
 			if (dis_fac_cpl < 16)
 			{
@@ -1622,62 +1562,6 @@ void Calc_HoseiRC(uint32_t lrc)
 			{
 				dis_fac_cpl = 400;
 			}
-
-			/* for logic cpl_d3 updated CPH 用比例计算方式 。
-放电不平滑条件 ：
-
-连续满充满放条件下：
-电流变化 ： 误差上次放电的10% 以内
-current_continue_last
-温度变化： 3 摄氏度以内
-CellTemp_continue_last
-FCC 在2% 以内 。
-FCC_continue_last logic */
-
-			/*  part a */
-			if (f_study_d3_ful == 0)
-			{
-				if (f_discharge)
-				{
-					f_cpl_d3_updated = 0; // have ful chg and ful dsg
-				}
-			}
-
-			if (ABS(current_continue_last - tabsc) < current_continue_last/5)
-			{
-				f_con_cur = 1;
-			}
-			else
-			{
-				f_con_cur = 0;
-			}
-			if (ABS(CellTemp_continue_last - CellTemp) <= 3)
-			{
-				f_con_CellTemp = 1;
-			}
-			else
-			{
-				f_con_CellTemp = 0;
-			}
-
-			if (ABS(FCC_continue_last - t_com10) <= FCC_continue_last/50)
-			{
-				f_con_FCC = 1;
-			}
-			else
-			{
-				f_con_FCC = 0;
-			}
-			/*  part a */
-			if (f_cpl_d3_updated == 1)
-			{
-				if (f_con_cur && f_con_CellTemp && f_con_FCC)
-				{
-					f_cpl_d3_updated = 0;
-					dis_fac_cpl = 100;
-				}
-			}
-		}
 
 		lrc_w -= dis_fac_cpl * lrc / 100;
 		if (t_com0d != 0)
@@ -1717,72 +1601,14 @@ FCC_continue_last logic */
 				lrc_w_last = 0; // 40 is right number ,since t_com10*36/3600 ,maybe rsoc == 0 ;
 			}
 		}
+		}
 	}
-	// f_cp_h_fccupdated = 0 ;
-	// f_cp_l_fccupdated = 0 ;
-	// lrc_w_last= lrc_w ;
-	// t_com0dlast = t_com0d;
-	// f_init_first_time = 0;
-	/*temperature less than 10 */
-	// if ((t_com09 <= t_com33 + 70) && (t_com0d > 2))
-	// {
-	// 	// Record_lrc_w = t_com10*0.02* 3600*;    // rc
-	// 	if (CellTemp < 10)   // temperature
-	// 	{
-	// 		if (t_com09 <= t_com33 + 40)
-	// 		{
-	// 			t_com0d = 2;		  // soc = 2
-	// 			lrc_w = t_com10 * 72; // rc
-	// 			lrc_w_last = lrc_w;
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		t_com0d = 2;		  // soc = 2
-	// 		lrc_w = t_com10 * 72; // rc
-	// 		lrc_w_last = lrc_w;
-	// 	}
-	// }
-	/*temperature less than 10 */
 
-	// // hold 2   /* hold 2 8/
-	// t_work1 = (uint16_t)((long)tabsc * 100 / D_DCAP); // eg :   3600 mAh  = 3600mA * 1h   	//zhuyao he beilv guanxi da .
-	// if (t_work1 <= 10) // two2_hold_voltage_range  = 108
-	// {
-	// 	two2_hold_voltage_range = 108;
-	// }
-	// else if (t_work1 <= 30) // y = -4.5x +155   3200mV   10 ---108  32---20
-	// {
-	// 	two2_hold_voltage_range = 155 - t_work1 * 9 / 2;
-	// }
-	// else if (t_work1 <= 50) // y = -0.5x +35   3200mV    32---20  40-----8
-	// {
-	// 	two2_hold_voltage_range = 35 - t_work1 / 2;
-	// }
-	// else if (t_work1 <= 70) // y = -0.1x +15   3200mV    32---20  40-----8
-	// {
-	// 	two2_hold_voltage_range = 15 - t_work1 / 10;
-	// }
-	// else
-	// {
-	// 	two2_hold_voltage_range = 8;
-	// }
+	// // hold 2 /* hold 2 8
+	// two2_hold_voltage_range = 20;
 
-	// if((f_discharge==ON)&&(f_relax ==OFF))
-	// {
-	// 	if ((t_com09 > t_com33 + two2_hold_voltage_range) && (t_com0d == 2)) // Record_lrc_w = t_com10*0.02* 3600*;    // rc
-	// 	{
-	// 		if (lrc_w <= t_com10 * 80) // rsoc have already 4 she 5 ru // 	t_com0d = 2;		 // soc = 2
-	// 		{
-	// 			lrc_w = t_com10 * 80; // rc twork = (uint16_t)(lrc_w / (60 * 60)); // RC = RC_W / (60min*60sec) FCC * aresult / 100 * 3600			 
-	// 		}
-	// 		lrc_w_last = lrc_w;  // twork = (uint16_t)(((((uint32_t)t_com0f * 200) * 10 / t_com10) ) / 2); // not  sishewuru .
-	// 	}
-	// }
-
-	// // hold 2 /* hold 2 8/
-
-	if ((t_com09 <= t_com33 + two2_hold_voltage_range) && (t_com0d > 1)) //
+	// if ((t_com09 <= t_com33 + two2_hold_voltage_range) && (t_com0d > 1)) //
+		if ((t_com09 <= t_com33 + 20) && (t_com0d > 1)) //
 	{
 		t_com0d = 1; // soc = 1
 		// Record_lrc_w = t_com10*0.01* 3600;    // rc
@@ -2035,6 +1861,10 @@ void Make_Relearning(uint8_t acp)
 		//lrc_w_last  = lrc_w ;
 		clr_flg_fulchg_update();
 
+		lrccr_w = (long)t_com10 * rsoc_enlarge_1000_cph * 18 / 5;
+		// lrccr_w = (uint32_t)t_com10 * t_com0d * 36;   // fcc*rsoc   // here soc never changed , so can be put here .
+		lrc_w = lrccr_w;
+		lrc_w_last = lrc_w;
 		save_dsg_upd_fcc = tcom10c_w;
 		f_bigger_than_zero = 1;
 		Calc_factor_of_fcc(); // update fcc , fcc factor and save into  save_fac_dsg_upd
@@ -2505,7 +2335,7 @@ void Calc_fulchg_fuldsg_cap(void)  // full chg  full dsg ,leiji capacity
 					
 					current_continue_last =  keep_cur_study_d3 ; ;
 					CellTemp_continue_last = CellTemp  ;
-					FCC_continue_last =  t_com10 ;
+					//FCC_continue_last =  t_com10 ;
 				}
 				else
 				{
@@ -2664,9 +2494,7 @@ void Calc_RC(void)
 	uint8_t divi_by_1k;
 
 
-calc_leiji_dsg_2cpl();
-
-
+	calc_leiji_dsg_2cpl();
     Calc_fulchg_fuldsg_cap();
 
 	//   ful dsg leiji rongliang 
@@ -2678,7 +2506,6 @@ calc_leiji_dsg_2cpl();
 
 	if(t_com0a > 0) // Charging ?
 	{
-
 		if (f_charge == ON) // Charging ?
 		{
 			if (f_studied == ON) // Studied flag = ON ?
@@ -2923,10 +2750,12 @@ calc_leiji_dsg_2cpl();
 							// CP_H capacity = FCC*60*60*(D_CP_H/100)
 							//               = FCC*D_CP_H*36
 							// lrccr_w = (uint32_t)t_com10 * D_CP_H * 36;
-							lrccr_w = (long)t_com10* rsoc_enlarge_1000_cph *18/5;
-							// lrccr_w = (uint32_t)t_com10 * t_com0d * 36;   // fcc*rsoc   // here soc never changed , so can be put here .
-							lrc_w = lrccr_w;
-							lrc_w_last  = lrc_w ;
+
+							/*   
+							can not put here ,cause it will lead soc = 0 when cph not update 
+							// lrccr_w = (long)t_com10* rsoc_enlarge_1000_cph *18/5;
+							*/
+						
 							f_rcsame = OFF; // Clear RC same flag
 							Calc_HoseiRC(lwork);
 

@@ -989,47 +989,9 @@ void Set_CCCV(void)
         f_CV_DGRD = 0x0;
     }
 
-    if (D_CS_CV)
-    {
-        if (ChargingVoltage >= D_CS_MINCV)
-        {
-            if (t_com08 >= D_CSTEMP_TH && t_com09 >= D_CSVOLT_TH)
-            {
-                CS_Cnt++;
-                if (CS_Cnt >= D_CSTIME_InV)
-                {
-                    CS_Cnt1++;
-                    CS_Cnt = 0;
-                }
-                ChargingVoltage -= D_CSVOLT_DT * CS_Cnt1;
-            }
-            else
-            {
-                CS_Cnt1 = 0;
-                CS_Cnt = 0;
-            }
+    
 
-            if (ChargingVoltage < D_CS_MINCV)
-            {
-                ChargingVoltage = D_CS_MINCV;
-            }
-        }
-        else
-        {
-            CS_Cnt1 = 0;
-            CS_Cnt = 0;
-        }
-    }
-    else
-    {
-        CS_Cnt1 = 0;
-        CS_Cnt = 0;
-    }
-
-    if (D_COMP_IR && f_charge)
-    {
-        ChargingVoltage += (uint32_t)tabsc * (D_R_BMU + D_R_SYSTEM) / 1000;
-    }
+   
 
    
 

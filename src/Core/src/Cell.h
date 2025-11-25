@@ -279,10 +279,6 @@ typedef struct
 
 	uint16_t      d_DegradeCC3;
 
-	uint16_t      d_R_Bmu;
-
-	uint16_t      d_R_System;
-
 	int8_t        d_CsTemp_Th;
 
 	uint16_t      d_CsVolt_Th;
@@ -295,23 +291,9 @@ typedef struct
 	
 	
 	
-	uint16_t      d_FSChargeCC1;
 
-	uint16_t      d_FSChargeCV2;
 	
-	uint16_t      d_FSChargeCC2;
-
-	uint16_t      d_FSChargeCV3;
 	
-	uint16_t      d_FSChargeCC3;
-	
-	uint16_t      d_CCStepDelta;
-	
-	uint16_t      d_CCStepDown;
-	
-	uint16_t      d_CCStepDelay;
-	
-	uint16_t      d_MinStepCC;
 
 	// _ST_CTLFLG1	d_CTLFLG1;		    //Control flag 1
 
@@ -319,11 +301,7 @@ typedef struct
 
 	uint16_t	d_CTLFLG1;		    //Control flag 1
 
-	uint16_t	d_CTLFLG2;		    // Control flag 2
-
-	uint8_t 	d_I2CConfiguration;
-
-	uint8_t 	d_AuthConfig;
+	
 
 	uint8_t 	d_PowerConfig;
 
@@ -371,13 +349,7 @@ typedef struct
 
 	uint8_t    CycleLimt;             // [1byte] Cycle Limit
 
-	int16_t 	d_InitDischargeSet;
-
-	int16_t 	d_InitChargeSet;
-
-	uint8_t 	d_InitDischargeSetRSOC;
-
-	uint8_t 	d_InitChargeSetRSOC;
+	
 
 	uint8_t 	d_TimeRSOCThresholdA;
 
@@ -393,53 +365,6 @@ typedef struct
 
 	uint8_t 	d_TimeRSOCThresholdG;
 	
-	uint16_t 	d_SOCFSetThreshold;
-
-	uint16_t 	d_SOCFClearThreshold;
-
-	uint16_t 	d_SOC1SetThreshold;
-
-	uint16_t 	d_SOC1ClearThreshold;
-
-	int16_t     d_ODCDetection;
-
-	int16_t		d_ODCRecovery;
-
-	uint8_t 	d_ODCDelay;
-
-	int16_t 	d_OCCDetection;
-
-	int16_t 	d_OCCRecovery;
-
-	uint8_t 	d_OCCDelay;
-
-	uint16_t 	d_BATLOWDetection;
-
-	uint16_t 	d_BATLOWRecovery;
-
-	uint8_t 	d_BATLOWDelay;
-
-	uint16_t 	d_BATHIDetection;
-
-	uint16_t 	d_BATHIRecovery;
-
-	uint8_t 	d_BAITHIDelay;
-
-	int16_t 	d_DsgCurrent;
-
-	int16_t 	d_ChgCurrent;
-
-	int16_t 	d_OTCDetection;
-
-	int16_t 	d_OTCRecovery;
-
-	uint8_t 	d_OTCDelay;
-
-	int16_t		d_OTDDetection;
-
-	int16_t		d_OTDRecovery;
-
-	uint8_t 	d_OTDDelay;
 	
 	int16_t 	d_InitVoltageHighSet;
 
@@ -530,9 +455,7 @@ typedef struct
 	uint8_t ipa_comba[0x10];
 	uint8_t ipa_com3e[0x0c];
 	uint8_t ipa_com3f[0x0c];
-	
-	uint8_t d_dsg_pinghua_mul;
-	uint8_t d_dsg_pinghua_div;
+
 
 	uint16_t d_0PVOLT5_Tempera_10 ;
 	uint16_t d_0PVOLT_Tempera_less_than_5;
@@ -607,6 +530,7 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define D_FDCLVOLTTHR   u_fd_rom.d_FDClearVoltageThreshold
 #define D_FDRSOCTHR     u_fd_rom.d_FDSetRSOCThreshold
 #define D_FDCLRSOCTHR   u_fd_rom.d_FDClearRSOCThreshold
+
 #define D_TCVOLTTHR     u_fd_rom.d_TCSetVoltageThreshold
 #define D_TCCLVOLTTHR   u_fd_rom.d_TCClearVoltageThreshold
 #define D_TCRSOCTHR     u_fd_rom.d_TCSetRSOCThreshold
@@ -694,8 +618,7 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define D_DG_CV3        u_fd_rom.d_DegradeCV3
 #define D_DG_CC3        u_fd_rom.d_DegradeCC3
 
-#define D_R_BMU         u_fd_rom.d_R_Bmu
-#define D_R_SYSTEM      u_fd_rom.d_R_System
+
 
 #define D_CSTEMP_TH		u_fd_rom.d_CsTemp_Th
 #define D_CSVOLT_TH     u_fd_rom.d_CsVolt_Th
@@ -704,16 +627,9 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define D_CS_MINCV      u_fd_rom.d_CS_MinCV
 
 
-#define D_FS_CC1				u_fd_rom.d_FSChargeCC1
-#define D_FS_CV2				u_fd_rom.d_FSChargeCV2
-#define D_FS_CC2				u_fd_rom.d_FSChargeCC2
-#define D_FS_CV3				u_fd_rom.d_FSChargeCV3
-#define D_FS_CC3				u_fd_rom.d_FSChargeCC3
 
-#define D_CCStepDelta  u_fd_rom.d_CCStepDelta
-#define D_CCStepDown    u_fd_rom.d_CCStepDown
-#define D_CCStepDelay  u_fd_rom.d_CCStepDelay
-#define D_MinStepCC     u_fd_rom.d_MinStepCC
+
+
 
 #define D_CTLFLG1		u_fd_rom.d_CTLFLG1				// [2byte] Control flag 
 
@@ -732,25 +648,7 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define F_0TOFD         DEF_BITC(&D_CTLFLG1)
 #define F_IGENABLE      DEF_BITD(&D_CTLFLG1)
 
-#define D_CTLFLG2		u_fd_rom.d_CTLFLG2				// [2byte] Control flag 2
-// #define F_DSPT			u_fd_rom.d_CTLFLG2.f_dspt		// bit 0
-// #define F_CSDIS			u_fd_rom.d_CTLFLG2.f_csdis		// bit 1
-// #define F_DSDIS			u_fd_rom.d_CTLFLG2.f_dsdis		// bit 2
-// #define F_CPLDROP		u_fd_rom.d_CTLFLG2.f_cpldrop	// bit 3
-// #define F_FCCUP			u_fd_rom.d_CTLFLG2.f_fccup		// bit 4
-
-#define F_DSPT			DEF_BIT0(&D_CTLFLG2)		// bit 0
-#define F_CSDIS			DEF_BIT1(&D_CTLFLG2)		// bit 1
-#define F_DSDIS			DEF_BIT2(&D_CTLFLG2)		// bit 2
-#define F_CPLDROP		DEF_BIT3(&D_CTLFLG2)	// bit 3
-#define F_FCCUP			DEF_BIT4(&D_CTLFLG2)		// bit 4
-
-#define D_I2CCONFIG     u_fd_rom.d_I2CConfiguration
-
-#define D_AUTHCONFIG    u_fd_rom.d_AuthConfig
-
-#define f_IPH13MODE     DEF_BIT0(&D_AUTHCONFIG) 
-#define f_IPH13MODE1    DEF_BIT1(&D_AUTHCONFIG)
+	// bit 4
 
 #define D_POWERCONFIG   u_fd_rom.d_PowerConfig
 #define f_DP_SleepEn    DEF_BIT6(&D_POWERCONFIG)
@@ -816,10 +714,7 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define SOC_L           u_fd_rom.SOC_L	 				// [1byte] SOC Low
 #define SOC_H 			u_fd_rom.SOC_H 				// [1byte] SOC High	
 #define CYCLELIMIT      u_fd_rom.CycleLimt 			// [1byte] CYCLE Limit
-#define D_INITDSGRC     u_fd_rom.d_InitDischargeSet
-#define D_INITCHGRC     u_fd_rom.d_InitChargeSet
-#define D_INITDSGRSOC   u_fd_rom.d_InitDischargeSetRSOC
-#define D_INITCHGRSOC   u_fd_rom.d_InitChargeSetRSOC
+
 
 #define D_LFRSOCA		u_fd_rom.d_TimeRSOCThresholdA
 #define D_LFRSOCB		u_fd_rom.d_TimeRSOCThresholdB
@@ -829,31 +724,7 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define D_LFRSOCF		u_fd_rom.d_TimeRSOCThresholdF
 #define D_LFRSOCG		u_fd_rom.d_TimeRSOCThresholdG
 
-#define D_SOCFSetThreshold 		u_fd_rom.d_SOCFSetThreshold
-#define D_SOCFClearThreshold 	u_fd_rom.d_SOCFClearThreshold
-#define D_SOC1SetThreshold 		u_fd_rom.d_SOC1SetThreshold
-#define D_SOC1ClearThreshold 	u_fd_rom.d_SOC1ClearThreshold
 
-#define D_ODCDetection 			u_fd_rom.d_ODCDetection
-#define D_ODCRecovery 			u_fd_rom.d_ODCRecovery
-#define D_ODCDelay 				u_fd_rom.d_ODCDelay
-#define D_OCCDetection 			u_fd_rom.d_OCCDetection
-#define D_OCCRecovery 			u_fd_rom.d_OCCRecovery
-#define D_OCCDelay 				u_fd_rom.d_OCCDelay
-#define D_BATLOWDetection 		u_fd_rom.d_BATLOWDetection
-#define D_BATLOWRecovery 		u_fd_rom.d_BATLOWRecovery
-#define D_BATLOWDelay 			u_fd_rom.d_BATLOWDelay
-#define D_BATHIDetection 		u_fd_rom.d_BATHIDetection
-#define D_BATHIRecovery 		u_fd_rom.d_BATHIRecovery
-#define D_BAITHIDelay 			u_fd_rom.d_BAITHIDelay
-#define D_DsgCurrent 			u_fd_rom.d_DsgCurrent
-#define D_ChgCurrent 			u_fd_rom.d_ChgCurrent
-#define D_OTCDetection 			u_fd_rom.d_OTCDetection
-#define D_OTCRecovery 			u_fd_rom.d_OTCRecovery
-#define D_OTCDelay 				u_fd_rom.d_OTCDelay
-#define D_OTDDetection 			u_fd_rom.d_OTDDetection
-#define D_OTDRecovery 			u_fd_rom.d_OTDRecovery
-#define D_OTDDelay 				u_fd_rom.d_OTDDelay
 
 #define D_INITHIGHVOLT    u_fd_rom.d_InitVoltageHighSet
 #define D_INITHIGHVOLTCL  u_fd_rom.d_InitVoltageHighClear
@@ -922,8 +793,7 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define D_IPA_COM3E            u_fd_rom.ipa_com3e
 #define D_IPA_COM3F            u_fd_rom.ipa_com3f
 
-#define D_DSG_PINGHUA_MUL         u_fd_rom.d_dsg_pinghua_mul                     //  
-#define D_DSG_PINGHUA_DIV        u_fd_rom.d_dsg_pinghua_div                   // 
+            // 
 #define D_0PVOLT5_Tempera_10   		  u_fd_rom.d_0PVOLT5_Tempera_10  
 #define D_0PVOLT_Tempera_less_than_5   u_fd_rom.d_0PVOLT_Tempera_less_than_5
 

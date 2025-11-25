@@ -21,7 +21,7 @@ extern boolean_t bIO_Alarm;
 
 
 extern void ProtectProcess(void);
-extern void BatteryTripPoint(void);
+
 //void Calc_Dischargefactor(void);
 
 

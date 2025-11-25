@@ -253,26 +253,12 @@ const _ST_FIXED_DATA u_fd_rom __attribute__((used)) __attribute__((section(".ARM
     65535,         //d_HTHV Threshold3
     60,         //d_CV Degradation3
     0,         //d_CC Degradation3
-    0,         //d_R_BMU
-    0,         //d_R_System
     60,         //d_Temp Threshold
     4450,         //d_Voltage Threshold
     65535,         //d_Time interval
     10,         //d_Delta Voltage
     50,         //d_Min CV
-    2500,         //d_FastStepCC1
-    4200,         //d_FastStepCV2
-    2000,         //d_FastStepCC2
-    4400,         //d_FastStepCV3
-    1500,         //d_FastStepCC3
-    100,         //d_CCStepDelta
-    200,         //d_CCStepDown
-    5,         //d_CCStepDelay
-    1000,         //d_MinStepCC
     0x19ac,         //d_System Config
-    0x0003,         //d_Algorithm Config
-    0x0,         //d_I2C Config
-    0x0,         //d_Auth Config
     0x0,         //d_Power Config
     0x0,         //d_IO Config
     0x0ccc,         //d_SOC Config A
@@ -296,10 +282,6 @@ const _ST_FIXED_DATA u_fd_rom __attribute__((used)) __attribute__((section(".ARM
     0,         //d_SOC Low Limit
     100,         //d_SOC High Limit
     5,         //d_Cycle Limit
-    384,         //d_Init Discharge Set
-    768,         //d_Init Charge Set
-    10,         //d_Init Discharge Set RSOC
-    20,         //d_Init Charge Set RSOC
     95,         //d_Time RSOC Threshold 1
     90,         //d_Time RSOC Threshold 2
     70,         //d_Time RSOC Threshold 3
@@ -307,30 +289,6 @@ const _ST_FIXED_DATA u_fd_rom __attribute__((used)) __attribute__((section(".ARM
     30,         //d_Time RSOC Threshold 5
     10,         //d_Time RSOC Threshold 6
     5,         //d_Time RSOC Threshold 7
-    245,         //d_SOCFSetThreshold
-    367,         //d_SOCFClearThreshold
-    74,         //d_SOC1SetThreshold
-    184,         //d_SOC1ClearThreshold
-    -6000,         //d_ODCDetection
-    -500,         //d_ODCRecovery
-    2,         //d_ODCDelay
-    6000,         //d_OCCDetection
-    500,         //d_OCCRecovery
-    2,         //d_OCCDelay
-    2950,         //d_BATLOWDetection
-    3100,         //d_BATLOWRecovery
-    2,         //d_BATLOWDelay
-    4400,         //d_BATHIDetection
-    4300,         //d_BATHIRecovery
-    2,         //d_BAITHIDelay
-    -10,         //d_DsgCurrent
-    10,         //d_ChgCurrent
-    600,         //d_OTCDetection
-    500,         //d_OTCRecovery
-    2,         //d_OTCDelay
-    700,         //d_OTDDetection
-    600,         //d_OTDRecovery
-    2,         //d_OTDDelay
     4250,         //d_Init Voltage High Set
     4150,         //d_Init Voltage High Clear
     3500,         //d_Init Voltage Low Set
@@ -450,8 +408,6 @@ const _ST_FIXED_DATA u_fd_rom __attribute__((used)) __attribute__((section(".ARM
 {0xE7, 0x87, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
 {0x36,0x00,0x00,0x00,0x2f,0x00,0x00,0x20,0x15,0x00,0x00,0x40},
 {0x36,0x00,0x00,0x00,0x23,0x00,0x00,0x20,0x15,0x00,0x00,0x40},
-18,  // DSG_PINGHUA_MUL
-10,  // DSG_PINGHUA_DIV
 3100,   //D_0PVOLT5_Tempera_10  
 3000,   // D_0PVOLT_Tempera_less_than_5 
 0x2240,   // D_IPA_MANUFACTURE_DATE
@@ -465,7 +421,6 @@ const _ST_FIXED_DATA u_fd_rom __attribute__((used)) __attribute__((section(".ARM
 1000,  //  D_FAC_FCCOLD_CHU_NEW_CPH_XIAOBEILV  fac_fccold_chu_new_cph_xiaobeilv
 1000,  //  D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP_XIAOBEILV fac_fccold_chu_new_cpl_low_temp_xiaobeilv
 1000,  // D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP_XIAOBEILV    fac_fccold_chu_new_cph_low_temp_xiaobeilv
-
 };
 
 
