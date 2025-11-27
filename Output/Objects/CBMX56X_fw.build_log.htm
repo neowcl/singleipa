@@ -3,144 +3,41 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.31.0.0
+IDE-Version: ¦ÌVision V5.33.0.0
 Copyright (C) 2020 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: 111 admin, 111, LIC=32B1Q-N2DAQ-X7XRZ-JSARL-ZBPKW-DKE26
+License Information: 1226721052@qq.com 1226721052@qq.com, 1226721052@qq.com, LIC=MPPLD-8CAKD-HLCCL-0NAAC-65JI1-8GTPV
  
 Tool Versions:
-Toolchain:       MDK-ARM Plus  Version: 5.31.0.0
-Toolchain Path:  D:\Keil_v5\ARM\ARMCLANG\Bin
-C Compiler:      ArmClang.exe V6.14
-Assembler:       Armasm.exe V6.14
-Linker/Locator:  ArmLink.exe V6.14
-Library Manager: ArmAr.exe V6.14
-Hex Converter:   FromElf.exe V6.14
-CPU DLL:         SARMCM3.DLL V5.31.0.0
-Dialog DLL:      DARMCM1.DLL V1.19.3.0
+Toolchain:       MDK-ARM Plus  Version: 5.33.0.0
+Toolchain Path:  D:\keil5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.15
+Assembler:       Armasm.exe V6.15
+Linker/Locator:  ArmLink.exe V6.15
+Library Manager: ArmAr.exe V6.15
+Hex Converter:   FromElf.exe V6.15
+CPU DLL:         SARMCM3.DLL V5.33.0.0
+Dialog DLL:      DARMCM1.DLL V1.19.4.0
 Target DLL:      Segger\JL2CM3.dll V2.99.38.0
-Dialog DLL:      TARMCM1.DLL V1.14.2.0
+Dialog DLL:      TARMCM1.DLL V1.14.3.0
  
 <h2>Project:</h2>
-E:\1KPFwork\14 µ¥½Ú\P13\SFG2022_P13_IIC_V3.31\Project\CBMX56X.uvprojx
-Project File Date:  11/25/2025
+D:\×ÀÃæ\singg\P13_IIC\SFG2022_P13_IIC_V3.33\Project\CBMX56X.uvprojx
+Project File Date:  11/26/2025
 
 <h2>Output:</h2>
-*** Using Compiler 'V6.14', folder: 'D:\Keil_v5\ARM\ARMCLANG\Bin'
+*** Using Compiler 'V6.15', folder: 'D:\keil5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
-compiling main.c...
-compiling i2c_coms.c...
-compiling isr.c...
-compiling api_implement.c...
-compiling data_flash.c...
-../src/Core/src/task.c(454): warning: implicit declaration of function 'IIC_ReadReg' is invalid in C99 [-Wimplicit-function-declaration]
-                    IIC_ReadReg(0x75, &temperature_ex);
-                    ^
-../src/Core/src/task.c(520): warning: implicit declaration of function 'IIC_ReadReg' is invalid in C99 [-Wimplicit-function-declaration]
-                IIC_ReadReg(0x75, &temperature_ex);
-                ^
-../src/Core/src/task.c(759): warning: implicit declaration of function 'ts_W_L' is invalid in C99 [-Wimplicit-function-declaration]
-                ts_W_L();
-                ^
-../src/Core/src/task.c(799): warning: implicit declaration of function 'ts_W_H' is invalid in C99 [-Wimplicit-function-declaration]
-                ts_W_H();
-                ^
-4 warnings generated.
-compiling task.c...
-compiling utility.c...
-compiling comm_protocol.c...
-compiling app_crc.c...
-../src/Core/src/block_command.c(251): warning: implicit conversion from 'int' to 'uint8_t' (aka 'unsigned char') changes value from 13105 to 49 [-Wconstant-conversion]
-    *data = HW_VERSION >> 8; data++;
-          ~ ~~~~~~~~~~~^~~~
-1 warning generated.
-compiling block_command.c...
-compiling app_debug_mode_handle.c...
-compiling app_slave_io_event_handle.c...
-../src/App/src/app_reg_cmd_handle.c(73): warning: implicit declaration of function 'ts_W_L' is invalid in C99 [-Wimplicit-function-declaration]
-        ts_W_L(); 
-        ^
-../src/App/src/app_reg_cmd_handle.c(81): warning: implicit declaration of function 'ts_W_L' is invalid in C99 [-Wimplicit-function-declaration]
-        ts_W_L(); 
-        ^
-../src/App/src/app_reg_cmd_handle.c(91): warning: implicit declaration of function 'ts_W_L' is invalid in C99 [-Wimplicit-function-declaration]
-        ts_W_L(); 
-        ^
-3 warnings generated.
-compiling app_reg_cmd_handle.c...
-compiling app_task.c...
-compiling modules_current.c...
-compiling modules_fmc.c...
-../src/Modules/modules_init.c(568): warning: implicit declaration of function 'MyI2C_Init' is invalid in C99 [-Wimplicit-function-declaration]
-    MyI2C_Init();
-    ^
-1 warning generated.
-compiling modules_init.c...
-../src/Modules/modules_pmu.c(76): warning: implicit declaration of function 'get_high_speed_current' is invalid in C99 [-Wimplicit-function-declaration]
-       bat_current = get_high_speed_current();
-                     ^
-1 warning generated.
-compiling modules_pmu.c...
-../src/Core/src/standard_data_cmd.c(715): warning: implicit declaration of function 'ts_W_H' is invalid in C99 [-Wimplicit-function-declaration]
-                    ts_W_H();
-                    ^
-../src/Core/src/standard_data_cmd.c(864): warning: implicit declaration of function 'ts_W_H' is invalid in C99 [-Wimplicit-function-declaration]
-                    ts_W_H();
-                    ^
-../src/Core/src/standard_data_cmd.c(875): warning: implicit declaration of function 'ts_W_L' is invalid in C99 [-Wimplicit-function-declaration]
-                    ts_W_L();
-                    ^
-../src/Core/src/standard_data_cmd.c(880): warning: implicit declaration of function 'IIC_ReadReg' is invalid in C99 [-Wimplicit-function-declaration]
-                    IIC_ReadReg(g_i2cBuffRecv[0],&t_com06);
-                    ^
-../src/Core/src/standard_data_cmd.c(1330): warning: implicit declaration of function 'IIC_WriteIpa' is invalid in C99 [-Wimplicit-function-declaration]
-                    IIC_WriteIpa(0x61, buf4);
-                    ^
-5 warnings generated.
-compiling standard_data_cmd.c...
-compiling modules_temp.c...
-compiling modules_vbat.c...
-compiling Cell.c...
-../src/Core/src/bi2cs_interface.c(391): warning: implicit declaration of function 'ECCComm' is invalid in C99 [-Wimplicit-function-declaration]
-      if(!ECCComm(&t_com60,t_com62,t_com63,t_com64))
-          ^
-../src/Core/src/bi2cs_interface.c(788): warning: implicit declaration of function 'IPhVerify' is invalid in C99 [-Wimplicit-function-declaration]
-  IPhVerify(t_com91, t_com90, t1_com95, t_com7e, t_comf6);
-  ^
-../src/Core/src/bi2cs_interface.c(789): warning: implicit declaration of function 'IPHSeril' is invalid in C99 [-Wimplicit-function-declaration]
-  IPHSeril(&t_com4c);
-  ^
-../src/Core/src/bi2cs_interface.c(808): warning: implicit declaration of function 'ts_W_L' is invalid in C99 [-Wimplicit-function-declaration]
-    ts_W_L();
-    ^
-4 warnings generated.
-compiling bi2cs_interface.c...
-../src/Core/src/Ram.c(35): warning: for loop has empty body [-Wempty-body]
-        for( aidxB = 0; aidxB < DF_BLOCK && apdfadr[aidxB] != 0xFF; aidxB++ );
-                                                                             ^
-../src/Core/src/Ram.c(35): note: put the semicolon on a separate line to silence this warning
-1 warning generated.
-compiling Ram.c...
-compiling Calc_CVT.c...
-compiling Protect.c...
-compiling system_cbmx56x.c...
-compiling Mode.c...
-assembling startup_cbmx56x.S...
-compiling LifeTime.c...
-compiling datcalc_spl.c...
-linking...
-Program Size: Code=52380 RO-data=8024 RW-data=436 ZI-data=3188  
-FromELF: creating hex file...
 After Build - User command #1: fromelf.exe --bin --bincombined --bincombined_padding=1,0xff --output CBMX56X_fw.bin ..\Output\Objects\CBMX56X_fw.axf
 After Build - User command #2: CBM8560_bin.exe
-"..\Output\Objects\CBMX56X_fw.axf" - 0 Error(s), 20 Warning(s).
+"..\Output\Objects\CBMX56X_fw.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
 Package Vendor: ARM
-                http://www.keil.com/pack/ARM.CMSIS.5.9.0.pack
-                ARM.CMSIS.5.9.0
+                http://www.keil.com/pack/ARM.CMSIS.5.8.0.pack
+                ARM.CMSIS.5.8.0
                 CMSIS (Common Microcontroller Software Interface Standard)
-   * Component: CORE Version: 5.6.0
+   * Component: CORE Version: 5.5.0
 
 Package Vendor: Chipsea
                 http://www.keil.com/pack/Chipsea.CBMX56X_DFP.1.0.5.pack
@@ -151,24 +48,24 @@ Package Vendor: Chipsea
 
 <h2>Collection of Component include folders:</h2>
   .\RTE\_Target_1
-  D:\Keil_v5\ARM\CMSIS\5.9.0\CMSIS\Core\Include
-  D:\Keil_v5\Chipsea\CBMX56X_DFP\1.0.5\Device\Driver\inc
-  D:\Keil_v5\Chipsea\CBMX56X_DFP\1.0.5\Device\Include
+  C:\Users\12267\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include
+  C:\Users\12267\AppData\Local\Arm\Packs\Chipsea\CBMX56X_DFP\1.0.5\Device\Driver\inc
+  C:\Users\12267\AppData\Local\Arm\Packs\Chipsea\CBMX56X_DFP\1.0.5\Device\Include
 
 <h2>Collection of Component Files used:</h2>
 
-   * Component: ARM::CMSIS:CORE:5.6.0
+   * Component: ARM::CMSIS:CORE:5.5.0
 
    * Component: Chipsea::Device:HAL:Framework:1.0.5
       Source file:   Device\Driver\cbmx56x.lib
-      Source file:   Device\Driver\templates\Src\cbmx56x_it.c
       Include file:  Device\Driver\templates\Inc\cbmx56x_it.h
       Include file:  Device\Driver\inc\cbmx56x_config.h
+      Source file:   Device\Driver\templates\Src\cbmx56x_it.c
 
    * Component: Chipsea::Device:Startup:1.0.5
       Source file:   Device\Source\ARM\KEIL\startup_cbmx56x.S
       Source file:   Device\Source\system_cbmx56x.c
-Build Time Elapsed:  00:00:06
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

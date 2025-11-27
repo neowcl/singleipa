@@ -433,8 +433,6 @@ typedef struct
 	uint8_t d_FA_KEY4_SW;
 	uint16_t d_fccMaxlimit;
 	uint16_t d_fccMinlimit;
-	uint16_t d_currentlimit;
-	uint16_t d_currentlimittime;
 	uint16_t d_pinghua_chgvol_thresh;
 	uint16_t d_pinghua_chgcur_low;
 	uint16_t d_pinghua_chgcur_high;
@@ -769,8 +767,7 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define FA_KEY4_SW  	u_fd_rom.d_FA_KEY4_SW
 #define D_FCCMAXLIMIT  u_fd_rom.d_fccMaxlimit   // kpfa1 20240511
 #define D_FCCMINLIMIT	u_fd_rom.d_fccMinlimit
-#define D_CURRENTLIMIT   u_fd_rom.d_currentlimit
-#define D_CURRENTLIMITTIME  u_fd_rom.d_currentlimittime
+
 
 #define D_PINGHUA_CHGVOL_THRESH	u_fd_rom.d_pinghua_chgvol_thresh  //100
 #define D_PINGHUA_CHGCUR_LOW    u_fd_rom.d_pinghua_chgcur_low    // 230

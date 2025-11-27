@@ -353,27 +353,8 @@ void update_soc_input_param(void)
         { //+-30A limit
             cc_value_valid.bit.current_valid = 1;
             // average_current = cal_average_current(current_highSpeed);
-            CC_Vadc_value.avg_current = average_current;
-            
-            if ((t_com0d > 99) && (current_highSpeed < D_CURRENTLIMIT) && (current_highSpeed > 0) && (!f_CAL_EN))
-            {
-                currlimit++;
-                if (currlimit >= D_CURRENTLIMITTIME)
-                {
-                    currlimit = D_CURRENTLIMITTIME;
-                    t_com0a = 0x0000;
-                }
-                else
-                {
-                    t_com0a = current_highSpeed;
-                }
-            }
-            else
-            {
-                currlimit = 0;
-                t_com0a = current_highSpeed;
-            }
-
+            CC_Vadc_value.avg_current = average_current;          
+            t_com0a = current_highSpeed;
             // t_com89 = average_current;
         }
         /*电流A*/

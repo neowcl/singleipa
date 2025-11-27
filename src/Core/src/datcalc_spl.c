@@ -1431,6 +1431,7 @@ void Calc_CP1RelRC(uint32_t lrc)
  *""FUNC COMMENT END""**********************************************/
 void Calc_HoseiRC(uint32_t lrc)
 {
+	// below cph point 
 	uint32_t lwork;
 
 	// uint8_t f_con_cur;
@@ -1447,7 +1448,6 @@ void Calc_HoseiRC(uint32_t lrc)
 	// int16_t dis_fac_cpl = 100  ; // discharge factor when reach cpl voltage .
 	if (f_cp_l == OFF) // CP_L not detected  cph detected .
 	{
-	
 		lrc_w -= lrc;
 
 		//  delete  wait on 20251024  Version 3.29
@@ -1483,7 +1483,7 @@ void Calc_HoseiRC(uint32_t lrc)
 					// fcc_differ /FCC_continue_last*100 * 100  dianliu beilv  : dis_fac_cpl : 100
 					if (0 != D_CP_L_temp)
 					{
-						dis_fac_cpl = (fcc_differ_ratio + D_CP_L_temp * 100) / D_CP_L_temp;
+						dis_fac_cpl = (fcc_differ_ratio + (D_CP_L_temp +1)* 100) / (D_CP_L_temp+1);
 					}
 				}
 				else
@@ -1508,7 +1508,6 @@ void Calc_HoseiRC(uint32_t lrc)
 				//dis_fac_cpl = t_com0d * D_DSG_PINGHUA_MUL + t_com0d * 6 / D_DSG_PINGHUA_DIV; // discharge factor when reach cpl .
 				
 				rsoc_temp_hoise = t_com0d ;
-
 				if(D_CP_L_temp>=1 && D_CP_L_temp<100)
 				{
 					dis_fac_cpl = rsoc_temp_hoise*1000/(D_CP_L_temp*10-5) ; // eg  rsoc = 12 , 12000/55
@@ -1517,7 +1516,7 @@ void Calc_HoseiRC(uint32_t lrc)
 					dis_fac_cpl  = 100 ;
 				}
 				
-				if (t_com0d < D_CP_L)							a							 // t_com0d = rsoc  D_CP_L = 6 ;
+				if (t_com0d < D_CP_L)													 // t_com0d = rsoc  D_CP_L = 6 ;
 				{
 					if (dis_fac_cpl < 16)
 					{
@@ -1525,7 +1524,7 @@ void Calc_HoseiRC(uint32_t lrc)
 					}
 					else if (dis_fac_cpl >= 109) // 5---92
 					{
-						dis_fac_cpl = 100;a
+						dis_fac_cpl = 100;
 					}
 				}
 				else if (t_com0d > D_CP_L)
@@ -1544,8 +1543,7 @@ void Calc_HoseiRC(uint32_t lrc)
 					dis_fac_cpl = 100;
 				}
 			}
-		}
-
+		} // f_cp_l_last == OFF  shibushi diyici 
 		if (dis_fac_cpl < 16)
 		{
 			dis_fac_cpl = 16; // Subtruct correction value
@@ -1554,8 +1552,9 @@ void Calc_HoseiRC(uint32_t lrc)
 		{
 			dis_fac_cpl = 400;
 		}
-
 		lrc_w -= dis_fac_cpl * lrc / 100;
+	}
+
 		if (t_com0d != 0)
 		{
 			if (lrc_w / 36 <= t_com10)
@@ -1593,20 +1592,18 @@ void Calc_HoseiRC(uint32_t lrc)
 				lrc_w_last = 0; // 40 is right number ,since t_com10*36/3600 ,maybe rsoc == 0 ;
 			}
 		}
-	}
 
 	// // hold 2 /* hold 2 8
 	// two2_hold_voltage_range = 20;
 
 	// if ((t_com09 <= t_com33 + two2_hold_voltage_range) && (t_com0d > 1)) //
-		if ((t_com09 <= t_com33 + 20) && (t_com0d > 1)) //
+	if ((t_com09 <= t_com33 + 20) && (t_com0d > 1)) //
 	{
 		t_com0d = 1; // soc = 1
 		// Record_lrc_w = t_com10*0.01* 3600;    // rc
 		lrc_w = t_com10 * 70; // rc
 		lrc_w_last = lrc_w;
 	}
-
 
 	if((f_discharge==1)||(f_relax==1) )
 	{

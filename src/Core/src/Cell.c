@@ -385,9 +385,7 @@ const _ST_FIXED_DATA u_fd_rom __attribute__((used)) __attribute__((section(".ARM
     0xff,         //d_Key3
     0xff,         //d_Key4
     3600,         //d_FCC Max Limit
-    1500,         //d_FCC Min Limit
-    100,         //d_Current Limit
-    5,         //d_Current Limit Time    
+    1500,         //d_FCC Min Limit   
 100,  // #define D_PINGHUA_CHGVOL_THRESH	u_fd_rom.d_pinghua_chgvol_thresh  //100
 230,//#define D_PINGHUA_CHGCUR_LOW   u_fd_rom.d_d_pinghua_chgcur_low    // 230
 350,// #define D_PINGHUA_CHGCUR_HIGH u_fd_rom.d_pinghua_chgcur_high      // 350 
