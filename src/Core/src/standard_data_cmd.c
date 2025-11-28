@@ -935,11 +935,10 @@ void iic_isr_process(void)
                         t_com66[19] = (uint8_t)(rcu32 >> 24);
                      
 
-                        t_com66[20] = 0x00;
-                        t_com66[21] = 0x40;
+                        t_com66[20] = 0xF9;
+                        t_com66[21] = 0x3F;
                         t_com66[22] = 0x00;
                         t_com66[23] = 0x00;
-            
                         
                         // //uint32_t    QStart=175000000*0.88*(100-dd)/100;
                         uint32_t   QStart=(t_com10_cwh-t_com0f_cwh)*59000;
@@ -949,7 +948,8 @@ void iic_isr_process(void)
                         t_com66[27] = (uint8_t)(QStart >> 24);
                        
 
-                        t_com66[28] = 0x59;
+                       
+                        t_com66[28] = 0x35;
                         t_com66[29] = 0x00;
                         t_com66[30] = 0x00;
                         t_com66[31] = 0x00;
