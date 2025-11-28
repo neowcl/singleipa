@@ -470,6 +470,8 @@ typedef struct
 	uint16_t d_fac_fccold_chu_new_cph_xiaobeilv;
 	uint16_t d_fac_fccold_chu_new_cpl_low_temp_xiaobeilv;
 	uint16_t d_fac_fccold_chu_new_cph_low_temp_xiaobeilv;
+	uint16_t d_charge_vol_up;
+	uint16_t d_charge_vol_down;
 
 } _ST_FIXED_DATA;
 #pragma pack()
@@ -808,7 +810,8 @@ extern  const _ST_FIXED_DATA  u_fd_rom;
 #define D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP_XIAOBEILV  u_fd_rom.d_fac_fccold_chu_new_cpl_low_temp_xiaobeilv
 #define D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP_XIAOBEILV  u_fd_rom.d_fac_fccold_chu_new_cph_low_temp_xiaobeilv
 
-
+#define D_CHARGE_VOL_UP        u_fd_rom.d_charge_vol_up
+#define D_CHARGE_VOL_DOWN      u_fd_rom.d_charge_vol_down
 
 void StaticDFCrc_Chk(void);
 void DynamicDFCrc_Chk(void);

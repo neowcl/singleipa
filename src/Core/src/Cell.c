@@ -419,6 +419,8 @@ const _ST_FIXED_DATA u_fd_rom __attribute__((used)) __attribute__((section(".ARM
 1000,  //  D_FAC_FCCOLD_CHU_NEW_CPH_XIAOBEILV  fac_fccold_chu_new_cph_xiaobeilv
 1000,  //  D_FAC_FCCOLD_CHU_NEW_CPL_LOW_TEMP_XIAOBEILV fac_fccold_chu_new_cpl_low_temp_xiaobeilv
 1000,  // D_FAC_FCCOLD_CHU_NEW_CPH_LOW_TEMP_XIAOBEILV    fac_fccold_chu_new_cph_low_temp_xiaobeilv
+10,
+10,
 };
 
 

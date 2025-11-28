@@ -551,11 +551,11 @@ void update_soc_input_param(void)
                {
                    if (vbat_val > 4400 && f_charge && t_com0d<100)
                    {
-                       t_com09_rep = vbat_val + 10;
+                       t_com09_rep = vbat_val + D_CHARGE_VOL_UP;
                    }
                    else if ((t_com0d == 100) && f_charge)
                    {
-                       t_com09_rep = vbat_val - 10;
+                       t_com09_rep = vbat_val - D_CHARGE_VOL_DOWN;
                    }
                    else
                    {
